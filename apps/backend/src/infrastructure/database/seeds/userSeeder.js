@@ -84,14 +84,29 @@ const users = [
  */
 const seedUsers = async () => {
   try {
+    console.log('Starting user seeder...');
+    console.log(`MongoDB URI: ${process.env.MONGODB_URI || 'Not set (will use in-memory DB)'}`);
+    
     // Connect to database
+    console.log('Connecting to MongoDB...');
     await connectToDatabase();
+    
+    // Check if we're connected
+    if (mongoose.connection.readyState !== 1) {
+      throw new Error('Failed to connect to MongoDB. Connection state: ' + 
+        ['disconnected', 'connected', 'connecting', 'disconnecting'][mongoose.connection.readyState]);
+    }
+    
+    console.log('Connected to MongoDB successfully');
+    console.log('Database name:', mongoose.connection.name);
 
     // Delete existing users
-    await User.deleteMany({});
-    console.log('Deleted existing users');
+    console.log('Deleting existing users...');
+    const deleteResult = await User.deleteMany({});
+    console.log(`Deleted ${deleteResult.deletedCount} existing users`);
 
     // Create new users
+    console.log('Creating new users...');
     const createdUsers = await User.create(users);
     console.log(`Created ${createdUsers.length} users`);
 
@@ -103,14 +118,35 @@ const seedUsers = async () => {
     console.log('User seeding completed successfully');
     
     // Close database connection
+    console.log('Closing database connection...');
     await disconnectFromDatabase();
+    console.log('Database connection closed');
     
     process.exit(0);
   } catch (error) {
-    console.error('Error seeding users:', error);
+    console.error('Error seeding users:', error.message);
+    if (error.name === 'MongooseServerSelectionError') {
+      console.error('\nMongoDB connection error details:');
+      console.error('1. Make sure MongoDB is running on your machine');
+      console.error('2. Check if the MongoDB URI in .env file is correct');
+      console.error('3. Verify that the username and password are correct');
+      console.error('4. Ensure that the database name exists or can be created');
+      console.error('\nFor MongoDB Compass users:');
+      console.error('- Check that the connection string format is correct');
+      console.error('- Try using the connection string from MongoDB Compass');
+      console.error('- Example format: mongodb://localhost:27017/samudra_paket');
+    }
     
-    // Close database connection
-    await disconnectFromDatabase();
+    // Close database connection if it's open
+    try {
+      if (mongoose.connection.readyState !== 0) {
+        console.log('Closing database connection...');
+        await disconnectFromDatabase();
+        console.log('Database connection closed');
+      }
+    } catch (disconnectError) {
+      console.error('Error closing database connection:', disconnectError.message);
+    }
     
     process.exit(1);
   }

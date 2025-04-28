@@ -55,7 +55,7 @@ jobs:
       - name: Deploy to Railway Staging
         run: railway up --service backend-staging
         env:
-          RAILWAY_TOKEN: 9659664d-df2e-4684-8942-9e68295d9a5e
+          RAILWAY_TOKEN: 8de02fcf-1b95-40c1-b7d1-643352a53de1
 
   deploy-production:
     name: Deploy to Production
@@ -69,4 +69,4 @@ jobs:
       - name: Deploy to Railway Production
         run: railway up --service backend-production
         env:
-          RAILWAY_TOKEN: 9659664d-df2e-4684-8942-9e68295d9a5e
+          RAILWAY_TOKEN: 8de02fcf-1b95-40c1-b7d1-643352a53de1

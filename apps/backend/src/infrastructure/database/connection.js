@@ -12,8 +12,33 @@ let mongoServer;
  */
 const connectToDatabase = async () => {
   try {
-    // Always use in-memory MongoDB server for development to simplify setup
-    if (process.env.NODE_ENV === 'development') {
+    // Check if we should use external MongoDB connection
+    if (process.env.MONGODB_URI) {
+      console.log('Attempting to connect to external MongoDB...');
+      
+      // Basic connection options
+      const options = {
+        serverSelectionTimeoutMS: 10000, // 10 seconds timeout for server selection
+        connectTimeoutMS: 10000, // 10 seconds connection timeout
+        socketTimeoutMS: 45000, // 45 seconds socket timeout
+      };
+
+      // Log connection attempt
+      const sanitizedUri = process.env.MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@');
+      console.log(`Connecting to MongoDB at: ${sanitizedUri}`);
+      
+      // Connect to MongoDB
+      await mongoose.connect(process.env.MONGODB_URI, options);
+      
+      // Log successful connection
+      console.log('MongoDB connected successfully!');
+      console.log(`Database name: ${mongoose.connection.db.databaseName}`);
+      return;
+    }
+    // If no MongoDB URI is provided, use in-memory MongoDB for development
+    else if (process.env.NODE_ENV === 'development') {
+      console.log('No MongoDB URI provided, using in-memory MongoDB for development...');
+      
       try {
         // Use in-memory MongoDB server for development
         const { MongoMemoryServer } = require('mongodb-memory-server');
@@ -25,56 +50,38 @@ const connectToDatabase = async () => {
         console.log('Connected to in-memory MongoDB server');
         return;
       } catch (memoryError) {
-        console.warn('Failed to start in-memory MongoDB server:', memoryError.message);
-        console.warn('Falling back to external MongoDB connection if available...');
+        console.error('Failed to start in-memory MongoDB server:', memoryError.message);
+        throw new Error('Could not start in-memory MongoDB server');
       }
     }
-    
-    // If we're not in development or in-memory server failed, try external connection
-    if (process.env.MONGODB_URI) {
-      try {
-        // Connect to external MongoDB server
-        const options = {};
-
-        // Add credentials if provided
-        if (process.env.MONGODB_USER && process.env.MONGODB_PASSWORD) {
-          options.auth = {
-            username: process.env.MONGODB_USER,
-            password: process.env.MONGODB_PASSWORD
-          };
-        }
-
-        await mongoose.connect(process.env.MONGODB_URI, options);
-        console.log(`MongoDB connected successfully to: ${process.env.MONGODB_URI}`);
-        return;
-      } catch (externalError) {
-        console.error('External MongoDB connection error:', externalError.message);
-        
-        // If we're in development and external connection failed, try one more time with in-memory
-        if (process.env.NODE_ENV === 'development' && !mongoServer) {
-          console.log('Attempting to use in-memory MongoDB server as fallback...');
-          const { MongoMemoryServer } = require('mongodb-memory-server');
-          mongoServer = await MongoMemoryServer.create();
-          const mongoUri = mongoServer.getUri();
-          
-          await mongoose.connect(mongoUri);
-          console.log('Connected to fallback in-memory MongoDB server');
-          return;
-        }
-        
-        throw externalError;
-      }
-    } else {
-      throw new Error('MongoDB URI not provided');
+    else {
+      throw new Error('MongoDB URI not provided and not in development mode');
     }
   } catch (error) {
-    console.error('MongoDB connection error:', error.message);
-    console.error('Please check your MongoDB configuration in .env file');
-    console.error('For development, you can use an in-memory database by setting NODE_ENV=development');
+    console.error('\n==== MongoDB CONNECTION ERROR ====');
+    console.error(`Error message: ${error.message}`);
     
-    // Don't exit process, just log the error and continue
-    // This allows the application to start even if database connection fails
-    console.warn('Starting application without database connection. Some features may not work.');
+    if (error.name === 'MongoServerSelectionError') {
+      console.error('\nPossible causes:');
+      console.error('1. MongoDB server is not running');
+      console.error('2. MongoDB connection string is incorrect');
+      console.error('3. MongoDB credentials are invalid');
+      console.error('4. Network issues preventing connection');
+      
+      console.error('\nTroubleshooting steps:');
+      console.error('1. Verify MongoDB is running (check MongoDB Compass)');
+      console.error('2. Check your connection string in .env file');
+      console.error('3. Try connecting with MongoDB Compass to verify credentials');
+      console.error('4. Make sure your firewall allows MongoDB connections');
+      console.error('5. Check if the database name exists or can be created');
+    }
+    
+    console.error('\nSample .env configuration:');
+    console.error('MONGODB_URI=mongodb://localhost:27017/samudra_paket');
+    console.error('==== END OF ERROR REPORT ====\n');
+    
+    // Re-throw the error to be handled by the caller
+    throw error;
   }
 };
 
@@ -96,7 +103,8 @@ const disconnectFromDatabase = async () => {
     }
   } catch (error) {
     console.error('MongoDB disconnection error:', error.message);
-    process.exit(1);
+    // Don't exit process, just log the error
+    console.error('Failed to disconnect from MongoDB cleanly');
   }
 };
 
