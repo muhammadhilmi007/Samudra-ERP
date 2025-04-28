@@ -12,35 +12,40 @@ let mongoServer;
  */
 const connectToDatabase = async () => {
   try {
-    // Check if we should use external MongoDB connection
-    if (process.env.MONGODB_URI) {
-      console.log('Attempting to connect to external MongoDB...');
-      
-      // Basic connection options
-      const options = {
-        serverSelectionTimeoutMS: 10000, // 10 seconds timeout for server selection
-        connectTimeoutMS: 10000, // 10 seconds connection timeout
-        socketTimeoutMS: 45000, // 45 seconds socket timeout
-      };
+    // Khusus untuk MongoDB Compass - gunakan koneksi sederhana
+    console.log('Attempting to connect to MongoDB...');
+    
+    // Gunakan URI default jika tidak ada yang disediakan
+    const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/samudra_paket';
+    
+    // Opsi koneksi sederhana
+    const options = {
+      serverSelectionTimeoutMS: 30000, // 30 detik timeout untuk seleksi server
+      connectTimeoutMS: 30000, // 30 detik timeout koneksi
+      socketTimeoutMS: 60000, // 60 detik socket timeout
+      family: 4 // Gunakan IPv4, hindari masalah dengan IPv6
+    };
 
-      // Log connection attempt
-      const sanitizedUri = process.env.MONGODB_URI.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@');
-      console.log(`Connecting to MongoDB at: ${sanitizedUri}`);
-      
-      // Connect to MongoDB
-      await mongoose.connect(process.env.MONGODB_URI, options);
-      
-      // Log successful connection
-      console.log('MongoDB connected successfully!');
-      console.log(`Database name: ${mongoose.connection.db.databaseName}`);
-      return;
-    }
-    // If no MongoDB URI is provided, use in-memory MongoDB for development
-    else if (process.env.NODE_ENV === 'development') {
-      console.log('No MongoDB URI provided, using in-memory MongoDB for development...');
-      
+    // Log percobaan koneksi
+    const sanitizedUri = uri.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@');
+    console.log(`Connecting to MongoDB at: ${sanitizedUri}`);
+    
+    // Connect to MongoDB
+    await mongoose.connect(uri, options);
+    
+    // Log koneksi berhasil
+    console.log('MongoDB connected successfully!');
+    console.log(`Database name: ${mongoose.connection.db.databaseName}`);
+    return;
+  } catch (error) {
+    console.error('\n==== MONGODB CONNECTION ERROR ====');
+    console.error(`Error message: ${error.message}`);
+    
+    // Coba gunakan in-memory MongoDB sebagai fallback jika dalam mode development
+    if (process.env.NODE_ENV === 'development') {
       try {
-        // Use in-memory MongoDB server for development
+        console.log('\nMencoba menggunakan in-memory MongoDB sebagai fallback...');
+        
         const { MongoMemoryServer } = require('mongodb-memory-server');
         mongoServer = await MongoMemoryServer.create();
         const mongoUri = mongoServer.getUri();
@@ -51,34 +56,37 @@ const connectToDatabase = async () => {
         return;
       } catch (memoryError) {
         console.error('Failed to start in-memory MongoDB server:', memoryError.message);
-        throw new Error('Could not start in-memory MongoDB server');
       }
     }
-    else {
-      throw new Error('MongoDB URI not provided and not in development mode');
-    }
-  } catch (error) {
-    console.error('\n==== MongoDB CONNECTION ERROR ====');
-    console.error(`Error message: ${error.message}`);
+    // Tampilkan pesan error yang lebih spesifik untuk MongoDB Compass
+    console.error('\n==== PANDUAN TROUBLESHOOTING MONGODB COMPASS ====');
+    console.error('Error message:', error.message);
     
-    if (error.name === 'MongoServerSelectionError') {
-      console.error('\nPossible causes:');
-      console.error('1. MongoDB server is not running');
-      console.error('2. MongoDB connection string is incorrect');
-      console.error('3. MongoDB credentials are invalid');
-      console.error('4. Network issues preventing connection');
-      
-      console.error('\nTroubleshooting steps:');
-      console.error('1. Verify MongoDB is running (check MongoDB Compass)');
-      console.error('2. Check your connection string in .env file');
-      console.error('3. Try connecting with MongoDB Compass to verify credentials');
-      console.error('4. Make sure your firewall allows MongoDB connections');
-      console.error('5. Check if the database name exists or can be created');
-    }
+    console.error('\nLangkah-langkah troubleshooting:');
+    console.error('1. Pastikan MongoDB Compass sudah terbuka dan terhubung');
+    console.error('2. Periksa connection string di MongoDB Compass');
+    console.error('3. Gunakan format connection string berikut di file .env:');
+    console.error('   MONGODB_URI=mongodb://127.0.0.1:27017/samudra_paket');
+    console.error('   (Gunakan 127.0.0.1 bukan localhost)');
     
-    console.error('\nSample .env configuration:');
-    console.error('MONGODB_URI=mongodb://localhost:27017/samudra_paket');
-    console.error('==== END OF ERROR REPORT ====\n');
+    console.error('\nJika menggunakan autentikasi:');
+    console.error('1. Pastikan database samudra_paket sudah dibuat di MongoDB');
+    console.error('2. Pastikan user memiliki akses ke database tersebut');
+    console.error('3. Gunakan format connection string dengan kredensial:');
+    console.error('   MONGODB_URI=mongodb://username:password@127.0.0.1:27017/samudra_paket');
+    
+    console.error('\nUntuk MongoDB Compass:');
+    console.error('1. Buka MongoDB Compass');
+    console.error('2. Klik "Connect" > "New Connection"');
+    console.error('3. Masukkan connection string: mongodb://127.0.0.1:27017');
+    console.error('4. Klik "Connect"');
+    console.error('5. Buat database "samudra_paket" jika belum ada');
+    
+    console.error('\nJika masih gagal:');
+    console.error('1. Restart MongoDB service');
+    console.error('2. Pastikan port 27017 tidak diblokir firewall');
+    console.error('3. Coba gunakan "mongodb://localhost:27017/samudra_paket"');
+    console.error('==== END OF TROUBLESHOOTING GUIDE ====\n');
     
     // Re-throw the error to be handled by the caller
     throw error;
