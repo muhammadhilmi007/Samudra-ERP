@@ -1,24 +1,46 @@
-# Turborepo starter
+# Samudra Paket ERP
 
-This Turborepo starter is maintained by the Turborepo core team.
+Enterprise Resource Planning system for PT. Sarana Mudah Raya (Samudra Paket).
 
-## Using this example
+## Project Structure
 
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
-
-## What's inside?
-
-This Turborepo includes the following packages/apps:
+This project is set up as a monorepo using Turborepo and Yarn workspaces, with a mix of JavaScript and TypeScript.
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
+- `apps/backend`: Node.js/Express backend services (JavaScript)
+- `apps/frontend`: Next.js web application (JavaScript)
+- `apps/mobile`: React Native/Expo mobile application (TypeScript)
+- `packages/shared`: Shared utilities and components (JavaScript)
+- `packages/types`: TypeScript type definitions
+
+## Development
+
+### Prerequisites
+
+- Node.js >= 18
+- Yarn >= 1.22
+- Git
+
+### Getting Started
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   yarn install
+   ```
+3. Start development servers:
+   ```bash
+   yarn dev
+   ```
+
+### Available Scripts
+
+- `yarn build`: Build all packages and applications
+- `yarn dev`: Start development servers for all applications
+- `yarn lint`: Run linting for all packages and applications
+- `yarn test`: Run tests for all packages and applications
+- `yarn format`: Format code using Prettier
 - `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
