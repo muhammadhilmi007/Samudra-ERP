@@ -4,6 +4,8 @@
 node_modules
 .pnp
 .pnp.js
+yarn-error.log
+yarn-debug.log*
 
 # Local env files
 .env
@@ -17,6 +19,32 @@ coverage
 
 # Turbo
 .turbo
+
+# Build outputs
+dist
+build
+.next
+out
+
+# Mobile specific
+.expo
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# IDE specific files
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
 
 # Vercel
 .vercel
