@@ -19,9 +19,15 @@ const { validateRequest, schemas } = require('./middleware/gateway/requestValida
 router.use('/docs', express.static('public/docs'));
 
 // Auth routes
+router.post('/auth/register', validateRequest(schemas.register), authController.register);
 router.post('/auth/login', validateRequest(schemas.login), authController.login);
 router.post('/auth/refresh', authController.refreshToken);
 router.post('/auth/logout', authenticate, authController.logout);
+router.get('/auth/verify-email/:token', authController.verifyEmail);
+router.post('/auth/forgot-password', validateRequest(schemas.requestPasswordReset), authController.requestPasswordReset);
+router.post('/auth/reset-password', validateRequest(schemas.resetPassword), authController.resetPassword);
+router.post('/auth/change-password', authenticate, validateRequest(schemas.changePassword), authController.changePassword);
+router.get('/auth/profile', authenticate, authController.getProfile);
 
 // Package routes
 router.get('/packages', authenticate, packageController.getAllPackages);

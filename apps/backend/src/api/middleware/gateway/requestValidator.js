@@ -48,6 +48,33 @@ const validateRequest = (schema, property = 'body') => (
  */
 const schemas = {
   // Auth schemas
+  register: Joi.object({
+    username: Joi.string().min(3).max(30).required().messages({
+      'string.empty': 'Username is required',
+      'string.min': 'Username must be at least {#limit} characters',
+      'string.max': 'Username cannot exceed {#limit} characters',
+      'any.required': 'Username is required'
+    }),
+    email: Joi.string().email().required().messages({
+      'string.empty': 'Email is required',
+      'string.email': 'Please provide a valid email address',
+      'any.required': 'Email is required'
+    }),
+    password: Joi.string().min(8).required().messages({
+      'string.empty': 'Password is required',
+      'string.min': 'Password must be at least {#limit} characters',
+      'any.required': 'Password is required'
+    }),
+    fullName: Joi.string().required().messages({
+      'string.empty': 'Full name is required',
+      'any.required': 'Full name is required'
+    }),
+    phoneNumber: Joi.string().pattern(/^[0-9+\-\s]+$/).messages({
+      'string.pattern.base': 'Phone number must contain only digits, +, - or spaces'
+    }),
+    role: Joi.string().valid('ADMIN', 'MANAGER', 'OPERATOR', 'DRIVER', 'CHECKER', 'DEBT_COLLECTOR', 'CUSTOMER').default('CUSTOMER')
+  }),
+  
   login: Joi.object({
     username: Joi.string().required().messages({
       'string.empty': 'Username is required',
@@ -56,6 +83,38 @@ const schemas = {
     password: Joi.string().required().messages({
       'string.empty': 'Password is required',
       'any.required': 'Password is required'
+    })
+  }),
+  
+  requestPasswordReset: Joi.object({
+    email: Joi.string().email().required().messages({
+      'string.empty': 'Email is required',
+      'string.email': 'Please provide a valid email address',
+      'any.required': 'Email is required'
+    })
+  }),
+  
+  resetPassword: Joi.object({
+    token: Joi.string().required().messages({
+      'string.empty': 'Reset token is required',
+      'any.required': 'Reset token is required'
+    }),
+    newPassword: Joi.string().min(8).required().messages({
+      'string.empty': 'New password is required',
+      'string.min': 'New password must be at least {#limit} characters',
+      'any.required': 'New password is required'
+    })
+  }),
+  
+  changePassword: Joi.object({
+    currentPassword: Joi.string().required().messages({
+      'string.empty': 'Current password is required',
+      'any.required': 'Current password is required'
+    }),
+    newPassword: Joi.string().min(8).required().messages({
+      'string.empty': 'New password is required',
+      'string.min': 'New password must be at least {#limit} characters',
+      'any.required': 'New password is required'
     })
   }),
   
