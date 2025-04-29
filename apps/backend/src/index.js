@@ -10,25 +10,39 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 require('dotenv').config();
 
 const express = require('express');
-const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 
 // Import database connection
 const { connectToDatabase } = require('./infrastructure/database/connection');
 
+// Import API Gateway middleware
+const { 
+  configureApiGateway, 
+  configureErrorHandling 
+} = require('./api/middleware/gateway');
+
 // Import routes
 const apiRoutes = require('./api/routes');
+
+// Import logger
+const { logger } = require('./api/middleware/gateway/logger');
+
+// Create logs directory if it doesn't exist
+const logsDir = path.join(__dirname, '../logs');
+if (!fs.existsSync(logsDir)) {
+  fs.mkdirSync(logsDir, { recursive: true });
+}
 
 // Initialize Express app
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.static('public')); // Serve static files from public directory
+// Configure API Gateway middleware
+configureApiGateway(app);
 
-// Routes
-app.use('/api', apiRoutes);
+// Serve static files from public directory
+app.use(express.static('public'));
 
 // Basic health check route
 app.get('/', (req, res) => {
@@ -41,34 +55,27 @@ app.get('/', (req, res) => {
   });
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    success: false,
-    error: {
-      code: 'SERVER_ERROR',
-      message: 'Internal Server Error',
-      details: process.env.NODE_ENV === 'development' ? err.message : {},
-    },
-  });
-});
+// API Routes
+app.use('/api', apiRoutes);
+
+// Configure error handling middleware
+configureErrorHandling(app);
 
 // Start server
 const startServer = async () => {
   try {
     // Connect to database
     await connectToDatabase();
-    console.log('MongoDB connected successfully');
+    logger.info('MongoDB connected successfully');
     
     // Start Express server
     app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-      console.log(`API Documentation: http://localhost:${PORT}/api/docs`);
-      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+      logger.info(`Server running on port ${PORT}`);
+      logger.info(`API Documentation: http://localhost:${PORT}/api/docs`);
+      logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
     });
   } catch (error) {
-    console.error('Failed to start server:', error.message);
+    logger.error(`Failed to start server: ${error.message}`, { error });
     process.exit(1);
   }
 };
@@ -77,5 +84,23 @@ const startServer = async () => {
 if (process.env.NODE_ENV !== 'test') {
   startServer();
 }
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+  logger.error('Uncaught Exception:', { error });
+  // Give the logger time to flush before exiting
+  setTimeout(() => {
+    process.exit(1);
+  }, 1000);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason) => {
+  logger.error('Unhandled Rejection:', { reason });
+  // Give the logger time to flush before exiting
+  setTimeout(() => {
+    process.exit(1);
+  }, 1000);
+});
 
 module.exports = app; // For testing purposes
