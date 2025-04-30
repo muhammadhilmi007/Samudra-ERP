@@ -172,7 +172,7 @@
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ refreshToken: refreshTokenValue })
+          body: JSON.stringify({ token: refreshTokenValue })
         });
         
         const data = await response.json();

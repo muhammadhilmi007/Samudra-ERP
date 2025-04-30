@@ -104,6 +104,7 @@ const register = async (req, res) => {
 
     // In a real application, you would send an email with the verification link
     // For now, we'll just return the token in the response for testing purposes
+    // eslint-disable-next-line max-len
     const verificationUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/verify-email?token=${verificationToken}`;
 
     logger.info(`User registered: ${newUser.username} (${newUser.email})`);
@@ -163,6 +164,7 @@ const login = async (req, res) => {
       return res.status(401).json(
         createApiError(
           'ACCOUNT_LOCKED',
+          // eslint-disable-next-line max-len
           `Your account is temporarily locked due to multiple failed login attempts. Please try again after ${lockTime.toLocaleTimeString()}.`,
         ),
       );
@@ -178,6 +180,7 @@ const login = async (req, res) => {
       }
 
       return res.status(401).json(
+        // eslint-disable-next-line max-len
         createApiError('ACCOUNT_INACTIVE', 'Your account is inactive. Please contact an administrator.'),
       );
     }
@@ -299,6 +302,7 @@ const refreshToken = async (req, res) => {
 
     try {
       // Verify refresh token
+      // eslint-disable-next-line max-len
       const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET || 'your_jwt_refresh_secret_key_here');
 
       // Find refresh token in database
@@ -337,6 +341,7 @@ const refreshToken = async (req, res) => {
       const { token: newRefreshToken, expiresAt } = generateRefreshToken(user);
 
       // Store new refresh token
+      // eslint-disable-next-line max-len
       await userRepository.addRefreshToken(user.id, newRefreshToken, expiresAt, userAgent, ipAddress);
 
       logger.info(`Token refreshed for user: ${user.username}`);
@@ -364,7 +369,12 @@ const refreshToken = async (req, res) => {
       throw error;
     }
   } catch (error) {
-    logger.error('Refresh token error:', { error });
+    logger.error('Refresh token error:', {
+      error: error.message,
+      stack: error.stack,
+      name: error.name,
+      code: error.code,
+    });
     return res.status(500).json(
       createApiError('SERVER_ERROR', 'An error occurred during token refresh'),
     );
@@ -445,6 +455,7 @@ const requestPasswordReset = async (req, res) => {
 
     // In a real application, you would send an email with the reset link
     // For now, we'll just return the token in the response for testing purposes
+    // eslint-disable-next-line max-len
     const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
 
     logger.info(`Password reset requested for user: ${user.username} (${user.email})`);

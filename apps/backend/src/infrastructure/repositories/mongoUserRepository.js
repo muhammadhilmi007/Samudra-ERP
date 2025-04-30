@@ -50,6 +50,19 @@ class MongoUserRepository extends UserRepository {
   }
 
   /**
+   * Find a user by refresh token
+   * @param {string} token - Refresh token
+   * @returns {Promise<Object|null>} Refresh token object or null if not found
+   */
+  async findRefreshToken(token) {
+    const user = await User.findOne({ 'refreshTokens.token': token });
+    if (!user) return null;
+
+    const tokenObj = user.refreshTokens.find((t) => t.token === token);
+    return tokenObj || null;
+  }
+
+  /**
    * Find user by email verification token
    * @param {string} token - Email verification token
    * @returns {Promise<Object>} User object
