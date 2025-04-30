@@ -18,13 +18,13 @@ const createRateLimiter = (options = {}) => {
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
     message: (req, res) => res.status(429).json(
-      createApiError('TOO_MANY_REQUESTS', 'Too many requests, please try again later')
-    )
+      createApiError('TOO_MANY_REQUESTS', 'Too many requests, please try again later'),
+    ),
   };
 
   return rateLimit({
     ...defaultOptions,
-    ...options
+    ...options,
   });
 };
 
@@ -41,12 +41,12 @@ const authLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000,
   max: 10,
   message: (req, res) => res.status(429).json(
-    createApiError('TOO_MANY_REQUESTS', 'Too many authentication attempts, please try again later')
-  )
+    createApiError('TOO_MANY_REQUESTS', 'Too many authentication attempts, please try again later'),
+  ),
 });
 
 module.exports = {
   createRateLimiter,
   apiLimiter,
-  authLimiter
+  authLimiter,
 };

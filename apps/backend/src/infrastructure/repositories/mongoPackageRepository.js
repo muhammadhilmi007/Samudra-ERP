@@ -61,7 +61,7 @@ class MongoPackageRepository extends PackageRepository {
     return Package.findByIdAndUpdate(
       id,
       { $set: packageData },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
   }
 
@@ -75,7 +75,7 @@ class MongoPackageRepository extends PackageRepository {
     return Package.findByIdAndUpdate(
       id,
       { $set: { status } },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
   }
 

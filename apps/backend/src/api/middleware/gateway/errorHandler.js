@@ -27,7 +27,7 @@ const notFoundHandler = (req, res, next) => {
     'NOT_FOUND',
     `Route not found: ${req.method} ${req.originalUrl}`,
     {},
-    404
+    404,
   );
   next(error);
 };
@@ -47,9 +47,9 @@ const errorHandler = (err, req, res) => {
     // Mongoose validation error
     statusCode = 400;
     errorCode = 'VALIDATION_ERROR';
-    details = Object.values(err.errors).map(error => ({
+    details = Object.values(err.errors).map((error) => ({
       field: error.path,
-      message: error.message
+      message: error.message,
     }));
   } else if (err.name === 'CastError' && err.kind === 'ObjectId') {
     // MongoDB invalid ID error
@@ -65,7 +65,7 @@ const errorHandler = (err, req, res) => {
     details = {
       field,
       value: err.keyValue[field],
-      message: `${field} already exists`
+      message: `${field} already exists`,
     };
   }
 
@@ -77,18 +77,18 @@ const errorHandler = (err, req, res) => {
       method: req.method,
       url: req.originalUrl,
       ip: req.ip,
-      user: req.user ? req.user.id : 'anonymous'
+      user: req.user ? req.user.id : 'anonymous',
     });
   }
 
   // Send error response
   res.status(statusCode).json(
-    createApiError(errorCode, message, details)
+    createApiError(errorCode, message, details),
   );
 };
 
 module.exports = {
   ApiError,
   notFoundHandler,
-  errorHandler
+  errorHandler,
 };

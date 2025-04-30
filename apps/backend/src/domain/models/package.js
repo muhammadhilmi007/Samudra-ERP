@@ -10,26 +10,26 @@ const mongoose = require('mongoose');
  * Represents a physical address
  */
 const addressSchema = new mongoose.Schema({
-  street: { 
-    type: String, 
-    required: true 
+  street: {
+    type: String,
+    required: true,
   },
-  city: { 
-    type: String, 
-    required: true 
+  city: {
+    type: String,
+    required: true,
   },
-  province: { 
-    type: String, 
-    required: true 
+  province: {
+    type: String,
+    required: true,
   },
-  postalCode: { 
-    type: String, 
-    required: true 
+  postalCode: {
+    type: String,
+    required: true,
   },
-  country: { 
-    type: String, 
-    required: true, 
-    default: 'Indonesia' 
+  country: {
+    type: String,
+    required: true,
+    default: 'Indonesia',
   },
   coordinates: {
     latitude: Number,
@@ -42,17 +42,17 @@ const addressSchema = new mongoose.Schema({
  * Represents a contact person with address
  */
 const contactSchema = new mongoose.Schema({
-  name: { 
-    type: String, 
-    required: true 
+  name: {
+    type: String,
+    required: true,
   },
-  phone: { 
-    type: String, 
-    required: true 
+  phone: {
+    type: String,
+    required: true,
   },
-  address: { 
-    type: addressSchema, 
-    required: true 
+  address: {
+    type: addressSchema,
+    required: true,
   },
 });
 
@@ -113,8 +113,8 @@ const packageSchema = new mongoose.Schema({
     type: String,
     default: '',
   },
-}, { 
-  timestamps: true 
+}, {
+  timestamps: true,
 });
 
 // Create indexes for better query performance
@@ -126,7 +126,7 @@ packageSchema.index({ 'recipient.name': 1 });
  * Generate a unique tracking number
  * @returns {string} Tracking number
  */
-packageSchema.statics.generateTrackingNumber = function() {
+packageSchema.statics.generateTrackingNumber = function () {
   const prefix = 'SP';
   const randomNum = Math.floor(10000000 + Math.random() * 90000000);
   return `${prefix}${randomNum}`;

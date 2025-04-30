@@ -66,5 +66,5 @@ const configureErrorHandling = (app) => {
 
 module.exports = {
   configureApiGateway,
-  configureErrorHandling
+  configureErrorHandling,
 };

@@ -4,7 +4,7 @@
  */
 
 const jwt = require('jsonwebtoken');
-const crypto = require('crypto');
+// const crypto = require('crypto'); // Not used in this file
 const { createApiError } = require('../../domain/utils/errorUtils');
 const MongoUserRepository = require('../../infrastructure/repositories/mongoUserRepository');
 const { logger } = require('../middleware/gateway/logger');
@@ -17,18 +17,16 @@ const userRepository = new MongoUserRepository();
  * @param {Object} user - User object
  * @returns {string} JWT token
  */
-const generateToken = (user) => {
-  return jwt.sign(
-    { 
-      id: user._id, 
-      username: user.username, 
-      role: user.role,
-      permissions: user.permissions 
-    },
-    process.env.JWT_SECRET || 'your_jwt_secret_key_here',
-    { expiresIn: process.env.JWT_EXPIRES_IN || '1h' }
-  );
-};
+const generateToken = (user) => jwt.sign(
+  {
+    id: user.id,
+    username: user.username,
+    role: user.role,
+    permissions: user.permissions,
+  },
+  process.env.JWT_SECRET || 'your_jwt_secret_key_here',
+  { expiresIn: process.env.JWT_EXPIRES_IN || '1h' },
+);
 
 /**
  * Generate refresh token
@@ -37,22 +35,25 @@ const generateToken = (user) => {
  */
 const generateRefreshToken = (user) => {
   const expiresIn = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
-  
+
   // Convert expiration time to milliseconds
-  const expiresInMs = expiresIn.endsWith('d')
-    ? parseInt(expiresIn) * 24 * 60 * 60 * 1000
-    : expiresIn.endsWith('h')
-    ? parseInt(expiresIn) * 60 * 60 * 1000
-    : parseInt(expiresIn) * 1000;
-  
+  let expiresInMs;
+  if (expiresIn.endsWith('d')) {
+    expiresInMs = parseInt(expiresIn, 10) * 24 * 60 * 60 * 1000;
+  } else if (expiresIn.endsWith('h')) {
+    expiresInMs = parseInt(expiresIn, 10) * 60 * 60 * 1000;
+  } else {
+    expiresInMs = parseInt(expiresIn, 10) * 1000;
+  }
+
   const expiresAt = new Date(Date.now() + expiresInMs);
-  
+
   const token = jwt.sign(
-    { id: user._id, username: user.username },
+    { id: user.id, username: user.username },
     process.env.JWT_REFRESH_SECRET || 'your_jwt_refresh_secret_key_here',
-    { expiresIn }
+    { expiresIn },
   );
-  
+
   return { token, expiresAt };
 };
 
@@ -63,13 +64,15 @@ const generateRefreshToken = (user) => {
  */
 const register = async (req, res) => {
   try {
-    const { username, email, password, fullName, phoneNumber } = req.body;
+    const {
+      username, email, password, fullName, phoneNumber,
+    } = req.body;
 
     // Check if username is already taken
     const existingUsername = await userRepository.findByUsername(username);
     if (existingUsername) {
       return res.status(409).json(
-        createApiError('USERNAME_TAKEN', 'Username is already taken')
+        createApiError('USERNAME_TAKEN', 'Username is already taken'),
       );
     }
 
@@ -77,7 +80,7 @@ const register = async (req, res) => {
     const existingEmail = await userRepository.findByEmail(email);
     if (existingEmail) {
       return res.status(409).json(
-        createApiError('EMAIL_TAKEN', 'Email is already registered')
+        createApiError('EMAIL_TAKEN', 'Email is already registered'),
       );
     }
 
@@ -109,7 +112,7 @@ const register = async (req, res) => {
       success: true,
       data: {
         user: {
-          id: newUser._id,
+          id: newUser.id,
           username: newUser.username,
           email: newUser.email,
           fullName: newUser.fullName,
@@ -121,7 +124,7 @@ const register = async (req, res) => {
   } catch (error) {
     logger.error('Registration error:', { error });
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'An error occurred during registration')
+      createApiError('SERVER_ERROR', 'An error occurred during registration'),
     );
   }
 };
@@ -140,70 +143,70 @@ const login = async (req, res) => {
     // Basic validation
     if (!username || !password) {
       return res.status(400).json(
-        createApiError('INVALID_INPUT', 'Username and password are required')
+        createApiError('INVALID_INPUT', 'Username and password are required'),
       );
     }
 
     // Find user by username
     const user = await userRepository.findByUsername(username);
-    
+
     // Check if user exists
     if (!user) {
       return res.status(401).json(
-        createApiError('AUTHENTICATION_FAILED', 'Invalid username or password')
+        createApiError('AUTHENTICATION_FAILED', 'Invalid username or password'),
       );
     }
-    
+
     // Check if account is locked
     if (user.isAccountLocked()) {
       const lockTime = new Date(user.lockUntil);
       return res.status(401).json(
         createApiError(
-          'ACCOUNT_LOCKED', 
-          `Your account is temporarily locked due to multiple failed login attempts. Please try again after ${lockTime.toLocaleTimeString()}.`
-        )
+          'ACCOUNT_LOCKED',
+          `Your account is temporarily locked due to multiple failed login attempts. Please try again after ${lockTime.toLocaleTimeString()}.`,
+        ),
       );
     }
-    
+
     // Check if user is active
     if (!user.isActive) {
       // If email is not verified, provide a specific message
       if (!user.isEmailVerified) {
         return res.status(401).json(
-          createApiError('EMAIL_NOT_VERIFIED', 'Please verify your email before logging in.')
+          createApiError('EMAIL_NOT_VERIFIED', 'Please verify your email before logging in.'),
         );
       }
-      
+
       return res.status(401).json(
-        createApiError('ACCOUNT_INACTIVE', 'Your account is inactive. Please contact an administrator.')
+        createApiError('ACCOUNT_INACTIVE', 'Your account is inactive. Please contact an administrator.'),
       );
     }
-    
+
     // Verify password
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid) {
       // Track failed login attempt
-      await userRepository.trackFailedLogin(user._id);
-      
+      await userRepository.trackFailedLogin(user.id);
+
       return res.status(401).json(
-        createApiError('AUTHENTICATION_FAILED', 'Invalid username or password')
+        createApiError('AUTHENTICATION_FAILED', 'Invalid username or password'),
       );
     }
-    
+
     // Reset failed login attempts
-    await userRepository.resetFailedLogins(user._id);
-    
+    await userRepository.resetFailedLogins(user.id);
+
     // Generate JWT token
     const token = generateToken(user);
 
     // Generate refresh token
     const { token: refreshToken, expiresAt } = generateRefreshToken(user);
-    
+
     // Store refresh token in database
-    await userRepository.addRefreshToken(user._id, refreshToken, expiresAt, userAgent, ipAddress);
+    await userRepository.addRefreshToken(user.id, refreshToken, expiresAt, userAgent, ipAddress);
 
     // Update last login time
-    await userRepository.update(user._id, { lastLogin: new Date() });
+    await userRepository.update(user.id, { lastLogin: new Date() });
 
     logger.info(`User logged in: ${user.username} (${user.email})`);
 
@@ -212,7 +215,7 @@ const login = async (req, res) => {
       success: true,
       data: {
         user: {
-          id: user._id,
+          id: user.id,
           username: user.username,
           email: user.email,
           fullName: user.fullName,
@@ -226,7 +229,7 @@ const login = async (req, res) => {
   } catch (error) {
     logger.error('Login error:', { error });
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'An error occurred during login')
+      createApiError('SERVER_ERROR', 'An error occurred during login'),
     );
   }
 };
@@ -242,7 +245,7 @@ const verifyEmail = async (req, res) => {
 
     if (!token) {
       return res.status(400).json(
-        createApiError('INVALID_INPUT', 'Verification token is required')
+        createApiError('INVALID_INPUT', 'Verification token is required'),
       );
     }
 
@@ -251,7 +254,7 @@ const verifyEmail = async (req, res) => {
 
     if (!user) {
       return res.status(400).json(
-        createApiError('INVALID_TOKEN', 'Invalid or expired verification token')
+        createApiError('INVALID_TOKEN', 'Invalid or expired verification token'),
       );
     }
 
@@ -272,7 +275,7 @@ const verifyEmail = async (req, res) => {
   } catch (error) {
     logger.error('Email verification error:', { error });
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'An error occurred during email verification')
+      createApiError('SERVER_ERROR', 'An error occurred during email verification'),
     );
   }
 };
@@ -284,36 +287,43 @@ const verifyEmail = async (req, res) => {
  */
 const refreshToken = async (req, res) => {
   try {
-    const { refreshToken: token } = req.body;
+    const { token } = req.body;
     const userAgent = req.headers['user-agent'] || 'unknown';
     const ipAddress = req.ip || req.connection.remoteAddress;
 
     if (!token) {
       return res.status(400).json(
-        createApiError('INVALID_INPUT', 'Refresh token is required')
+        createApiError('INVALID_INPUT', 'Refresh token is required'),
       );
     }
 
     try {
       // Verify refresh token
-      const decoded = jwt.verify(
-        token,
-        process.env.JWT_REFRESH_SECRET || 'your_jwt_refresh_secret_key_here'
-      );
+      const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET || 'your_jwt_refresh_secret_key_here');
 
-      // Find user by refresh token
-      const user = await userRepository.findByRefreshToken(token);
-      
+      // Find refresh token in database
+      const foundRefreshToken = await userRepository.findRefreshToken(token);
+
+      // Check if refresh token exists
+      if (!foundRefreshToken) {
+        return res.status(401).json(
+          createApiError('INVALID_TOKEN', 'Invalid refresh token'),
+        );
+      }
+
+      // Find user associated with the refresh token
+      const user = await userRepository.findById(decoded.id);
+
       // Check if user exists and is active
       if (!user) {
         return res.status(401).json(
-          createApiError('INVALID_TOKEN', 'Invalid refresh token')
+          createApiError('USER_NOT_FOUND', 'User not found'),
         );
       }
-      
+
       if (!user.isActive) {
         return res.status(401).json(
-          createApiError('ACCOUNT_INACTIVE', 'Your account is inactive')
+          createApiError('ACCOUNT_INACTIVE', 'Your account is inactive'),
         );
       }
 
@@ -325,7 +335,7 @@ const refreshToken = async (req, res) => {
 
       // Generate new refresh token (token rotation for security)
       const { token: newRefreshToken, expiresAt } = generateRefreshToken(user);
-      
+
       // Store new refresh token
       await userRepository.addRefreshToken(user.id, newRefreshToken, expiresAt, userAgent, ipAddress);
 
@@ -341,13 +351,13 @@ const refreshToken = async (req, res) => {
     } catch (error) {
       if (error instanceof jwt.TokenExpiredError) {
         return res.status(401).json(
-          createApiError('TOKEN_EXPIRED', 'Refresh token has expired')
+          createApiError('TOKEN_EXPIRED', 'Refresh token has expired'),
         );
       }
 
       if (error instanceof jwt.JsonWebTokenError) {
         return res.status(401).json(
-          createApiError('INVALID_TOKEN', 'Invalid refresh token')
+          createApiError('INVALID_TOKEN', 'Invalid refresh token'),
         );
       }
 
@@ -356,7 +366,7 @@ const refreshToken = async (req, res) => {
   } catch (error) {
     logger.error('Refresh token error:', { error });
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'An error occurred during token refresh')
+      createApiError('SERVER_ERROR', 'An error occurred during token refresh'),
     );
   }
 };
@@ -368,23 +378,23 @@ const refreshToken = async (req, res) => {
  */
 const logout = async (req, res) => {
   try {
-    const { refreshToken } = req.body;
+    const { token } = req.body;
     const userId = req.user ? req.user.id : null;
-    
+
     if (!userId) {
       return res.status(401).json(
-        createApiError('UNAUTHORIZED', 'Authentication required')
+        createApiError('UNAUTHORIZED', 'Authentication required'),
       );
     }
 
     // If a specific refresh token is provided, remove only that token
-    if (refreshToken) {
-      await userRepository.removeRefreshToken(userId, refreshToken);
+    if (token) {
+      await userRepository.removeRefreshToken(userId, token);
     } else {
       // Otherwise, remove all refresh tokens for this user (logout from all devices)
       await userRepository.clearAllRefreshTokens(userId);
     }
-    
+
     // Update last activity timestamp
     await userRepository.update(userId, { lastActivity: new Date() });
 
@@ -397,7 +407,7 @@ const logout = async (req, res) => {
   } catch (error) {
     logger.error('Logout error:', { error });
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'An error occurred during logout')
+      createApiError('SERVER_ERROR', 'An error occurred during logout'),
     );
   }
 };
@@ -413,7 +423,7 @@ const requestPasswordReset = async (req, res) => {
 
     if (!email) {
       return res.status(400).json(
-        createApiError('INVALID_INPUT', 'Email is required')
+        createApiError('INVALID_INPUT', 'Email is required'),
       );
     }
 
@@ -425,7 +435,7 @@ const requestPasswordReset = async (req, res) => {
       logger.info(`Password reset requested for non-existent email: ${email}`);
       return res.status(200).json({
         success: true,
-        message: 'If your email is registered, you will receive a password reset link.'
+        message: 'If your email is registered, you will receive a password reset link.',
       });
     }
 
@@ -448,7 +458,7 @@ const requestPasswordReset = async (req, res) => {
   } catch (error) {
     logger.error('Password reset request error:', { error });
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'An error occurred during password reset request')
+      createApiError('SERVER_ERROR', 'An error occurred during password reset request'),
     );
   }
 };
@@ -464,7 +474,7 @@ const resetPassword = async (req, res) => {
 
     if (!token || !newPassword) {
       return res.status(400).json(
-        createApiError('INVALID_INPUT', 'Token and new password are required')
+        createApiError('INVALID_INPUT', 'Token and new password are required'),
       );
     }
 
@@ -473,7 +483,7 @@ const resetPassword = async (req, res) => {
 
     if (!user) {
       return res.status(400).json(
-        createApiError('INVALID_TOKEN', 'Invalid or expired reset token')
+        createApiError('INVALID_TOKEN', 'Invalid or expired reset token'),
       );
     }
 
@@ -484,12 +494,12 @@ const resetPassword = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: 'Password reset successful. You can now log in with your new password.'
+      message: 'Password reset successful. You can now log in with your new password.',
     });
   } catch (error) {
     logger.error('Password reset error:', { error });
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'An error occurred during password reset')
+      createApiError('SERVER_ERROR', 'An error occurred during password reset'),
     );
   }
 };
@@ -506,13 +516,13 @@ const changePassword = async (req, res) => {
 
     if (!userId) {
       return res.status(401).json(
-        createApiError('UNAUTHORIZED', 'Authentication required')
+        createApiError('UNAUTHORIZED', 'Authentication required'),
       );
     }
 
     if (!currentPassword || !newPassword) {
       return res.status(400).json(
-        createApiError('INVALID_INPUT', 'Current password and new password are required')
+        createApiError('INVALID_INPUT', 'Current password and new password are required'),
       );
     }
 
@@ -521,7 +531,7 @@ const changePassword = async (req, res) => {
 
     if (!success) {
       return res.status(400).json(
-        createApiError('INVALID_PASSWORD', 'Current password is incorrect')
+        createApiError('INVALID_PASSWORD', 'Current password is incorrect'),
       );
     }
 
@@ -532,12 +542,12 @@ const changePassword = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      message: 'Password changed successfully. Please log in again with your new password.'
+      message: 'Password changed successfully. Please log in again with your new password.',
     });
   } catch (error) {
     logger.error('Password change error:', { error });
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'An error occurred during password change')
+      createApiError('SERVER_ERROR', 'An error occurred during password change'),
     );
   }
 };
@@ -553,7 +563,7 @@ const getProfile = async (req, res) => {
 
     if (!userId) {
       return res.status(401).json(
-        createApiError('UNAUTHORIZED', 'Authentication required')
+        createApiError('UNAUTHORIZED', 'Authentication required'),
       );
     }
 
@@ -561,7 +571,7 @@ const getProfile = async (req, res) => {
 
     if (!user) {
       return res.status(404).json(
-        createApiError('NOT_FOUND', 'User not found')
+        createApiError('NOT_FOUND', 'User not found'),
       );
     }
 
@@ -588,7 +598,7 @@ const getProfile = async (req, res) => {
   } catch (error) {
     logger.error('Get profile error:', { error });
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'An error occurred while retrieving user profile')
+      createApiError('SERVER_ERROR', 'An error occurred while retrieving user profile'),
     );
   }
 };

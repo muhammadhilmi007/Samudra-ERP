@@ -15,7 +15,7 @@ const corsConfig = (options = {}) => {
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps, curl, Postman)
       if (!origin) return callback(null, true);
-      
+
       // Check against whitelist
       const whitelist = [
         process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -23,10 +23,10 @@ const corsConfig = (options = {}) => {
         process.env.ADMIN_DASHBOARD_URL,
         // Add other allowed origins here
       ].filter(Boolean); // Remove undefined/null values
-      
+
       if (whitelist.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
         return callback(null, true);
-      } 
+      }
       return callback(new Error('Not allowed by CORS'));
     },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -47,7 +47,7 @@ const corsConfig = (options = {}) => {
 
   return cors({
     ...defaultOptions,
-    ...options
+    ...options,
   });
 };
 

@@ -17,9 +17,9 @@ const fs = require('fs');
 const { connectToDatabase } = require('./infrastructure/database/connection');
 
 // Import API Gateway middleware
-const { 
-  configureApiGateway, 
-  configureErrorHandling 
+const {
+  configureApiGateway,
+  configureErrorHandling,
 } = require('./api/middleware/gateway');
 
 // Import routes
@@ -34,9 +34,12 @@ if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir, { recursive: true });
 }
 
+// Import config
+const config = require('./config/config');
+
 // Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = config.app.port;
 
 // Configure API Gateway middleware
 configureApiGateway(app);
@@ -67,12 +70,20 @@ const startServer = async () => {
     // Connect to database
     await connectToDatabase();
     logger.info('MongoDB connected successfully');
-    
+
     // Start Express server
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       logger.info(`Server running on port ${PORT}`);
       logger.info(`API Documentation: http://localhost:${PORT}/api/docs`);
       logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+
+    // Handle graceful shutdown
+    process.on('SIGTERM', () => {
+      logger.info('SIGTERM signal received: closing HTTP server');
+      server.close(() => {
+        logger.info('HTTP server closed');
+      });
     });
   } catch (error) {
     logger.error(`Failed to start server: ${error.message}`, { error });

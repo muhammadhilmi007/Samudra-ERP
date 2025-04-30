@@ -13,7 +13,6 @@ const User = require('../../domain/models/user');
  */
 /* eslint-disable class-methods-use-this */
 class MongoUserRepository extends UserRepository {
-
   /**
    * Find all users with optional filters
    * @param {Object} filters - Filter criteria
@@ -63,7 +62,7 @@ class MongoUserRepository extends UserRepository {
 
     return User.findOne({
       emailVerificationToken: hashedToken,
-      emailVerificationExpires: { $gt: Date.now() }
+      emailVerificationExpires: { $gt: Date.now() },
     });
   }
 
@@ -80,7 +79,7 @@ class MongoUserRepository extends UserRepository {
 
     return User.findOne({
       passwordResetToken: hashedToken,
-      passwordResetExpires: { $gt: Date.now() }
+      passwordResetExpires: { $gt: Date.now() },
     });
   }
 
@@ -92,7 +91,7 @@ class MongoUserRepository extends UserRepository {
   async findByRefreshToken(token) {
     return User.findOne({
       'refreshTokens.token': token,
-      'refreshTokens.expiresAt': { $gt: new Date() }
+      'refreshTokens.expiresAt': { $gt: new Date() },
     });
   }
 
@@ -103,24 +102,24 @@ class MongoUserRepository extends UserRepository {
    */
   async create(userData) {
     const newUser = new User(userData);
-    
+
     // Generate email verification token if not already verified
     if (!userData.isEmailVerified) {
       newUser.generateEmailVerificationToken();
     }
-    
+
     await newUser.save();
-    
-    return newUser.toObject({ 
-      getters: true, 
-      versionKey: false, 
+
+    return newUser.toObject({
+      getters: true,
+      versionKey: false,
       transform: (doc, ret) => {
         const userObj = { ...ret };
         delete userObj.password;
         delete userObj.refreshTokens;
         delete userObj.mfaSecret;
         return userObj;
-      }
+      },
     });
   }
 
@@ -134,9 +133,9 @@ class MongoUserRepository extends UserRepository {
     const updatedUser = await User.findByIdAndUpdate(
       id,
       { $set: userData },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select('-password -refreshTokens -mfaSecret');
-    
+
     return updatedUser;
   }
 
@@ -150,7 +149,7 @@ class MongoUserRepository extends UserRepository {
     return User.findByIdAndUpdate(
       id,
       { $set: { permissions } },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select('-password -refreshTokens -mfaSecret');
   }
 
@@ -164,7 +163,7 @@ class MongoUserRepository extends UserRepository {
     return User.findByIdAndUpdate(
       id,
       { $set: { role } },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select('-password -refreshTokens -mfaSecret');
   }
 
@@ -184,16 +183,16 @@ class MongoUserRepository extends UserRepository {
     user.addRefreshToken(token, expiresAt, userAgent, ipAddress);
     await user.save();
 
-    return user.toObject({ 
-      getters: true, 
-      versionKey: false, 
+    return user.toObject({
+      getters: true,
+      versionKey: false,
       transform: (doc, ret) => {
         const userObj = { ...ret };
         delete userObj.password;
         delete userObj.refreshTokens;
         delete userObj.mfaSecret;
         return userObj;
-      }
+      },
     });
   }
 
@@ -222,9 +221,9 @@ class MongoUserRepository extends UserRepository {
   async clearAllRefreshTokens(id) {
     const result = await User.updateOne(
       { _id: id },
-      { $set: { refreshTokens: [] } }
+      { $set: { refreshTokens: [] } },
     );
-    
+
     return result.modifiedCount > 0;
   }
 
@@ -241,7 +240,7 @@ class MongoUserRepository extends UserRepository {
 
     const user = await User.findOne({
       emailVerificationToken: hashedToken,
-      emailVerificationExpires: { $gt: Date.now() }
+      emailVerificationExpires: { $gt: Date.now() },
     });
 
     if (!user) return null;
@@ -254,16 +253,16 @@ class MongoUserRepository extends UserRepository {
 
     await user.save();
 
-    return user.toObject({ 
-      getters: true, 
-      versionKey: false, 
+    return user.toObject({
+      getters: true,
+      versionKey: false,
       transform: (doc, ret) => {
         const userObj = { ...ret };
         delete userObj.password;
         delete userObj.refreshTokens;
         delete userObj.mfaSecret;
         return userObj;
-      }
+      },
     });
   }
 
@@ -281,7 +280,7 @@ class MongoUserRepository extends UserRepository {
 
     const user = await User.findOne({
       passwordResetToken: hashedToken,
-      passwordResetExpires: { $gt: Date.now() }
+      passwordResetExpires: { $gt: Date.now() },
     });
 
     if (!user) return null;
@@ -294,16 +293,16 @@ class MongoUserRepository extends UserRepository {
 
     await user.save();
 
-    return user.toObject({ 
-      getters: true, 
-      versionKey: false, 
+    return user.toObject({
+      getters: true,
+      versionKey: false,
       transform: (doc, ret) => {
         const userObj = { ...ret };
         delete userObj.password;
         delete userObj.refreshTokens;
         delete userObj.mfaSecret;
         return userObj;
-      }
+      },
     });
   }
 
@@ -339,15 +338,15 @@ class MongoUserRepository extends UserRepository {
   async enableMfa(id, secret) {
     const user = await User.findByIdAndUpdate(
       id,
-      { 
-        $set: { 
+      {
+        $set: {
           mfaSecret: secret,
-          isMfaEnabled: true 
-        } 
+          isMfaEnabled: true,
+        },
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select('-password -refreshTokens');
-    
+
     return user;
   }
 
@@ -359,17 +358,17 @@ class MongoUserRepository extends UserRepository {
   async disableMfa(id) {
     const user = await User.findByIdAndUpdate(
       id,
-      { 
-        $set: { 
-          isMfaEnabled: false 
+      {
+        $set: {
+          isMfaEnabled: false,
         },
         $unset: {
-          mfaSecret: ""
-        }
+          mfaSecret: '',
+        },
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select('-password -refreshTokens');
-    
+
     return user;
   }
 
@@ -403,16 +402,16 @@ class MongoUserRepository extends UserRepository {
   async resetFailedLogins(id) {
     const user = await User.findByIdAndUpdate(
       id,
-      { 
-        $set: { 
+      {
+        $set: {
           failedLoginAttempts: 0,
           isLocked: false,
-          lockedUntil: null
-        } 
+          lockedUntil: null,
+        },
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     ).select('-password -refreshTokens -mfaSecret');
-    
+
     return user;
   }
 

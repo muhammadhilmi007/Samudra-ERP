@@ -31,30 +31,34 @@ router.get('/auth/profile', authenticate, authController.getProfile);
 
 // Package routes
 router.get('/packages', authenticate, packageController.getAllPackages);
-router.get('/packages/:id', 
-  authenticate, 
+router.get(
+  '/packages/:id',
+  authenticate,
   validateRequest(schemas.idParam, 'params'),
-  packageController.getPackageById
+  packageController.getPackageById,
 );
-router.post('/packages', 
-  authenticate, 
+router.post(
+  '/packages',
+  authenticate,
   authorizePermissions(['packages.create']),
-  validateRequest(schemas.packageCreate), 
-  packageController.createPackage
+  validateRequest(schemas.packageCreate),
+  packageController.createPackage,
 );
-router.put('/packages/:id', 
-  authenticate, 
+router.put(
+  '/packages/:id',
+  authenticate,
   authorizePermissions(['packages.update']),
   validateRequest(schemas.idParam, 'params'),
   validateRequest(schemas.packageUpdate),
-  packageController.updatePackage
+  packageController.updatePackage,
 );
-router.patch('/packages/:id/status', 
-  authenticate, 
+router.patch(
+  '/packages/:id/status',
+  authenticate,
   authorizePermissions(['packages.update_status']),
   validateRequest(schemas.idParam, 'params'),
   validateRequest(schemas.packageStatusUpdate),
-  packageController.updatePackageStatus
+  packageController.updatePackageStatus,
 );
 
 module.exports = router;

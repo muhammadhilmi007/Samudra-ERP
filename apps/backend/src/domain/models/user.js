@@ -40,6 +40,18 @@ const userSchema = new mongoose.Schema({
     trim: true,
   },
   role: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Role',
+    required: true,
+    index: true,
+  },
+  permissions: [{
+    type: String, // Store permission codes for faster access
+    uppercase: true,
+    trim: true,
+  }],
+  // Legacy role field for backward compatibility
+  legacyRole: {
     type: String,
     enum: [
       'ADMIN',
@@ -50,12 +62,8 @@ const userSchema = new mongoose.Schema({
       'DEBT_COLLECTOR',
       'CUSTOMER',
     ],
-    default: 'CUSTOMER',
     index: true,
   },
-  permissions: [{
-    type: String,
-  }],
   isActive: {
     type: Boolean,
     default: false, // Users need to verify email before becoming active
@@ -114,8 +122,8 @@ const userSchema = new mongoose.Schema({
     userAgent: String,
     ipAddress: String,
   }],
-}, { 
-  timestamps: true 
+}, {
+  timestamps: true,
 });
 
 /**
@@ -150,15 +158,15 @@ userSchema.methods.comparePassword = async function comparePassword(candidatePas
  */
 userSchema.methods.generateEmailVerificationToken = function generateEmailVerificationToken() {
   const token = crypto.randomBytes(32).toString('hex');
-  
+
   this.emailVerificationToken = crypto
     .createHash('sha256')
     .update(token)
     .digest('hex');
-    
+
   // Token expires in 24 hours
   this.emailVerificationExpires = Date.now() + 24 * 60 * 60 * 1000;
-  
+
   return token;
 };
 
@@ -168,15 +176,15 @@ userSchema.methods.generateEmailVerificationToken = function generateEmailVerifi
  */
 userSchema.methods.generatePasswordResetToken = function generatePasswordResetToken() {
   const token = crypto.randomBytes(32).toString('hex');
-  
+
   this.passwordResetToken = crypto
     .createHash('sha256')
     .update(token)
     .digest('hex');
-    
+
   // Token expires in 1 hour
   this.passwordResetExpires = Date.now() + 60 * 60 * 1000;
-  
+
   return token;
 };
 
@@ -195,7 +203,7 @@ userSchema.methods.addRefreshToken = function addRefreshToken(token, expiresAt, 
     this.refreshTokens.sort((a, b) => a.createdAt - b.createdAt);
     this.refreshTokens.shift();
   }
-  
+
   this.refreshTokens.push({
     token,
     expiresAt,
@@ -211,7 +219,7 @@ userSchema.methods.addRefreshToken = function addRefreshToken(token, expiresAt, 
  */
 userSchema.methods.removeRefreshToken = function removeRefreshToken(token) {
   const initialLength = this.refreshTokens.length;
-  this.refreshTokens = this.refreshTokens.filter(t => t.token !== token);
+  this.refreshTokens = this.refreshTokens.filter((t) => t.token !== token);
   return initialLength > this.refreshTokens.length;
 };
 
@@ -228,7 +236,7 @@ userSchema.methods.clearAllRefreshTokens = function clearAllRefreshTokens() {
  * @returns {boolean} True if token exists and is not expired
  */
 userSchema.methods.hasValidRefreshToken = function hasValidRefreshToken(token) {
-  const tokenObj = this.refreshTokens.find(t => t.token === token);
+  const tokenObj = this.refreshTokens.find((t) => t.token === token);
   return tokenObj && new Date(tokenObj.expiresAt) > new Date();
 };
 
@@ -238,7 +246,7 @@ userSchema.methods.hasValidRefreshToken = function hasValidRefreshToken(token) {
 userSchema.methods.incrementLoginAttempts = function incrementLoginAttempts() {
   // Increment login attempts
   this.failedLoginAttempts += 1;
-  
+
   // Lock account after 5 failed attempts for 15 minutes
   if (this.failedLoginAttempts >= 5) {
     this.lockUntil = Date.now() + 15 * 60 * 1000; // 15 minutes
@@ -263,23 +271,40 @@ userSchema.methods.isAccountLocked = function isAccountLocked() {
 
 /**
  * Method to check if user has specific permission
- * @param {string} permission - Permission to check
+ * @param {string} permission - Permission code to check
  * @returns {boolean} True if user has permission
  */
 userSchema.methods.hasPermission = function hasPermission(permission) {
-  return this.permissions.includes(permission) || this.permissions.includes('ALL');
+  const permissionCode = permission.toUpperCase();
+  return this.permissions.includes(permissionCode) || this.permissions.includes('ALL');
 };
 
 /**
  * Method to check if user has specific role
- * @param {string|string[]} roles - Role(s) to check
+ * @param {string|string[]} roleIds - Role ID(s) to check
  * @returns {boolean} True if user has any of the roles
  */
-userSchema.methods.hasRole = function hasRole(roles) {
-  if (Array.isArray(roles)) {
-    return roles.includes(this.role);
+userSchema.methods.hasRole = function hasRole(roleIds) {
+  if (!this.role) return false;
+
+  if (Array.isArray(roleIds)) {
+    return roleIds.some((roleId) => this.role.toString() === roleId.toString());
   }
-  return this.role === roles;
+  return this.role.toString() === roleIds.toString();
+};
+
+/**
+ * Method to check if user has specific legacy role
+ * @param {string|string[]} roles - Legacy role(s) to check
+ * @returns {boolean} True if user has any of the legacy roles
+ */
+userSchema.methods.hasLegacyRole = function hasLegacyRole(roles) {
+  if (!this.legacyRole) return false;
+
+  if (Array.isArray(roles)) {
+    return roles.includes(this.legacyRole);
+  }
+  return this.legacyRole === roles;
 };
 
 const User = mongoose.model('User', userSchema);

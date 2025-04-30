@@ -14,9 +14,10 @@ const router = express.Router();
  * @desc    Get all packages with optional filters
  * @access  Private - Requires authentication
  */
-router.get('/', 
-  authenticate, 
-  packageController.getAllPackages
+router.get(
+  '/',
+  authenticate,
+  packageController.getAllPackages,
 );
 
 /**
@@ -24,9 +25,10 @@ router.get('/',
  * @desc    Get package by ID
  * @access  Private - Requires authentication
  */
-router.get('/:id', 
-  authenticate, 
-  packageController.getPackageById
+router.get(
+  '/:id',
+  authenticate,
+  packageController.getPackageById,
 );
 
 /**
@@ -34,10 +36,11 @@ router.get('/:id',
  * @desc    Create a new package
  * @access  Private - Requires create_package permission
  */
-router.post('/', 
-  authenticate, 
+router.post(
+  '/',
+  authenticate,
   authorizePermissions('create_package'),
-  packageController.createPackage
+  packageController.createPackage,
 );
 
 /**
@@ -45,10 +48,11 @@ router.post('/',
  * @desc    Update package by ID
  * @access  Private - Requires update_package permission
  */
-router.put('/:id', 
-  authenticate, 
+router.put(
+  '/:id',
+  authenticate,
   authorizePermissions('update_package'),
-  packageController.updatePackage
+  packageController.updatePackage,
 );
 
 /**
@@ -56,10 +60,11 @@ router.put('/:id',
  * @desc    Delete package by ID
  * @access  Private - Admin only
  */
-router.delete('/:id', 
-  authenticate, 
+router.delete(
+  '/:id',
+  authenticate,
   authorizeRoles('ADMIN'),
-  packageController.deletePackage
+  packageController.deletePackage,
 );
 
 /**
@@ -67,10 +72,11 @@ router.delete('/:id',
  * @desc    Update package status
  * @access  Private - Requires update_package_status permission
  */
-router.patch('/:id/status', 
-  authenticate, 
+router.patch(
+  '/:id/status',
+  authenticate,
   authorizePermissions('update_package_status'),
-  packageController.updatePackageStatus
+  packageController.updatePackageStatus,
 );
 
 module.exports = router;

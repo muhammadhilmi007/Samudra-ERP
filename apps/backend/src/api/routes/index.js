@@ -6,6 +6,8 @@
 const express = require('express');
 const authRoutes = require('./authRoutes');
 const packageRoutes = require('./packageRoutes');
+const roleRoutes = require('./roleRoutes');
+const permissionRoutes = require('./permissionRoutes');
 
 const router = express.Router();
 
@@ -24,5 +26,7 @@ router.get('/health', (req, res) => {
 // Mount route modules
 router.use('/auth', authRoutes);
 router.use('/packages', packageRoutes);
+router.use('/roles', roleRoutes);
+router.use('/permissions', permissionRoutes);
 
 module.exports = router;

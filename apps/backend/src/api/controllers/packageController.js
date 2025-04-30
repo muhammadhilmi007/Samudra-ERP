@@ -97,15 +97,15 @@ const mockPackages = [
 const getAllPackages = async (req, res) => {
   try {
     const { status, service } = req.query;
-    
+
     // Build filter object for MongoDB query
     const filters = {};
     if (status) filters.status = status;
     if (service) filters.service = service;
-    
+
     // Get packages from repository
     const packages = await packageRepository.findAll(filters);
-    
+
     return res.json({
       success: true,
       data: packages,
@@ -116,7 +116,7 @@ const getAllPackages = async (req, res) => {
   } catch (error) {
     console.error('Get all packages error:', error);
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'Internal server error', { details: error.message })
+      createApiError('SERVER_ERROR', 'Internal server error', { details: error.message }),
     );
   }
 };
@@ -129,16 +129,16 @@ const getAllPackages = async (req, res) => {
 const getPackageById = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     // Get package from repository
     const pkg = await packageRepository.findById(id);
-    
+
     if (!pkg) {
       return res.status(404).json(
-        createApiError('NOT_FOUND', 'Package not found')
+        createApiError('NOT_FOUND', 'Package not found'),
       );
     }
-    
+
     return res.json({
       success: true,
       data: pkg,
@@ -146,7 +146,7 @@ const getPackageById = async (req, res) => {
   } catch (error) {
     console.error('Get package by ID error:', error);
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'Internal server error', { details: error.message })
+      createApiError('SERVER_ERROR', 'Internal server error', { details: error.message }),
     );
   }
 };
@@ -158,17 +158,17 @@ const getPackageById = async (req, res) => {
  */
 const createPackage = async (req, res) => {
   try {
-    const { 
-      weight, dimensions, sender, recipient, service, price, notes 
+    const {
+      weight, dimensions, sender, recipient, service, price, notes,
     } = req.body;
-    
+
     // Basic validation
     if (!weight || !dimensions || !sender || !recipient || !service || !price) {
       return res.status(400).json(
-        createApiError('INVALID_INPUT', 'Missing required fields')
+        createApiError('INVALID_INPUT', 'Missing required fields'),
       );
     }
-    
+
     // Create package using repository
     const newPackage = await packageRepository.create({
       weight,
@@ -178,9 +178,9 @@ const createPackage = async (req, res) => {
       service,
       price,
       notes: notes || '',
-      status: 'PENDING'
+      status: 'PENDING',
     });
-    
+
     return res.status(201).json({
       success: true,
       data: newPackage,
@@ -188,7 +188,7 @@ const createPackage = async (req, res) => {
   } catch (error) {
     console.error('Create package error:', error);
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'Internal server error', { details: error.message })
+      createApiError('SERVER_ERROR', 'Internal server error', { details: error.message }),
     );
   }
 };
@@ -202,16 +202,16 @@ const updatePackage = async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-    
+
     // Update package using repository
     const updatedPackage = await packageRepository.update(id, updateData);
-    
+
     if (!updatedPackage) {
       return res.status(404).json(
-        createApiError('NOT_FOUND', 'Package not found')
+        createApiError('NOT_FOUND', 'Package not found'),
       );
     }
-    
+
     return res.json({
       success: true,
       data: updatedPackage,
@@ -219,7 +219,7 @@ const updatePackage = async (req, res) => {
   } catch (error) {
     console.error('Update package error:', error);
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'Internal server error', { details: error.message })
+      createApiError('SERVER_ERROR', 'Internal server error', { details: error.message }),
     );
   }
 };
@@ -233,35 +233,35 @@ const updatePackageStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    
+
     // Basic validation
     if (!status) {
       return res.status(400).json(
-        createApiError('INVALID_INPUT', 'Status is required')
+        createApiError('INVALID_INPUT', 'Status is required'),
       );
     }
-    
+
     // Validate status value
     const validStatuses = [
-      'PENDING', 'PICKED_UP', 'IN_TRANSIT', 'OUT_FOR_DELIVERY', 
-      'DELIVERED', 'FAILED_DELIVERY', 'RETURNED', 'CANCELLED'
+      'PENDING', 'PICKED_UP', 'IN_TRANSIT', 'OUT_FOR_DELIVERY',
+      'DELIVERED', 'FAILED_DELIVERY', 'RETURNED', 'CANCELLED',
     ];
-    
+
     if (!validStatuses.includes(status)) {
       return res.status(400).json(
-        createApiError('INVALID_INPUT', 'Invalid status value')
+        createApiError('INVALID_INPUT', 'Invalid status value'),
       );
     }
-    
+
     // Update package status using repository
     const updatedPackage = await packageRepository.updateStatus(id, status);
-    
+
     if (!updatedPackage) {
       return res.status(404).json(
-        createApiError('NOT_FOUND', 'Package not found')
+        createApiError('NOT_FOUND', 'Package not found'),
       );
     }
-    
+
     return res.json({
       success: true,
       data: updatedPackage,
@@ -269,7 +269,7 @@ const updatePackageStatus = async (req, res) => {
   } catch (error) {
     console.error('Update package status error:', error);
     return res.status(500).json(
-      createApiError('SERVER_ERROR', 'Internal server error', { details: error.message })
+      createApiError('SERVER_ERROR', 'Internal server error', { details: error.message }),
     );
   }
 };

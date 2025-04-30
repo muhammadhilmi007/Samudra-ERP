@@ -1,0 +1,168 @@
+# Windsurf Rules - Sistem ERP PT. Sarana Mudah Raya (Samudra Paket)
+
+## General Code Style & Formatting
+
+- Follow the Airbnb Style Guide for code formatting.
+- Use ESLint and Prettier for consistent code styling across the codebase.
+- Use PascalCase for React component file names (e.g., `PickupForm.jsx`, not `pickup-form.jsx`).
+- Use camelCase for JavaScript/TypeScript variables, functions, and instances.
+- Use PascalCase for TypeScript interfaces and types.
+- Prefer named exports for components to improve code traceability and debugging.
+- Add JSDoc comments for complex functions explaining their purpose and parameters.
+- Limit line length to 100 characters for improved readability.
+- Use async/await over promise chains for asynchronous operations.
+
+## Project Structure & Architecture
+
+- Follow Next.js patterns and use the App Router.
+- Correctly determine when to use server vs. client components in Next.js.
+- Structure the project according to feature-based modules as specified in TDD Section 3.1.1:
+  ```
+  /frontend
+  ├── /public  # Static assets
+  ├── /src
+      ├── /components  # Reusable UI components
+      │   ├── /atoms  # Basic building blocks (buttons, inputs)
+      │   ├── /molecules  # Combinations of atoms (form fields, cards)
+      │   ├── /organisms  # Complex UI components (tables, forms)
+      │   └── /templates  # Page layouts
+      ├── /features  # Feature-based modules
+      │   ├── /auth  # Authentication related features
+      │   ├── /dashboard  # Dashboard related features
+      │   ├── /pickup  # Pickup related features
+      │   └── ...
+      ├── /hooks  # Custom React hooks
+      ├── /lib  # Utility libraries
+      ├── /pages  # Next.js pages
+      ├── /services  # API service integrations
+      ├── /store  # Context providers
+      ├── /styles  # Global styles and themes
+      └── /types  # TypeScript type definitions
+  ```
+- Implement the hexagonal architecture pattern for backend services as specified in TDD Section 4.1.
+- Use the microservices approach outlined in TDD, with each service following this structure:
+  ```
+  /service-name
+  ├── /src
+  │   ├── /api  # API Layer
+  │   ├── /domain  # Domain Layer
+  │   ├── /infrastructure  # Infrastructure Layer
+  │   ├── /app  # Application Layer
+  │   └── /config  # Service configuration
+  ├── /tests
+  │   ├── /unit
+  │   ├── /integration
+  │   └── /e2e
+  ├── package.json
+  └── Dockerfile
+  ```
+
+## Styling & UI
+
+- Use Tailwind CSS for styling as specified in TDD Section 3.5.1.
+- Implement the color palette defined in TDD:
+  - Primary: `#2563EB` (Blue)
+  - Secondary: `#10B981` (Green)
+  - Accent: `#F59E0B` (Amber)
+  - Neutral: `#64748B` (Slate)
+- Use Shadcn UI for components integrated with Tailwind CSS.
+- Follow the spacing system based on a 4px unit as specified in TDD.
+- Implement a responsive design with breakpoints:
+  - Mobile: < 640px
+  - Tablet: 640px - 1024px
+  - Desktop: > 1024px
+  - Large desktop: > 1280px
+- Ensure accessibility compliance with WCAG 2.1 Level AA.
+
+## Data Fetching & Forms
+
+- Use TanStack Query (react-query) for frontend data fetching as specified in TDD Section 9.1.1.
+- Implement optimistic updates for UI responsiveness.
+- Use React Hook Form for form handling, including validation and error messages.
+- Use Zod for schema validation in both frontend and backend.
+- Follow the error handling patterns specified in TDD Section 6.4.2 for consistent API responses.
+- Implement the API format standards defined in TDD:
+  - Request format: URL parameters, query parameters, request body (JSON)
+  - Success response: `{ success: true, data: {...}, meta: {...} }`
+  - Error response: `{ success: false, error: { code: "...", message: "...", details: {...} } }`
+
+## State Management & Logic
+
+- Use React Context for state management, structuring contexts by feature domain.
+- Use Redux Toolkit for global state management as specified in TDD Sections 3.1.1 and 3.1.2.
+- Use Context API for localized state.
+- Implement the event-driven architecture for service communication as specified in TDD.
+- Follow the business logic separation as outlined in the hexagonal architecture pattern.
+- Implement proper error boundaries and fallbacks for resilient UI.
+
+## Backend & Database
+
+- Use MongoDB with Mongoose ODM as specified in TDD Section 5, not Prisma.
+- Use embedded document structure as defined in TDD Section 5.2.
+- Follow the database schema design in TDD Section 5.2 for all collections.
+- Implement the indexing strategy defined in TDD Section 5.4.
+- Use Node.js with Express.js for backend services as specified in TDD.
+- Implement JWT-based authentication as specified in TDD Section 6.2.
+- Follow the RBAC authorization model as specified in SRS Section 3.1.3.
+- Use Redis for caching as specified in TDD Section 5.1.2.
+- Implement the API endpoints defined in TDD Section 6.3.
+
+## Mobile Development
+
+- Use React Native with Expo and TypeScript for mobile development as specified in TDD Section 3.1.2.
+- Implement offline-first architecture with synchronization queue as specified in TDD.
+- Use Watermelon DB for local database as specified in TDD.
+- Follow the mobile app module structure for Checker App, Driver App, and Debt Collector App as detailed in TDD Section 3.4.
+- Optimize for battery life and data usage as per SRS requirements.
+- Implement secure local storage for sensitive data.
+
+## Testing & Quality Assurance
+
+- Maintain minimum 70% code coverage for unit tests as specified in TDD.
+- Implement end-to-end testing for critical user flows.
+- Use Jest for unit testing JavaScript/TypeScript.
+- Use React Testing Library for component testing.
+- Use Supertest for API testing.
+- Implement CI/CD pipeline for automated testing on each push.
+- Follow TDD's security requirements in Section 4.2 for all implementations.
+
+## Performance & Optimization
+
+- Implement lazy loading and code splitting for frontend optimization.
+- Optimize images and static assets using Next.js Image component.
+- Implement proper caching strategies for API responses.
+- Follow the performance requirements in SRS Section 4.1:
+  - API response time under 3 seconds for 95% of transactions
+  - Page load time under 5 seconds on standard connections
+- Monitor and optimize database queries with proper indexing.
+
+## DevOps & Deployment
+
+- Use Railway.com for hosting and deployment as specified in TDD Section 7.
+- Implement the CI/CD pipeline described in TDD Section 7.3.
+- Follow the environment setup in TDD Section 7.2:
+  - Development, Staging, and Production environments
+- Implement the backup and recovery strategies outlined in TDD Section 7.5.
+- Use Docker for containerization as specified in TDD.
+- Implement proper logging and monitoring as outlined in TDD Section 7.4.
+
+## Documentation
+
+- Document all APIs using Swagger/OpenAPI as specified in TDD Section 6.5.
+- Maintain up-to-date README files for all modules.
+- Create and maintain technical documentation for the system architecture.
+- Document all third-party integrations with clear interface specifications.
+- Use Storybook for documenting UI components.
+
+## Security
+
+- Implement all security measures outlined in TDD Section 2.4:
+  - JWT-based authentication with signature verification
+  - RBAC with granular permissions
+  - Secure password storage with bcrypt + salt
+  - Data encryption for sensitive information
+  - Input validation on client and server sides
+  - CSRF protection and Content Security Policy
+- Follow the security non-functional requirements in SRS Section 4.2.
+- Implement audit logging for security-relevant operations.
+- Regularly scan dependencies for vulnerabilities.
