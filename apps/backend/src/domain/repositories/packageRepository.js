@@ -10,66 +10,73 @@
 class PackageRepository {
   /**
    * Find all packages with optional filters
-   * @param {Object} filters - Filter criteria
+   * @param {Object} _filters - Filter criteria
    * @returns {Promise<Array>} List of packages
    */
-  async findAll(filters = {}) {
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  async findAll(_filters = {}) {
     throw new Error('Method not implemented');
   }
 
   /**
    * Find package by ID
-   * @param {string} id - Package ID
+   * @param {string} _id - Package ID
    * @returns {Promise<Object>} Package object
    */
-  async findById(id) {
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  async findById(_id) {
     throw new Error('Method not implemented');
   }
 
   /**
    * Find package by tracking number
-   * @param {string} trackingNumber - Package tracking number
+   * @param {string} _trackingNumber - Package tracking number
    * @returns {Promise<Object>} Package object
    */
-  async findByTrackingNumber(trackingNumber) {
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  async findByTrackingNumber(_trackingNumber) {
     throw new Error('Method not implemented');
   }
 
   /**
    * Create a new package
-   * @param {Object} packageData - Package data
+   * @param {Object} _packageData - Package data
    * @returns {Promise<Object>} Created package
    */
-  async create(packageData) {
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  async create(_packageData) {
     throw new Error('Method not implemented');
   }
 
   /**
    * Update a package
-   * @param {string} id - Package ID
-   * @param {Object} packageData - Package data to update
+   * @param {string} _id - Package ID
+   * @param {Object} _packageData - Package data to update
    * @returns {Promise<Object>} Updated package
    */
-  async update(id, packageData) {
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  async update(_id, _packageData) {
     throw new Error('Method not implemented');
   }
 
   /**
    * Update package status
-   * @param {string} id - Package ID
-   * @param {string} status - New status
+   * @param {string} _id - Package ID
+   * @param {string} _status - New status
    * @returns {Promise<Object>} Updated package
    */
-  async updateStatus(id, status) {
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  async updateStatus(_id, _status) {
     throw new Error('Method not implemented');
   }
 
   /**
    * Delete a package
-   * @param {string} id - Package ID
+   * @param {string} _id - Package ID
    * @returns {Promise<boolean>} True if deleted
    */
-  async delete(id) {
+  // eslint-disable-next-line class-methods-use-this, no-unused-vars
+  async delete(_id) {
     throw new Error('Method not implemented');
   }
 }

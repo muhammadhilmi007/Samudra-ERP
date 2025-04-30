@@ -69,6 +69,7 @@ const stream = {
 // Create Morgan middleware with custom format
 const httpLogger = morgan(
   // Define format
+  // eslint-disable-next-line max-len
   ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" - :response-time ms',
   // Options
   { stream },

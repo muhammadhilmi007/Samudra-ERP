@@ -60,62 +60,65 @@ const contactSchema = new mongoose.Schema({
  * Package Schema
  * Main entity for package/shipment
  */
-const packageSchema = new mongoose.Schema({
-  trackingNumber: {
-    type: String,
-    required: true,
-    unique: true,
-    index: true,
+const packageSchema = new mongoose.Schema(
+  {
+    trackingNumber: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+    },
+    status: {
+      type: String,
+      enum: [
+        'PENDING',
+        'PICKED_UP',
+        'IN_TRANSIT',
+        'OUT_FOR_DELIVERY',
+        'DELIVERED',
+        'FAILED_DELIVERY',
+        'RETURNED',
+        'CANCELLED',
+      ],
+      default: 'PENDING',
+      index: true,
+    },
+    weight: {
+      type: Number,
+      required: true,
+    },
+    dimensions: {
+      length: { type: Number, required: true },
+      width: { type: Number, required: true },
+      height: { type: Number, required: true },
+    },
+    sender: {
+      type: contactSchema,
+      required: true,
+    },
+    recipient: {
+      type: contactSchema,
+      required: true,
+    },
+    service: {
+      type: String,
+      enum: ['REGULAR', 'EXPRESS', 'SAME_DAY'],
+      required: true,
+      index: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    notes: {
+      type: String,
+      default: '',
+    },
   },
-  status: {
-    type: String,
-    enum: [
-      'PENDING',
-      'PICKED_UP',
-      'IN_TRANSIT',
-      'OUT_FOR_DELIVERY',
-      'DELIVERED',
-      'FAILED_DELIVERY',
-      'RETURNED',
-      'CANCELLED',
-    ],
-    default: 'PENDING',
-    index: true,
+  {
+    timestamps: true,
   },
-  weight: {
-    type: Number,
-    required: true,
-  },
-  dimensions: {
-    length: { type: Number, required: true },
-    width: { type: Number, required: true },
-    height: { type: Number, required: true },
-  },
-  sender: {
-    type: contactSchema,
-    required: true,
-  },
-  recipient: {
-    type: contactSchema,
-    required: true,
-  },
-  service: {
-    type: String,
-    enum: ['REGULAR', 'EXPRESS', 'SAME_DAY'],
-    required: true,
-    index: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  notes: {
-    type: String,
-    default: '',
-  },
-}, {
-  timestamps: true,
-});
+);
 
 // Create indexes for better query performance
 packageSchema.index({ createdAt: -1 });

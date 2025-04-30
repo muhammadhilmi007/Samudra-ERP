@@ -24,8 +24,11 @@ router.post('/auth/login', validateRequest(schemas.login), authController.login)
 router.post('/auth/refresh', authController.refreshToken);
 router.post('/auth/logout', authenticate, authController.logout);
 router.get('/auth/verify-email/:token', authController.verifyEmail);
+// eslint-disable-next-line max-len
 router.post('/auth/forgot-password', validateRequest(schemas.requestPasswordReset), authController.requestPasswordReset);
+// eslint-disable-next-line max-len
 router.post('/auth/reset-password', validateRequest(schemas.resetPassword), authController.resetPassword);
+// eslint-disable-next-line max-len
 router.post('/auth/change-password', authenticate, validateRequest(schemas.changePassword), authController.changePassword);
 router.get('/auth/profile', authenticate, authController.getProfile);
 

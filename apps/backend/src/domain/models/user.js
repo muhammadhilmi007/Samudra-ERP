@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /**
  * Samudra Paket ERP - User Model
  * Domain model for user entity with RBAC support

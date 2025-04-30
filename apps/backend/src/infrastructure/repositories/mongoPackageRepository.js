@@ -16,6 +16,7 @@ class MongoPackageRepository extends PackageRepository {
    * @param {Object} filters - Filter criteria
    * @returns {Promise<Array>} List of packages
    */
+  // eslint-disable-next-line class-methods-use-this
   async findAll(filters = {}) {
     return Package.find(filters).sort({ createdAt: -1 });
   }
@@ -25,6 +26,7 @@ class MongoPackageRepository extends PackageRepository {
    * @param {string} id - Package ID
    * @returns {Promise<Object>} Package object
    */
+  // eslint-disable-next-line class-methods-use-this
   async findById(id) {
     return Package.findById(id);
   }
@@ -34,6 +36,7 @@ class MongoPackageRepository extends PackageRepository {
    * @param {string} trackingNumber - Package tracking number
    * @returns {Promise<Object>} Package object
    */
+  // eslint-disable-next-line class-methods-use-this
   async findByTrackingNumber(trackingNumber) {
     return Package.findOne({ trackingNumber });
   }
@@ -41,49 +44,64 @@ class MongoPackageRepository extends PackageRepository {
   /**
    * Create a new package
    * @param {Object} packageData - Package data
-   * @returns {Promise<Object>} Created package
+   * @returns {Promise<Object>} Created package object
    */
+  // eslint-disable-next-line class-methods-use-this
   async create(packageData) {
-    if (!packageData.trackingNumber) {
-      packageData.trackingNumber = Package.generateTrackingNumber();
-    }
-    const newPackage = new Package(packageData);
-    return newPackage.save();
+    const newPackage = new Package({
+      ...packageData,
+      // Default status is 'pending'
+      status: 'pending',
+      // Initialize history with creation event
+      history: [{ status: 'pending', timestamp: new Date() }],
+    });
+    await newPackage.save();
+    return newPackage;
   }
 
   /**
-   * Update a package
+   * Update a package by ID
    * @param {string} id - Package ID
-   * @param {Object} packageData - Package data to update
-   * @returns {Promise<Object>} Updated package
+   * @param {Object} updateData - Data to update
+   * @returns {Promise<Object>} Updated package object
    */
-  async update(id, packageData) {
+  // eslint-disable-next-line class-methods-use-this
+  async update(id, updateData) {
+    return Package.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+  }
+
+  /**
+   * Update package status and add history record
+   * @param {string} id - Package ID
+   * @param {string} newStatus - New status
+   * @param {string} userId - User performing the update
+   * @param {Object} additionalInfo - Optional additional info (location, etc.)
+   * @returns {Promise<Object>} Updated package object
+   */
+  // eslint-disable-next-line class-methods-use-this
+  async updateStatus(id, newStatus, userId, additionalInfo = {}) {
+    const historyEntry = {
+      status: newStatus,
+      timestamp: new Date(),
+      updatedBy: userId,
+      ...additionalInfo,
+    };
     return Package.findByIdAndUpdate(
       id,
-      { $set: packageData },
+      { $set: { status: newStatus }, $push: { history: historyEntry } },
       { new: true, runValidators: true },
     );
   }
 
   /**
-   * Update package status
+   * Delete a package by ID
    * @param {string} id - Package ID
-   * @param {string} status - New status
-   * @returns {Promise<Object>} Updated package
+   * @returns {Promise<boolean>} True if deleted, false otherwise
    */
-  async updateStatus(id, status) {
-    return Package.findByIdAndUpdate(
-      id,
-      { $set: { status } },
-      { new: true, runValidators: true },
-    );
-  }
-
-  /**
-   * Delete a package
-   * @param {string} id - Package ID
-   * @returns {Promise<boolean>} True if deleted
-   */
+  // eslint-disable-next-line class-methods-use-this
   async delete(id) {
     const result = await Package.findByIdAndDelete(id);
     return !!result;

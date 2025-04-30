@@ -73,6 +73,7 @@ const schemas = {
     phoneNumber: Joi.string().pattern(/^[0-9+\-\s]+$/).messages({
       'string.pattern.base': 'Phone number must contain only digits, +, - or spaces',
     }),
+    // eslint-disable-next-line max-len
     role: Joi.string().valid('ADMIN', 'MANAGER', 'OPERATOR', 'DRIVER', 'CHECKER', 'DEBT_COLLECTOR', 'CUSTOMER').default('CUSTOMER'),
   }),
 
@@ -141,6 +142,7 @@ const schemas = {
       height: Joi.number().positive().required(),
     }),
     serviceType: Joi.string().valid('regular', 'express', 'same-day').required(),
+    // eslint-disable-next-line max-len
     status: Joi.string().valid('pending', 'picked-up', 'in-transit', 'delivered', 'returned').default('pending'),
     price: Joi.number().positive().required(),
     notes: Joi.string().optional(),
@@ -171,6 +173,7 @@ const schemas = {
   }),
 
   packageStatusUpdate: Joi.object({
+    // eslint-disable-next-line max-len
     status: Joi.string().valid('pending', 'picked-up', 'in-transit', 'delivered', 'returned').required(),
     notes: Joi.string().optional(),
     location: Joi.string().optional(),

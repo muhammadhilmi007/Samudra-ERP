@@ -6,6 +6,7 @@
 const { createApiResponse, createApiError } = require('../../domain/utils/errorUtils');
 const RoleService = require('../../app/services/roleService');
 const MongoRoleRepository = require('../../infrastructure/repositories/mongoRoleRepository');
+// eslint-disable-next-line max-len
 const MongoPermissionRepository = require('../../infrastructure/repositories/mongoPermissionRepository');
 
 // Initialize repositories and services

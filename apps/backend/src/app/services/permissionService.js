@@ -119,7 +119,9 @@ class PermissionService {
     const permission = await this.getPermissionById(id);
 
     // Check if system permission
+    // eslint-disable-next-line max-len
     if (permission.isSystem && (permissionData.name || permissionData.code || permissionData.isActive === false)) {
+      // eslint-disable-next-line max-len
       throw createApiError('FORBIDDEN', 'Cannot modify name, code, or deactivate system permissions');
     }
 

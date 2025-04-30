@@ -104,6 +104,7 @@ const seedUsers = async () => {
 
     // Check if we're connected
     if (mongoose.connection.readyState !== 1) {
+      // eslint-disable-next-line max-len
       throw new Error(`Failed to connect to MongoDB. Connection state: ${['disconnected', 'connected', 'connecting', 'disconnecting'][mongoose.connection.readyState]}`);
     }
 
@@ -164,7 +165,7 @@ const seedUsers = async () => {
       if (roleMap[template.roleName]) {
         user.role = roleMap[template.roleName];
       } else {
-        // eslint-disable-next-line no-console
+        // eslint-disable-next-line no-console, max-len
         console.warn(`Warning: Role '${template.roleName}' not found in database. User '${template.username}' will not be created.`);
         return null;
       }

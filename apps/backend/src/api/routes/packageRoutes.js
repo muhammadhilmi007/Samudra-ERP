@@ -5,6 +5,7 @@
 
 const express = require('express');
 const packageController = require('../controllers/packageController');
+// eslint-disable-next-line max-len
 const { authenticate, authorizeRoles, authorizePermissions } = require('../middleware/authMiddleware');
 
 const router = express.Router();
