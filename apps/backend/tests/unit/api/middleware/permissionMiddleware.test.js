@@ -227,7 +227,7 @@ describe('Permission Middleware', () => {
       expect(res.status).toHaveBeenCalledWith(403);
       expect(res.json).toHaveBeenCalledWith(expect.objectContaining({
         success: false,
-        error: { code: 'FORBIDDEN', message: 'You do not have permission to perform this action' },
+        error: { code: 'FORBIDDEN', message: 'You do not have all required permissions' },
       }));
       expect(next).not.toHaveBeenCalled();
     });

@@ -18,44 +18,40 @@ const userRepository = new MongoUserRepository();
  * @returns {Function} Express middleware
  */
 const checkPermission = (requiredPermissions) => async (req, res, next) => {
-  // Check if authenticate middleware has been run
-  if (!req.user) {
-    return res.status(500).json(
-      createApiError(
-        'SERVER_ERROR',
-        'Authentication middleware must be used before permission check',
-      ),
-    );
-  }
-
   try {
-    // Get user from database to ensure we have the latest data
-    const user = await userRepository.findById(req.user.id);
-    if (!user) {
-      return res.status(401).json(
-        createApiError('UNAUTHORIZED', 'User not found'),
+    // Ensure req.user exists
+    if (!req.user || !req.user.id) {
+      return res.status(500).json(
+        createApiError(
+          'SERVER_ERROR',
+          'Authentication middleware must be used before permission check',
+        ),
       );
     }
 
-    // Convert single permission to array
-    const permissionsToCheck = Array.isArray(requiredPermissions)
+    // Normalize permissions to array
+    const normalizedPermissions = Array.isArray(requiredPermissions)
       ? requiredPermissions
       : [requiredPermissions];
 
-    // Normalize permission codes to uppercase
-    const normalizedPermissions = permissionsToCheck.map((p) => p.toUpperCase());
+    // Get user from database to ensure we have the latest data
+    const user = await userRepository.findById(req.user.id);
+    if (!user) {
+      return res.status(401).json(createApiError('UNAUTHORIZED', 'User not found'));
+    }
 
     // Super admin check - if user has 'ALL' permission
     if (user.permissions && user.permissions.includes('ALL')) {
       return next();
     }
 
-    // Check permissions
-    const hasPermission = normalizedPermissions.some(
+    // Check if user has all required permissions
+    // Check if user has each required permission
+    const hasAllPermissions = normalizedPermissions.every(
       (permission) => user.permissions && user.permissions.includes(permission),
     );
 
-    if (!hasPermission) {
+    if (!hasAllPermissions) {
       logger.warn('Permission denied', {
         userId: user.id,
         username: user.username,
@@ -87,33 +83,66 @@ const checkResourcePermission = (
   requiredPermissions,
   resourceAccessFn,
 ) => async (req, res, next) => {
-  // First check if user has the required permission
-  const permissionMiddleware = checkPermission(requiredPermissions);
-
-  // Call the permission middleware
-  permissionMiddleware(req, res, async (err) => {
-    if (err) return next(err);
-
-    try {
-      // Now check if user has access to the specific resource
-      const hasAccess = await resourceAccessFn(req);
-
-      if (!hasAccess) {
-        return res.status(403).json(
-          createApiError('FORBIDDEN', 'You do not have access to this resource'),
-        );
-      }
-
-      return next();
-    } catch (error) {
-      logger.error('Resource permission check error:', { error });
+  try {
+    // Ensure req.user exists
+    if (!req.user || !req.user.id) {
       return res.status(500).json(
-        createApiError('SERVER_ERROR', 'An error occurred during resource permission check'),
+        createApiError(
+          'SERVER_ERROR',
+          'Authentication middleware must be used before permission check',
+        ),
       );
     }
-  });
 
-  return undefined;
+    // Get user from database to ensure we have the latest data
+    const user = await userRepository.findById(req.user.id);
+    if (!user) {
+      return res.status(401).json(createApiError('UNAUTHORIZED', 'User not found'));
+    }
+
+    // Super admin check - if user has 'ALL' permission
+    if (user.permissions && user.permissions.includes('ALL')) {
+      // Check resource access
+      const hasAccess = await resourceAccessFn(req);
+      if (!hasAccess) {
+        return res.status(403).json(
+          createApiError('FORBIDDEN', 'You do not have permission to access this resource'),
+        );
+      }
+      return next();
+    }
+
+    // Normalize permissions to array
+    const normalizedPermissions = Array.isArray(requiredPermissions)
+      ? requiredPermissions
+      : [requiredPermissions];
+
+    // Check if user has all required permissions
+    const hasAllPermissions = normalizedPermissions.every(
+      (permission) => user.permissions && user.permissions.includes(permission),
+    );
+
+    if (!hasAllPermissions) {
+      return res.status(403).json(
+        createApiError('FORBIDDEN', 'You do not have permission to perform this action'),
+      );
+    }
+
+    // Check resource access
+    const hasAccess = await resourceAccessFn(req);
+    if (!hasAccess) {
+      return res.status(403).json(
+        createApiError('FORBIDDEN', 'You do not have permission to access this resource'),
+      );
+    }
+
+    return next();
+  } catch (error) {
+    logger.error('Resource permission check error:', { error });
+    return res.status(500).json(
+      createApiError('SERVER_ERROR', 'An error occurred during resource permission check'),
+    );
+  }
 };
 
 /**
