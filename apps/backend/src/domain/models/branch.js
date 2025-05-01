@@ -157,11 +157,15 @@ branchSchema.pre('save', async function preSaveHook(next) {
 branchSchema.statics.getHierarchy = async function getHierarchy(branchId = null) {
   const query = branchId ? { _id: branchId } : { parentBranch: null };
 
+  // Use a more robust approach with explicit population at each level
   const branches = await this.find(query)
     .populate({
       path: 'childBranches',
       populate: {
         path: 'childBranches',
+        populate: {
+          path: 'childBranches',
+        },
       },
     })
     .lean();
@@ -173,17 +177,28 @@ branchSchema.statics.getHierarchy = async function getHierarchy(branchId = null)
 branchSchema.methods.getAllDescendants = async function getAllDescendants() {
   const descendants = [];
 
-  const getChildrenRecursively = async (branchId) => {
-    const children = await mongoose.model('Branch').find({ parentBranch: branchId });
+  // Use a more efficient approach to get all descendants
+  const getDescendantsRecursively = async (parentId) => {
+    // Find all direct children
+    const directChildren = await mongoose.model('Branch')
+      .find({ parentBranch: parentId })
+      .lean();
 
-    // Using Promise.all to handle async operations in parallel
-    await Promise.all(children.map(async (child) => {
-      descendants.push(child);
-      await getChildrenRecursively(child._id);
-    }));
+    // Add direct children to descendants array
+    if (directChildren && directChildren.length > 0) {
+      descendants.push(...directChildren);
+
+      // Process each child's descendants recursively
+      await Promise.all(
+        directChildren.map((child) => getDescendantsRecursively(child._id)),
+      );
+    }
   };
 
-  await getChildrenRecursively(this._id);
+  // Start the recursive process
+  await getDescendantsRecursively(this._id);
+
+  // Ensure we're returning all descendants
   return descendants;
 };
 

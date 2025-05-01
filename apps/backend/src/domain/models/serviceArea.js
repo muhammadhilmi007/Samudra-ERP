@@ -143,6 +143,19 @@ serviceAreaSchema.virtual('isActive').get(function isActiveGetter() {
   return this.status === 'active';
 });
 
+// Set isActive as a setter for status
+serviceAreaSchema.virtual('isActive').set(function isActiveSetter(value) {
+  this.status = value ? 'active' : 'inactive';
+});
+
+// Pre-save middleware to handle isActive property
+serviceAreaSchema.pre('save', function preSave(next) {
+  if (this.isNew && this.isActive !== undefined && this.status === undefined) {
+    this.status = this.isActive ? 'active' : 'inactive';
+  }
+  next();
+});
+
 // Create indexes for efficient querying
 serviceAreaSchema.index({ branch: 1 });
 // Code already has a unique index from the schema definition

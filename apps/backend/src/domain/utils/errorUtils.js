@@ -3,6 +3,9 @@
  * Utility functions for handling API errors
  */
 
+const NotFoundError = require('./errors/NotFoundError');
+const ValidationError = require('./errors/ValidationError');
+
 /**
  * Create a standardized API error response
  * @param {string} code - Error code
@@ -21,4 +24,6 @@ const createApiError = (code, message, details = {}) => ({
 
 module.exports = {
   createApiError,
+  NotFoundError,
+  ValidationError,
 };

@@ -365,6 +365,19 @@ describe('Branch Repository', () => {
         parentBranch: headOffice._id,
       });
 
+      // Create second branch under head office
+      await branchRepository.createBranch({
+        ...sampleBranch,
+        code: 'BR002',
+        name: 'Branch Surabaya',
+        address: {
+          ...sampleBranch.address,
+          city: 'Surabaya',
+          province: 'Jawa Timur',
+        },
+        parentBranch: headOffice._id,
+      });
+
       // Create sub-branch under branch1
       await branchRepository.createBranch({
         ...sampleBranch,
