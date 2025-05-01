@@ -59,7 +59,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 
 ### B. Backend: Modul Authentication & Authorization
 
-#### API Gateway
+#### API Gateway [Finished]
 - [ ] Implementasi API Gateway dengan Express.js
 - [ ] Konfigurasi routing dan middleware
 - [ ] Setup error handling terpusat
@@ -68,7 +68,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi request validation
 - [ ] Setup logging middleware
 
-#### User & Authentication Service
+#### User & Authentication Service [Finished]
 - [ ] Desain dan implementasi database schema untuk users
 - [ ] Implementasi user registration endpoint
 - [ ] Implementasi login endpoint dengan JWT authentication
@@ -79,7 +79,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi logout functionality
 - [ ] Unit testing untuk authentication flows
 
-#### Role & Authorization Service
+#### Role & Authorization Service [Finished]
 - [ ] Desain dan implementasi database schema untuk roles dan permissions
 - [ ] Implementasi RBAC (Role-Based Access Control)
 - [ ] Implementasi permission-based authorization
@@ -90,7 +90,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 
 ### C. Backend: Modul Manajemen Cabang & Divisi
 
-#### Branch Management Service
+#### Branch Management Service [Finished]
 - [ ] Desain dan implementasi database schema untuk branches
 - [ ] Implementasi CRUD endpoints untuk branches
 - [ ] Implementasi branch hierarchy management 
@@ -98,7 +98,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi branch status management (active/inactive)
 - [ ] Unit testing untuk branch management
 
-#### Service Area Management
+#### Service Area Management [Finished]
 - [ ] Desain dan implementasi database schema untuk service areas
 - [ ] Implementasi CRUD endpoints untuk service areas
 - [ ] Implementasi validation untuk service area mapping
@@ -106,7 +106,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi geographic data indexing
 - [ ] Unit testing untuk service area functionality
 
-#### Division & Position Management Service
+#### Division & Position Management Service [Doing]
 - [ ] Desain dan implementasi database schema untuk divisions dan positions
 - [ ] Implementasi CRUD endpoints untuk divisions
 - [ ] Implementasi CRUD endpoints untuk positions
@@ -114,7 +114,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi position hierarchy management
 - [ ] Unit testing untuk division dan position management
 
-#### Forwarder Management Service
+#### Forwarder Management Service [Doing]
 - [ ] Desain dan implementasi database schema untuk forwarder partners
 - [ ] Implementasi CRUD endpoints untuk forwarder partners
 - [ ] Implementasi forwarder area management

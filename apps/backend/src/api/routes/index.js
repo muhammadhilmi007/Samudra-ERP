@@ -12,6 +12,7 @@ const branchRoutes = require('./branchRoutes');
 const serviceAreaRoutes = require('./serviceAreaRoutes');
 const divisionRoutes = require('./divisionRoutes');
 const positionRoutes = require('./positionRoutes');
+const forwarderRoutes = require('./forwarderRoutes');
 
 const router = express.Router();
 
@@ -36,5 +37,6 @@ router.use('/branches', branchRoutes);
 router.use('/service-areas', serviceAreaRoutes);
 router.use('/divisions', divisionRoutes);
 router.use('/positions', positionRoutes);
+router.use('/forwarders', forwarderRoutes);
 
 module.exports = router;

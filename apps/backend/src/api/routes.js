@@ -10,6 +10,7 @@ const router = express.Router();
 // Import controllers
 const authController = require('./controllers/authController');
 const packageController = require('./controllers/packageController');
+const forwarderController = require('./controllers/forwarderController');
 
 // Import middleware
 const { authenticate, authorizePermissions } = require('./middleware/authMiddleware');
@@ -47,6 +48,9 @@ router.post(
   validateRequest(schemas.packageCreate),
   packageController.createPackage,
 );
+
+// Forwarder routes
+router.use('/forwarders', require('./routes/forwarderRoutes')({ forwarderController }));
 router.put(
   '/packages/:id',
   authenticate,

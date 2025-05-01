@@ -1,11 +1,10 @@
+/* eslint-disable max-len */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const ServiceArea = require('../../../../src/domain/models/serviceArea');
-const MongoServiceAreaRepository = require(
-  '../../../../src/infrastructure/repositories/mongoServiceAreaRepository',
-);
+const MongoServiceAreaRepository = require('../../../../src/infrastructure/repositories/mongoServiceAreaRepository');
 const { NotFoundError } = require('../../../../src/domain/utils/errorUtils');
 
 let mongoServer;
@@ -40,7 +39,15 @@ describe('MongoServiceAreaRepository', () => {
         coverage: {
           type: 'Polygon',
           // eslint-disable-next-line max-len
-          coordinates: [[[-73.9, 40.7], [-73.8, 40.7], [-73.8, 40.8], [-73.9, 40.8], [-73.9, 40.7]]],
+          coordinates: [
+            [
+              [-73.9, 40.7],
+              [-73.8, 40.7],
+              [-73.8, 40.8],
+              [-73.9, 40.8],
+              [-73.9, 40.7],
+            ],
+          ],
         },
         centerPoint: {
           type: 'Point',
@@ -58,9 +65,7 @@ describe('MongoServiceAreaRepository', () => {
       expect(createdArea).toBeDefined();
       expect(createdArea.name).toBe('Test Area');
       expect(createdArea.branch.toString()).toBe(branchId.toString());
-      expect(createdArea.coverage.coordinates).toEqual(
-        serviceAreaData.coverage.coordinates,
-      );
+      expect(createdArea.coverage.coordinates).toEqual(serviceAreaData.coverage.coordinates);
       expect(createdArea.operationalHours).toBe(serviceAreaData.operationalHours);
       expect(createdArea.isActive).toBe(true);
 
@@ -79,8 +84,9 @@ describe('MongoServiceAreaRepository', () => {
         },
       };
 
-      await expect(serviceAreaRepository.create(invalidServiceAreaData))
-        .rejects.toThrow(mongoose.Error.ValidationError);
+      await expect(serviceAreaRepository.create(invalidServiceAreaData)).rejects.toThrow(
+        mongoose.Error.ValidationError,
+      );
     });
   });
 
@@ -94,7 +100,15 @@ describe('MongoServiceAreaRepository', () => {
         branch: branchId,
         coverage: {
           type: 'Polygon',
-          coordinates: [[[-1, 1], [1, 1], [1, -1], [-1, -1], [-1, 1]]],
+          coordinates: [
+            [
+              [-1, 1],
+              [1, 1],
+              [1, -1],
+              [-1, -1],
+              [-1, 1],
+            ],
+          ],
         },
         centerPoint: {
           type: 'Point',
@@ -123,8 +137,9 @@ describe('MongoServiceAreaRepository', () => {
     });
 
     it('should throw an error for invalid ID format', async () => {
-      await expect(serviceAreaRepository.findById('invalid-id'))
-        .rejects.toThrow(mongoose.Error.CastError);
+      await expect(serviceAreaRepository.findById('invalid-id')).rejects.toThrow(
+        mongoose.Error.CastError,
+      );
     });
   });
 
@@ -132,6 +147,8 @@ describe('MongoServiceAreaRepository', () => {
     let areas;
 
     beforeAll(async () => {
+      // Debug: Log branchId being used
+
       areas = await Promise.all([
         new ServiceArea({
           name: 'Area A',
@@ -140,7 +157,15 @@ describe('MongoServiceAreaRepository', () => {
           isActive: true,
           coverage: {
             type: 'Polygon',
-            coordinates: [[[-1, 1], [1, 1], [1, -1], [-1, -1], [-1, 1]]],
+            coordinates: [
+              [
+                [-1, 1],
+                [1, 1],
+                [1, -1],
+                [-1, -1],
+                [-1, 1],
+              ],
+            ],
           },
           centerPoint: {
             type: 'Point',
@@ -158,7 +183,15 @@ describe('MongoServiceAreaRepository', () => {
           isActive: false,
           coverage: {
             type: 'Polygon',
-            coordinates: [[[-2, 2], [2, 2], [2, -2], [-2, -2], [-2, 2]]],
+            coordinates: [
+              [
+                [-2, 2],
+                [2, 2],
+                [2, -2],
+                [-2, -2],
+                [-2, 2],
+              ],
+            ],
           },
           centerPoint: {
             type: 'Point',
@@ -176,7 +209,15 @@ describe('MongoServiceAreaRepository', () => {
           isActive: true,
           coverage: {
             type: 'Polygon',
-            coordinates: [[[-3, 3], [3, 3], [3, -3], [-3, -3], [-3, 3]]],
+            coordinates: [
+              [
+                [-3, 3],
+                [3, 3],
+                [3, -3],
+                [-3, -3],
+                [-3, 3],
+              ],
+            ],
           },
           centerPoint: {
             type: 'Point',
@@ -188,6 +229,11 @@ describe('MongoServiceAreaRepository', () => {
           },
         }).save(),
       ]);
+
+      // Debug: Verify saved areas
+
+      // Debug: Verify database contents
+      const dbAreas = await ServiceArea.find({});
     });
 
     afterAll(async () => {
@@ -257,7 +303,17 @@ describe('MongoServiceAreaRepository', () => {
         name: 'Update Area',
         code: 'UA001',
         branch: branchId,
-        coverage: { type: 'Polygon', coordinates: [[[0, 0], [1, 1], [0, 1], [0, 0]]] },
+        coverage: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [0, 0],
+              [1, 1],
+              [0, 1],
+              [0, 0],
+            ],
+          ],
+        },
         centerPoint: {
           type: 'Point',
           coordinates: [0.5, 0.5],
@@ -293,17 +349,20 @@ describe('MongoServiceAreaRepository', () => {
       const nonExistentId = new mongoose.Types.ObjectId();
       const updateData = { name: 'Does Not Matter' };
 
-      await expect(serviceAreaRepository.update(nonExistentId, updateData))
-        .rejects.toThrow(NotFoundError);
-      await expect(serviceAreaRepository.update(nonExistentId, updateData))
-        .rejects.toThrow(`ServiceArea with ID ${nonExistentId} not found`);
+      await expect(serviceAreaRepository.update(nonExistentId, updateData)).rejects.toThrow(
+        NotFoundError,
+      );
+      await expect(serviceAreaRepository.update(nonExistentId, updateData)).rejects.toThrow(
+        `ServiceArea with ID ${nonExistentId} not found`,
+      );
     });
 
     it('should throw validation error for invalid update data', async () => {
       const invalidUpdateData = { name: '' };
 
-      await expect(serviceAreaRepository.update(testArea._id, invalidUpdateData))
-        .rejects.toThrow(mongoose.Error.ValidationError);
+      await expect(serviceAreaRepository.update(testArea._id, invalidUpdateData)).rejects.toThrow(
+        mongoose.Error.ValidationError,
+      );
     });
 
     it('should only update specified fields', async () => {
@@ -324,7 +383,17 @@ describe('MongoServiceAreaRepository', () => {
         name: 'Delete Area',
         code: 'DA001',
         branch: branchId,
-        coverage: { type: 'Polygon', coordinates: [[[0, 0], [1, 1], [0, 1], [0, 0]]] },
+        coverage: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [0, 0],
+              [1, 1],
+              [0, 1],
+              [0, 0],
+            ],
+          ],
+        },
         centerPoint: {
           type: 'Point',
           coordinates: [0.5, 0.5],
@@ -349,15 +418,16 @@ describe('MongoServiceAreaRepository', () => {
     it('should throw NotFoundError if service area does not exist', async () => {
       const nonExistentId = new mongoose.Types.ObjectId();
 
-      await expect(serviceAreaRepository.delete(nonExistentId))
-        .rejects.toThrow(NotFoundError);
-      await expect(serviceAreaRepository.delete(nonExistentId))
-        .rejects.toThrow(`ServiceArea with ID ${nonExistentId} not found`);
+      await expect(serviceAreaRepository.delete(nonExistentId)).rejects.toThrow(NotFoundError);
+      await expect(serviceAreaRepository.delete(nonExistentId)).rejects.toThrow(
+        `ServiceArea with ID ${nonExistentId} not found`,
+      );
     });
 
     it('should throw an error for invalid ID format', async () => {
-      await expect(serviceAreaRepository.delete('invalid-id'))
-        .rejects.toThrow(mongoose.Error.CastError);
+      await expect(serviceAreaRepository.delete('invalid-id')).rejects.toThrow(
+        mongoose.Error.CastError,
+      );
     });
   });
 
@@ -374,7 +444,15 @@ describe('MongoServiceAreaRepository', () => {
           branch: branchId,
           coverage: {
             type: 'Polygon',
-            coordinates: [[[-1, 1], [1, 1], [1, -1], [-1, -1], [-1, 1]]],
+            coordinates: [
+              [
+                [-1, 1],
+                [1, 1],
+                [1, -1],
+                [-1, -1],
+                [-1, 1],
+              ],
+            ],
           },
           centerPoint: {
             type: 'Point',
@@ -391,7 +469,15 @@ describe('MongoServiceAreaRepository', () => {
           branch: branchId,
           coverage: {
             type: 'Polygon',
-            coordinates: [[[-2, 2], [2, 2], [2, -2], [-2, -2], [-2, 2]]],
+            coordinates: [
+              [
+                [-2, 2],
+                [2, 2],
+                [2, -2],
+                [-2, -2],
+                [-2, 2],
+              ],
+            ],
           },
           centerPoint: {
             type: 'Point',
@@ -410,7 +496,15 @@ describe('MongoServiceAreaRepository', () => {
           branch: branch2Id,
           coverage: {
             type: 'Polygon',
-            coordinates: [[[-3, 3], [3, 3], [3, -3], [-3, -3], [-3, 3]]],
+            coordinates: [
+              [
+                [-3, 3],
+                [3, 3],
+                [3, -3],
+                [-3, -3],
+                [-3, 3],
+              ],
+            ],
           },
           centerPoint: {
             type: 'Point',
@@ -464,7 +558,15 @@ describe('MongoServiceAreaRepository', () => {
         branch: branchId,
         coverage: {
           type: 'Polygon',
-          coordinates: [[[1, 1], [3, 1], [3, 3], [1, 3], [1, 1]]],
+          coordinates: [
+            [
+              [1, 1],
+              [3, 1],
+              [3, 3],
+              [1, 3],
+              [1, 1],
+            ],
+          ],
         },
         centerPoint: {
           type: 'Point',
@@ -481,7 +583,15 @@ describe('MongoServiceAreaRepository', () => {
         branch: branchId,
         coverage: {
           type: 'Polygon',
-          coordinates: [[[4, 4], [6, 4], [6, 6], [4, 6], [4, 4]]],
+          coordinates: [
+            [
+              [4, 4],
+              [6, 4],
+              [6, 6],
+              [4, 6],
+              [4, 4],
+            ],
+          ],
         },
         centerPoint: {
           type: 'Point',
@@ -541,7 +651,15 @@ describe('MongoServiceAreaRepository', () => {
           branch: branchId,
           coverage: {
             type: 'Polygon',
-            coordinates: [[[-1, 1], [1, 1], [1, -1], [-1, -1], [-1, 1]]],
+            coordinates: [
+              [
+                [-1, 1],
+                [1, 1],
+                [1, -1],
+                [-1, -1],
+                [-1, 1],
+              ],
+            ],
           },
           centerPoint: {
             type: 'Point',
@@ -558,7 +676,15 @@ describe('MongoServiceAreaRepository', () => {
           branch: branchId,
           coverage: {
             type: 'Polygon',
-            coordinates: [[[-2, 2], [2, 2], [2, -2], [-2, -2], [-2, 2]]],
+            coordinates: [
+              [
+                [-2, 2],
+                [2, 2],
+                [2, -2],
+                [-2, -2],
+                [-2, 2],
+              ],
+            ],
           },
           centerPoint: {
             type: 'Point',
@@ -575,7 +701,15 @@ describe('MongoServiceAreaRepository', () => {
           branch: branchId,
           coverage: {
             type: 'Polygon',
-            coordinates: [[[-3, 3], [3, 3], [3, -3], [-3, -3], [-3, 3]]],
+            coordinates: [
+              [
+                [-3, 3],
+                [3, 3],
+                [3, -3],
+                [-3, -3],
+                [-3, 3],
+              ],
+            ],
           },
           centerPoint: {
             type: 'Point',
