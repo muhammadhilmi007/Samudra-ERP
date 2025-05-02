@@ -7,21 +7,29 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest"
+    "test": "jest",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.0.1",
     "@samudra-paket-erp/shared": "*",
     "@samudra-paket-erp/types": "*",
+    "@storybook/react-webpack5": "^8.6.12",
     "@tanstack/react-query": "^5.8.4",
     "next": "14.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
-    "zod": "^3.22.4",
-    "@reduxjs/toolkit": "^2.0.1",
-    "react-redux": "^9.0.1"
+    "react-redux": "^9.0.1",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@storybook/addon-a11y": "^8.6.12",
+    "@storybook/addon-essentials": "^8.6.12",
+    "@storybook/addon-interactions": "^8.6.12",
+    "@storybook/addon-links": "^8.6.12",
+    "@storybook/react": "^8.6.12",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.1.2",
     "autoprefixer": "^10.4.16",

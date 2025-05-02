@@ -133,7 +133,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi employee status management
 - [ ] Unit testing untuk employee management
 
-#### Employee Attendance Service
+#### Employee Attendance Service [Doing]
 - [ ] Desain dan implementasi database schema untuk attendance
 - [ ] Implementasi attendance recording endpoints
 - [ ] Implementasi attendance reporting
@@ -142,7 +142,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 
 ### E. Frontend: Core Components & Authentication
 
-#### Frontend Setup & Configuration
+#### Frontend Setup & Configuration [Doing]
 - [ ] Setup Next.js project structure berdasarkan Atomic Design
 - [ ] Implementasi basic layout components
 - [ ] Konfigurasi routing dengan Next.js

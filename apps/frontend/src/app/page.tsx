@@ -1,8 +1,3 @@
-/**
- * Samudra Paket ERP - Frontend
- * Home page component
- */
-
 'use client';
 
 import { useEffect } from 'react';
@@ -17,7 +12,7 @@ export default function Home() {
   
   useEffect(() => {
     // Check if user is authenticated (could be enhanced with actual auth check)
-    const token = localStorage.getItem('token');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     
     if (token) {
       router.push('/dashboard');
