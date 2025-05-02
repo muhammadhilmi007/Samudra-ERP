@@ -23,6 +23,16 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "start": {
+      "dependsOn": [],
+      "cache": false,
+      "persistent": true,
+      "outputs": []
+    },
+    "start:frontend": {
+      "cache": false,
+      "persistent": true
     }
   },
   "globalDependencies": [".env", "tsconfig.json", ".eslintrc.js"]

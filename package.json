@@ -4,6 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:railway": "turbo run build",
+    "start:frontend": "turbo run start:frontend --filter=@samudra-paket-erp/frontend",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "test": "turbo run test",

@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "cross-env NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 next build || exit 0",
-    "start": "next start",
+    "start": "next dev",
+    "start:frontend": "next dev",
     "lint": "next lint",
     "test": "jest",
     "storybook": "storybook dev -p 6006",
