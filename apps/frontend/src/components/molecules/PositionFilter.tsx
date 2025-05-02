@@ -33,14 +33,14 @@ interface PositionFilterProps {
  * PositionFilter - Component for filtering position list
  * Handles search and filtering functionality
  */
-const PositionFilter: React.FC<PositionFilterProps> = ({ 
-  onFilterChange, 
-  branchOptions, 
+const PositionFilter: React.FC<PositionFilterProps> = ({
+  onFilterChange,
+  branchOptions,
   divisionOptions,
-  parentPositionOptions 
+  parentPositionOptions,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  
+
   const {
     register,
     handleSubmit,
@@ -58,42 +58,42 @@ const PositionFilter: React.FC<PositionFilterProps> = ({
       parentPosition: '',
     },
   });
-  
+
   // Watch for changes to apply filters automatically
   const watchedValues = watch();
-  
+
   useEffect(() => {
     if (isDirty) {
       const filters: PositionListParams = {};
-      
+
       if (watchedValues.search) {
         filters.search = watchedValues.search;
       }
-      
+
       if (watchedValues.status && watchedValues.status !== 'all') {
         filters.status = watchedValues.status as 'active' | 'inactive';
       }
-      
+
       if (watchedValues.branch) {
         filters.branch = watchedValues.branch;
       }
-      
+
       if (watchedValues.division) {
         filters.division = watchedValues.division;
       }
-      
+
       if (watchedValues.level && watchedValues.level !== 'all') {
         filters.level = parseInt(watchedValues.level, 10);
       }
-      
+
       if (watchedValues.parentPosition) {
         filters.parentPosition = watchedValues.parentPosition;
       }
-      
+
       onFilterChange(filters);
     }
   }, [watchedValues, isDirty, onFilterChange]);
-  
+
   const handleReset = () => {
     reset({
       search: '',
@@ -105,20 +105,16 @@ const PositionFilter: React.FC<PositionFilterProps> = ({
     });
     onFilterChange({});
   };
-  
+
   return (
     <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-medium">Filter Jabatan</h3>
-        <Button
-          type="button"
-          variant="text"
-          onClick={() => setIsExpanded(!isExpanded)}
-        >
+        <Button type="button" variant="text" onClick={() => setIsExpanded(!isExpanded)}>
           {isExpanded ? 'Sembunyikan Filter' : 'Tampilkan Filter'}
         </Button>
       </div>
-      
+
       <div className="relative mb-4">
         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
           <Search className="h-5 w-5 text-gray-400" />
@@ -130,13 +126,11 @@ const PositionFilter: React.FC<PositionFilterProps> = ({
           {...register('search')}
         />
       </div>
-      
+
       {isExpanded && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Status
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
             <Select
               {...register('status')}
               options={[
@@ -146,37 +140,25 @@ const PositionFilter: React.FC<PositionFilterProps> = ({
               ]}
             />
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Cabang
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Cabang</label>
             <Select
               {...register('branch')}
-              options={[
-                { value: '', label: 'Semua Cabang' },
-                ...branchOptions,
-              ]}
+              options={[{ value: '', label: 'Semua Cabang' }, ...branchOptions]}
             />
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Divisi
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Divisi</label>
             <Select
               {...register('division')}
-              options={[
-                { value: '', label: 'Semua Divisi' },
-                ...divisionOptions,
-              ]}
+              options={[{ value: '', label: 'Semua Divisi' }, ...divisionOptions]}
             />
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Level
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Level</label>
             <Select
               {...register('level')}
               options={[
@@ -190,30 +172,20 @@ const PositionFilter: React.FC<PositionFilterProps> = ({
               ]}
             />
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Jabatan Atasan
-            </label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Jabatan Atasan</label>
             <Select
               {...register('parentPosition')}
-              options={[
-                { value: '', label: 'Semua Jabatan' },
-                ...parentPositionOptions,
-              ]}
+              options={[{ value: '', label: 'Semua Jabatan' }, ...parentPositionOptions]}
             />
           </div>
         </div>
       )}
-      
+
       {isExpanded && (
         <div className="flex justify-end mt-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleReset}
-            className="mr-2"
-          >
+          <Button type="button" variant="outline" onClick={handleReset} className="mr-2">
             Reset
           </Button>
         </div>

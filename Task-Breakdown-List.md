@@ -182,7 +182,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi attendance management UI
 - [ ] Unit testing untuk employee management components
 
-### F. Integration Testing - Phase 1
+### F. Integration Testing - Phase 1 [Doing]
 - [ ] End-to-end testing untuk user authentication flows
 - [ ] Integration testing untuk role and permission management
 - [ ] Integration testing untuk branch management
