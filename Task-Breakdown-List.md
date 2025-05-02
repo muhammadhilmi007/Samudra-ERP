@@ -124,7 +124,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 
 ### D. Backend: Modul Manajemen Pegawai
 
-#### Employee Management Service
+#### Employee Management Service [Doing]
 - [ ] Desain dan implementasi database schema untuk employees
 - [ ] Implementasi CRUD endpoints untuk employees
 - [ ] Implementasi employee association dengan users

@@ -13,6 +13,9 @@ const serviceAreaRoutes = require('./serviceAreaRoutes');
 const divisionRoutes = require('./divisionRoutes');
 const positionRoutes = require('./positionRoutes');
 const forwarderRoutes = require('./forwarderRoutes');
+const employeeRoutes = require('./employeeRoutes');
+const attendanceRoutes = require('./attendanceRoutes');
+const leaveRoutes = require('./leaveRoutes');
 
 const router = express.Router();
 
@@ -38,5 +41,8 @@ router.use('/service-areas', serviceAreaRoutes);
 router.use('/divisions', divisionRoutes);
 router.use('/positions', positionRoutes);
 router.use('/forwarders', forwarderRoutes);
+router.use('/employees', employeeRoutes);
+router.use('/attendance', attendanceRoutes);
+router.use('/leaves', leaveRoutes);
 
 module.exports = router;
