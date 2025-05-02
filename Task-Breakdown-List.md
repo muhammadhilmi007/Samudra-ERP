@@ -152,7 +152,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi responsive design foundation
 - [ ] Setup component documentation dengan Storybook
 
-#### Authentication UI
+#### Authentication UI [Doing]
 - [ ] Implementasi login page
 - [ ] Implementasi forgot password flow
 - [ ] Implementasi password reset page
@@ -163,7 +163,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi profile management page
 - [ ] Unit testing untuk authentication components
 
-#### Master Data UI - Branches & Divisions
+#### Master Data UI - Branches & Divisions [Doing]
 - [ ] Implementasi branch list page dengan filtering dan search
 - [ ] Implementasi branch detail page
 - [ ] Implementasi branch create/edit forms
@@ -173,7 +173,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi organizational chart visualization
 - [ ] Unit testing untuk branch & division components
 
-#### Master Data UI - Employees
+#### Master Data UI - Employees [Doing]
 - [ ] Implementasi employee list page dengan filtering dan search
 - [ ] Implementasi employee detail page
 - [ ] Implementasi employee create/edit forms

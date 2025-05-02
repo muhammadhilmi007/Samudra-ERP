@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import authService from '@/services/authService';
 
 // Define types for the auth state
 interface User {
@@ -11,14 +12,17 @@ interface User {
 interface AuthState {
   user: User | null;
   token: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  lastTokenRefresh: number | null;
 }
 
 interface LoginResponse {
   user: User;
   token: string;
+  refreshToken: string;
 }
 
 interface LoginCredentials {
@@ -32,9 +36,11 @@ interface LoginCredentials {
 const initialState: AuthState = {
   user: null,
   token: null,
+  refreshToken: null,
   isAuthenticated: false,
   isLoading: false,
   error: null,
+  lastTokenRefresh: null,
 };
 
 /**
@@ -44,30 +50,18 @@ export const loginUser = createAsyncThunk<LoginResponse, LoginCredentials>(
   'auth/login',
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      // TODO: Replace with actual API call
-      // Simulating API call
-      const response = await new Promise<LoginResponse>((resolve) => {
-        setTimeout(() => {
-          resolve({
-            user: {
-              id: '1',
-              email,
-              name: 'Test User',
-              role: 'admin',
-            },
-            token: 'sample-jwt-token',
-          });
-        }, 1000);
-      });
+      // Call the auth service login method
+      const response = await authService.login({ email, password });
       
-      // Store token in localStorage for persistence
+      // Store tokens in localStorage for persistence
       if (typeof window !== 'undefined') {
         localStorage.setItem('token', response.token);
+        localStorage.setItem('refreshToken', response.refreshToken);
       }
       
       return response;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.error || 'Login failed');
+      return rejectWithValue(error.message || 'Login failed');
     }
   }
 );
@@ -79,13 +73,84 @@ export const logoutUser = createAsyncThunk(
   'auth/logout',
   async (_, { rejectWithValue }) => {
     try {
-      // Clear token from localStorage
+      // Call the auth service logout method
+      await authService.logout();
+      
+      // Clear tokens from localStorage
       if (typeof window !== 'undefined') {
         localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
       }
       return null;
     } catch (error: any) {
+      // Even if API call fails, we still want to clear local tokens
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+      }
       return rejectWithValue(error.message || 'Logout failed');
+    }
+  }
+);
+
+/**
+ * Async thunk for refreshing token
+ */
+export const refreshToken = createAsyncThunk(
+  'auth/refreshToken',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const state = getState() as { auth: AuthState };
+      const refreshToken = state.auth.refreshToken || localStorage.getItem('refreshToken');
+      
+      if (!refreshToken) {
+        throw new Error('No refresh token available');
+      }
+      
+      // Call refresh token API
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refreshToken }),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Token refresh failed');
+      }
+      
+      const data = await response.json();
+      
+      // Store new tokens
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('refreshToken', data.refreshToken);
+      }
+      
+      return data;
+    } catch (error: any) {
+      // If refresh fails, clear tokens
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
+      }
+      return rejectWithValue(error.message || 'Token refresh failed');
+    }
+  }
+);
+
+/**
+ * Async thunk for getting current user profile
+ */
+export const getCurrentUser = createAsyncThunk(
+  'auth/getCurrentUser',
+  async (_, { rejectWithValue }) => {
+    try {
+      const userData = await authService.getCurrentUser();
+      return userData;
+    } catch (error: any) {
+      return rejectWithValue(error.message || 'Failed to get user profile');
     }
   }
 );
@@ -102,10 +167,14 @@ const authSlice = createSlice({
     checkAuthState: (state) => {
       if (typeof window !== 'undefined') {
         const token = localStorage.getItem('token');
+        const refreshToken = localStorage.getItem('refreshToken');
+        
         if (token) {
           state.token = token;
+          state.refreshToken = refreshToken;
           state.isAuthenticated = true;
-          // TODO: Decode token to get user info or make API call to get user data
+          state.lastTokenRefresh = Date.now();
+          // User data will be fetched by getCurrentUser thunk
         }
       }
     },

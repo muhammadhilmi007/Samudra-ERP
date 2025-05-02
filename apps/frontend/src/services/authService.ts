@@ -13,6 +13,12 @@ interface UserData {
   role: string;
 }
 
+interface ProfileUpdateData {
+  name?: string;
+  currentPassword?: string;
+  newPassword?: string;
+}
+
 interface AuthResponse {
   user: UserData;
   token: string;
@@ -23,6 +29,14 @@ interface RegistrationData {
   email: string;
   password: string;
   role?: string;
+}
+
+interface ForgotPasswordResponse {
+  message: string;
+}
+
+interface ResetPasswordResponse {
+  message: string;
 }
 
 /**
@@ -73,6 +87,41 @@ const authService = {
    */
   getCurrentUser: async (): Promise<UserData> => {
     const response = await apiService.get<UserData>('/auth/me');
+    return response.data;
+  },
+
+  /**
+   * Request password reset link
+   * @param {string} email - User email
+   * @returns {Promise<ForgotPasswordResponse>} - Response message
+   */
+  forgotPassword: async (email: string): Promise<ForgotPasswordResponse> => {
+    const response = await apiService.post<ForgotPasswordResponse>('/auth/forgot-password', { email });
+    return response.data;
+  },
+
+  /**
+   * Reset password with token
+   * @param {string} token - Reset password token
+   * @param {string} password - New password
+   * @returns {Promise<ResetPasswordResponse>} - Response message
+   */
+  resetPassword: async (token: string, password: string): Promise<ResetPasswordResponse> => {
+    const response = await apiService.post<ResetPasswordResponse>('/auth/reset-password', { token, password });
+    return response.data;
+  },
+
+  /**
+   * Check if user is authenticated
+   * @returns {boolean} - Authentication status
+   */
+  /**
+   * Update user profile
+   * @param {ProfileUpdateData} data - Profile data to update
+   * @returns {Promise<UserData>} - Updated user data
+   */
+  updateProfile: async (data: ProfileUpdateData): Promise<UserData> => {
+    const response = await apiService.put<UserData>('/auth/profile', data);
     return response.data;
   },
 

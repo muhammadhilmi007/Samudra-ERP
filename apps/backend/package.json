@@ -25,6 +25,8 @@
     "mongoose": "^8.0.3",
     "morgan": "^1.10.0",
     "redis": "^4.6.11",
+    "redux-mock-store": "^1.5.5",
+    "redux-thunk": "^3.1.0",
     "uuid": "^11.1.0",
     "winston": "^3.17.0"
   },
