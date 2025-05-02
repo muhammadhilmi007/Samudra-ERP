@@ -1,12 +1,18 @@
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
+
 'use client';
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { ArrowLeft } from 'lucide-react';
-import employeeService from '@/services/employeeService';
-import Button from '@/components/atoms/Button';
-import EmployeeForm from '@/components/organisms/EmployeeForm';
+import employeeService from '../../../../services/employeeService';
+import Button from '../../../../components/atoms/Button';
+import EmployeeForm from '../../../../components/organisms/EmployeeForm';
 
 interface EditEmployeePageProps {
   params: {
@@ -30,7 +36,7 @@ export default function EditEmployeePage({ params }: EditEmployeePageProps) {
 
   // Update employee mutation
   const updateEmployeeMutation = useMutation({
-    mutationFn: (data: any) => employeeService.updateEmployee(id, data),
+    mutationFn: (data: unknown) => employeeService.updateEmployee(id, data),
     onSuccess: () => {
       router.push(`/employees/${id}`);
     },
@@ -40,7 +46,7 @@ export default function EditEmployeePage({ params }: EditEmployeePageProps) {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center py-8">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
           <p className="mt-2 text-gray-500">Memuat data karyawan...</p>
         </div>
       </div>
@@ -82,7 +88,7 @@ export default function EditEmployeePage({ params }: EditEmployeePageProps) {
       {employee && (
         <EmployeeForm 
           initialData={employee} 
-          isEdit={true} 
+          isEdit 
         />
       )}
     </div>

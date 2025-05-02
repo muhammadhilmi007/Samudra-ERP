@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import Button from '../atoms/Button';
-import useAuth from '@/hooks/useAuth';
+import useAuth from '../../hooks/useAuth';
 
 interface LogoutButtonProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'text';

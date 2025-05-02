@@ -1,15 +1,20 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import React from 'react';
-import ProfileForm from '@/components/organisms/ProfileForm';
-import AuthGuard from '@/components/organisms/AuthGuard';
+import ProfileForm from '../../components/organisms/ProfileForm';
+import AuthGuard from '../../components/organisms/AuthGuard';
 
 /**
  * Profile Page
  * Protected page for user profile management
  */
-const ProfilePage = () => {
-  return (
+const ProfilePage = () => (
     <AuthGuard>
       <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
@@ -19,6 +24,5 @@ const ProfilePage = () => {
       </div>
     </AuthGuard>
   );
-};
 
 export default ProfilePage;

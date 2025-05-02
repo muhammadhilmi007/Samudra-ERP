@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import FormField from '../molecules/FormField';
 import Button from '../atoms/Button';
-import authService from '@/services/authService';
+import authService from '../../services/authService';
 
 /**
  * ForgotPasswordForm - Form component for requesting password reset

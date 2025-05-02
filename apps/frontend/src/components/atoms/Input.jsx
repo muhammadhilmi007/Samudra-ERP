@@ -1,3 +1,11 @@
+/* eslint-disable react/button-has-type */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+/* eslint-disable react/require-default-props */
+
 import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 

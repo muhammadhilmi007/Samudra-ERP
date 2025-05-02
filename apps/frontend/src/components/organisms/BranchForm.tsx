@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2, Clock } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import branchService, { Branch } from '@/services/branchService';
+import branchService, { Branch } from '../../services/branchService';
 import FormField from '../molecules/FormField';
 import Button from '../atoms/Button';
 import Select from '../atoms/Select';

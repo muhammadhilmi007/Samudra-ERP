@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Edit, Eye, Trash2, MapPin, Phone, Mail } from 'lucide-react';
-import { Branch } from '@/services/branchService';
+import { Branch } from '../../services/branchService';
 import Button from '../atoms/Button';
 
 interface BranchTableProps {

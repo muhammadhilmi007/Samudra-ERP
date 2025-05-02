@@ -1,15 +1,21 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { ArrowLeft, Edit, Trash2 } from 'lucide-react';
-import employeeService, { EmployeeDocument, EmployeeAssignment, EmployeeAttendance } from '@/services/employeeService';
-import Button from '@/components/atoms/Button';
-import DeleteConfirmationModal from '@/components/molecules/DeleteConfirmationModal';
-import EmployeeDocumentManager from '@/components/organisms/EmployeeDocumentManager';
-import EmployeeAssignmentManager from '@/components/organisms/EmployeeAssignmentManager';
-import EmployeeAttendanceManager from '@/components/organisms/EmployeeAttendanceManager';
+import employeeService, { EmployeeDocument, EmployeeAssignment, EmployeeAttendance } from '../../../services/employeeService';
+import Button from '../../../components/atoms/Button';
+import DeleteConfirmationModal from '../../../components/molecules/DeleteConfirmationModal';
+import EmployeeDocumentManager from '../../../components/organisms/EmployeeDocumentManager';
+import EmployeeAssignmentManager from '../../../components/organisms/EmployeeAssignmentManager';
+import EmployeeAttendanceManager from '../../../components/organisms/EmployeeAttendanceManager';
 
 interface EmployeeDetailPageProps {
   params: {
@@ -167,7 +173,7 @@ export default function EmployeeDetailPage({ params }: EmployeeDetailPageProps) 
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center py-8">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
           <p className="mt-2 text-gray-500">Memuat data karyawan...</p>
         </div>
       </div>
@@ -548,11 +554,9 @@ export default function EmployeeDetailPage({ params }: EmployeeDetailPageProps) 
           <EmployeeDocumentManager
             employeeId={id}
             documents={employee.documents || []}
-            onAddDocument={(document, file) => 
-              uploadDocumentMutation.mutate({ document, file })
+            onAddDocument={async (document, file) => uploadDocumentMutation.mutate({ document, file })
             }
-            onDeleteDocument={(documentId) => 
-              deleteDocumentMutation.mutate(documentId)
+            onDeleteDocument={async (documentId) => deleteDocumentMutation.mutate(documentId)
             }
           />
         )}
@@ -561,14 +565,11 @@ export default function EmployeeDetailPage({ params }: EmployeeDetailPageProps) 
           <EmployeeAssignmentManager
             employeeId={id}
             assignments={employee.assignments || []}
-            onAddAssignment={(assignment) => 
-              addAssignmentMutation.mutate(assignment)
+            onAddAssignment={async (assignment) => addAssignmentMutation.mutate(assignment)
             }
-            onUpdateAssignment={(assignmentId, assignment) => 
-              updateAssignmentMutation.mutate({ assignmentId, assignment })
+            onUpdateAssignment={async (assignmentId, assignment) => updateAssignmentMutation.mutate({ assignmentId, assignment })
             }
-            onDeleteAssignment={(assignmentId) => 
-              deleteAssignmentMutation.mutate(assignmentId)
+            onDeleteAssignment={async (assignmentId) => deleteAssignmentMutation.mutate(assignmentId)
             }
           />
         )}
@@ -577,8 +578,7 @@ export default function EmployeeDetailPage({ params }: EmployeeDetailPageProps) 
           <EmployeeAttendanceManager
             employeeId={id}
             attendanceRecords={employee.attendance || []}
-            onRecordAttendance={(attendance) => 
-              recordAttendanceMutation.mutate(attendance)
+            onRecordAttendance={async (attendance) => recordAttendanceMutation.mutate(attendance)
             }
           />
         )}

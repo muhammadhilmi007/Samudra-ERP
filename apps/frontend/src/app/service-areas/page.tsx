@@ -1,13 +1,20 @@
+/* eslint-disable react/no-array-index-key */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus, Trash2, Search } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import branchService from '@/services/branchService';
-import Button from '@/components/atoms/Button';
-import AuthGuard from '@/components/organisms/AuthGuard';
-import DeleteConfirmationModal from '@/components/molecules/DeleteConfirmationModal';
+import branchService from '../../services/branchService';
+import Button from '../../components/atoms/Button';
+import AuthGuard from '../../components/organisms/AuthGuard';
+import DeleteConfirmationModal from '../../components/molecules/DeleteConfirmationModal';
 
 /**
  * ServiceAreasPage - Page for managing service areas
@@ -137,7 +144,8 @@ const ServiceAreasPage = () => {
           {isLoading ? (
             <div className="animate-pulse">
               {[...Array(5)].map((_, index) => (
-                <div key={index} className="h-12 bg-gray-200 rounded-md mb-2"></div>
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={index} className="h-12 bg-gray-200 rounded-md mb-2" />
               ))}
             </div>
           ) : filteredAreas.length > 0 ? (

@@ -6,8 +6,8 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormField from '../molecules/FormField';
 import Button from '../atoms/Button';
-import useAuth from '@/hooks/useAuth';
-import authService from '@/services/authService';
+import useAuth from '../../hooks/useAuth';
+import authService from '../../services/authService';
 
 /**
  * ProfileForm - Form component for user profile management

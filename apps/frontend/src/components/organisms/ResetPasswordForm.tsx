@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import FormField from '../molecules/FormField';
 import Button from '../atoms/Button';
-import authService from '@/services/authService';
+import authService from '../../services/authService';
 
 /**
  * ResetPasswordForm - Form component for resetting password

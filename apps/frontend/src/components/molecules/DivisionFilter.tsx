@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Search } from 'lucide-react';
-import { DivisionListParams } from '@/services/divisionService';
+import { DivisionListParams } from '../../services/divisionService';
 import FormField from '../atoms/FormField';
 import Button from '../atoms/Button';
 import Select from '../atoms/Select';

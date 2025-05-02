@@ -1,13 +1,19 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft } from 'lucide-react';
-import positionService from '@/services/positionService';
-import PositionForm from '@/components/organisms/PositionForm';
-import Button from '@/components/atoms/Button';
-import AuthGuard from '@/components/organisms/AuthGuard';
+import positionService from '../../../../services/positionService';
+import PositionForm from '../../../../components/organisms/PositionForm';
+import Button from '../../../../components/atoms/Button';
+import AuthGuard from '../../../../components/organisms/AuthGuard';
 
 interface EditPositionPageProps {
   params: {
@@ -46,9 +52,9 @@ const EditPositionPage: React.FC<EditPositionPageProps> = ({ params }) => {
           </div>
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
-              <div className="h-64 bg-gray-200 rounded mb-4"></div>
-              <div className="h-12 bg-gray-200 rounded w-1/3 ml-auto"></div>
+              <div className="h-8 bg-gray-200 rounded w-1/4 mb-6" />
+              <div className="h-64 bg-gray-200 rounded mb-4" />
+              <div className="h-12 bg-gray-200 rounded w-1/3 ml-auto" />
             </div>
           </div>
         </div>
@@ -98,7 +104,7 @@ const EditPositionPage: React.FC<EditPositionPageProps> = ({ params }) => {
           </h1>
         </div>
 
-        <PositionForm initialData={position.data} isEdit={true} />
+        <PositionForm initialData={position.data} isEdit />
       </div>
     </AuthGuard>
   );

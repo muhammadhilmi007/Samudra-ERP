@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2, Download, Eye } from 'lucide-react';
-import { EmployeeDocument } from '@/services/employeeService';
+import { EmployeeDocument } from '../../services/employeeService';
 import FormField from '../molecules/FormField';
 import Button from '../atoms/Button';
 import Select from '../atoms/Select';

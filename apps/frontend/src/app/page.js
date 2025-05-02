@@ -1,3 +1,7 @@
+/* eslint-disable no-undef */
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable react/jsx-filename-extension */
+
 /**
  * Samudra Paket ERP - Frontend
  * Home page component

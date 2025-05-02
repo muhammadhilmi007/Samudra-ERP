@@ -1,17 +1,22 @@
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import divisionService, { Division, DivisionListParams } from '@/services/divisionService';
-import branchService from '@/services/branchService';
-import DivisionFilter from '@/components/molecules/DivisionFilter';
-import DivisionTable from '@/components/organisms/DivisionTable';
-import Button from '@/components/atoms/Button';
-import Pagination from '@/components/molecules/Pagination';
-import AuthGuard from '@/components/organisms/AuthGuard';
-import DeleteConfirmationModal from '@/components/molecules/DeleteConfirmationModal';
+import divisionService, { DivisionListParams } from '../../services/divisionService';
+import branchService from '../../services/branchService';
+import DivisionFilter from '../../components/molecules/DivisionFilter';
+import DivisionTable from '../../components/organisms/DivisionTable';
+import Button from '../../components/atoms/Button';
+import Pagination from '../../components/molecules/Pagination';
+import AuthGuard from '../../components/organisms/AuthGuard';
+import DeleteConfirmationModal from '../../components/molecules/DeleteConfirmationModal';
 
 /**
  * DivisionListPage - Page for displaying and managing divisions

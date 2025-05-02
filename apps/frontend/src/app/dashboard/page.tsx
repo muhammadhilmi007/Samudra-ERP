@@ -1,17 +1,20 @@
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
-import React from 'react';
-import MainLayout from '@/components/templates/MainLayout';
-import useAuth from '@/hooks/useAuth';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import MainLayout from '../../components/templates/MainLayout';
+import useAuth from '../../hooks/useAuth';
 
 /**
  * Dashboard Page
  * Main entry point after authentication
  */
 const DashboardPage = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   const router = useRouter();
 
   // Redirect to login if not authenticated

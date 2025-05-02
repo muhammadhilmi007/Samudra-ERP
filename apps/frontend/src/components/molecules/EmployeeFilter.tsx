@@ -5,9 +5,9 @@ import { useQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
 import Select from '../atoms/Select';
 import Button from '../atoms/Button';
-import branchService from '@/services/branchService';
-import divisionService from '@/services/divisionService';
-import positionService from '@/services/positionService';
+import branchService from '../../services/branchService';
+import divisionService from '../../services/divisionService';
+import positionService from '../../services/positionService';
 
 interface EmployeeFilterProps {
   onFilter: (filters: {

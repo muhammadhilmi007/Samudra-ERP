@@ -1,9 +1,14 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import React from 'react';
-import { useSearchParams } from 'next/navigation';
-import ResetPasswordForm from '@/components/organisms/ResetPasswordForm';
-import { redirect } from 'next/navigation';
+import { useSearchParams, redirect } from 'next/navigation';
+import ResetPasswordForm from '../../components/organisms/ResetPasswordForm';
 
 /**
  * Reset Password Page

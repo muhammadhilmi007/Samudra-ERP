@@ -1,14 +1,19 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import React from 'react';
-import ForgotPasswordForm from '@/components/organisms/ForgotPasswordForm';
+import ForgotPasswordForm from '../../components/organisms/ForgotPasswordForm';
 
 /**
  * Forgot Password Page
  * Allows users to request a password reset link
  */
-const ForgotPasswordPage = () => {
-  return (
+const ForgotPasswordPage = () => (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
@@ -21,6 +26,5 @@ const ForgotPasswordPage = () => {
       </div>
     </div>
   );
-};
 
 export default ForgotPasswordPage;

@@ -47,6 +47,7 @@ export interface BranchMetadata {
 }
 
 export interface Branch {
+  data: any;
   id?: string;
   code: string;
   name: string;

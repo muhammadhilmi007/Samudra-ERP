@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Edit, Eye, Trash2, FileText, Briefcase, Clock } from 'lucide-react';
-import { Employee } from '@/services/employeeService';
+import { Employee } from '../../services/employeeService';
 import Button from '../atoms/Button';
 import Pagination from '../molecules/Pagination';
 

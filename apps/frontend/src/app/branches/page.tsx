@@ -1,16 +1,20 @@
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import branchService, { Branch, BranchListParams } from '@/services/branchService';
-import BranchFilter from '@/components/molecules/BranchFilter';
-import BranchTable from '@/components/organisms/BranchTable';
-import Button from '@/components/atoms/Button';
-import Pagination from '@/components/molecules/Pagination';
-import AuthGuard from '@/components/organisms/AuthGuard';
-import DeleteConfirmationModal from '@/components/molecules/DeleteConfirmationModal';
+import branchService, { BranchListParams } from '../../services/branchService';
+import BranchFilter from '../../components/molecules/BranchFilter';
+import BranchTable from '../../components/organisms/BranchTable';
+import Button from '../../components/atoms/Button';
+import Pagination from '../../components/molecules/Pagination';
+import AuthGuard from '../../components/organisms/AuthGuard';
+import DeleteConfirmationModal from '../../components/molecules/DeleteConfirmationModal';
 
 /**
  * BranchListPage - Page for displaying and managing branches

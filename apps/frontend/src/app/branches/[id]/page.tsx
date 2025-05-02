@@ -1,14 +1,28 @@
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { ArrowLeft, Edit, Trash2, MapPin, Phone, Mail, Globe, Calendar, Users, Building } from 'lucide-react';
-import branchService from '@/services/branchService';
-import divisionService from '@/services/divisionService';
-import Button from '@/components/atoms/Button';
-import AuthGuard from '@/components/organisms/AuthGuard';
-import DeleteConfirmationModal from '@/components/molecules/DeleteConfirmationModal';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  ArrowLeft,
+  Edit,
+  Trash2,
+  MapPin,
+  Phone,
+  Mail,
+  Globe,
+  Calendar,
+  Users,
+  Building,
+} from 'lucide-react';
+import branchService from '../../../services/branchService';
+import Button from '../../../components/atoms/Button';
+import AuthGuard from '../../../components/organisms/AuthGuard';
+import DeleteConfirmationModal from '../../../components/molecules/DeleteConfirmationModal';
 
 interface BranchDetailPageProps {
   params: {
@@ -25,7 +39,11 @@ const BranchDetailPage: React.FC<BranchDetailPageProps> = ({ params }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
 
   // Fetch branch details
-  const { data: branch, isLoading, isError } = useQuery({
+  const {
+    data: branch,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ['branch', id],
     queryFn: () => branchService.getBranchById(id),
   });
@@ -47,10 +65,10 @@ const BranchDetailPage: React.FC<BranchDetailPageProps> = ({ params }) => {
       <AuthGuard>
         <div className="container mx-auto px-4 py-8">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
+            <div className="h-8 bg-gray-200 rounded w-1/4 mb-6" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="h-64 bg-gray-200 rounded"></div>
-              <div className="h-64 bg-gray-200 rounded"></div>
+              <div className="h-64 bg-gray-200 rounded" />
+              <div className="h-64 bg-gray-200 rounded" />
             </div>
           </div>
         </div>
@@ -62,9 +80,15 @@ const BranchDetailPage: React.FC<BranchDetailPageProps> = ({ params }) => {
     return (
       <AuthGuard>
         <div className="container mx-auto px-4 py-8">
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <div
+            className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative"
+            role="alert"
+          >
             <strong className="font-bold">Error!</strong>
-            <span className="block sm:inline"> Tidak dapat memuat data cabang. Silakan coba lagi nanti.</span>
+            <span className="block sm:inline">
+              {' '}
+              Tidak dapat memuat data cabang. Silakan coba lagi nanti.
+            </span>
           </div>
           <Button
             type="button"
@@ -162,11 +186,13 @@ const BranchDetailPage: React.FC<BranchDetailPageProps> = ({ params }) => {
                 </div>
                 <div>
                   <p className="text-sm text-gray-500">Status</p>
-                  <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    branch.status === 'active' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
-                  }`}>
+                  <span
+                    className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                      branch.status === 'active'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
+                    }`}
+                  >
                     {branch.status === 'active' ? 'Aktif' : 'Tidak Aktif'}
                   </span>
                 </div>
@@ -209,7 +235,8 @@ const BranchDetailPage: React.FC<BranchDetailPageProps> = ({ params }) => {
                 <p className="font-medium flex items-start">
                   <MapPin className="h-5 w-5 mr-2 text-gray-400 mt-0.5" />
                   <span>
-                    {branch.address.street}, {branch.address.city}, {branch.address.province}, {branch.address.postalCode}, {branch.address.country}
+                    {branch.address.street}, {branch.address.city}, {branch.address.province},{' '}
+                    {branch.address.postalCode}, {branch.address.country}
                   </span>
                 </p>
               </div>
@@ -217,7 +244,8 @@ const BranchDetailPage: React.FC<BranchDetailPageProps> = ({ params }) => {
                 <div>
                   <p className="text-sm text-gray-500">Koordinat</p>
                   <p className="font-medium">
-                    Lat: {branch.address.coordinates.latitude}, Long: {branch.address.coordinates.longitude}
+                    Lat: {branch.address.coordinates.latitude}, Long:{' '}
+                    {branch.address.coordinates.longitude}
                   </p>
                 </div>
               )}
@@ -252,7 +280,12 @@ const BranchDetailPage: React.FC<BranchDetailPageProps> = ({ params }) => {
                     <p className="text-sm text-gray-500">Website</p>
                     <p className="font-medium flex items-center">
                       <Globe className="h-4 w-4 mr-1 text-gray-400" />
-                      <a href={branch.contactInfo.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                      <a
+                        href={branch.contactInfo.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary hover:underline"
+                      >
                         {branch.contactInfo.website}
                       </a>
                     </p>
@@ -267,7 +300,11 @@ const BranchDetailPage: React.FC<BranchDetailPageProps> = ({ params }) => {
                 <h2 className="text-xl font-semibold mb-4">Area Layanan</h2>
                 <div className="flex flex-wrap gap-2">
                   {branch.metadata.serviceArea.map((area, index) => (
-                    <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
+                    <span
+                      // eslint-disable-next-line react/no-array-index-key
+                      key={index}
+                      className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
+                    >
                       {area}
                     </span>
                   ))}
@@ -362,21 +399,26 @@ const BranchDetailPage: React.FC<BranchDetailPageProps> = ({ params }) => {
                   Tambah Divisi
                 </Button>
               </div>
-              
+
               {branch.divisions && branch.divisions.length > 0 ? (
                 <div className="space-y-3">
-                  {branch.divisions.map((division) => (
-                    <div key={division.id} className="p-3 border border-gray-200 rounded-md hover:bg-gray-50">
+                  {branch.divisions.map(division => (
+                    <div
+                      key={division.id}
+                      className="p-3 border border-gray-200 rounded-md hover:bg-gray-50"
+                    >
                       <div className="flex justify-between items-start">
                         <div>
                           <h3 className="font-medium">{division.name}</h3>
                           <p className="text-sm text-gray-500">{division.code}</p>
                         </div>
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          division.status === 'active' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}>
+                        <span
+                          className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            division.status === 'active'
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-red-100 text-red-800'
+                          }`}
+                        >
                           {division.status === 'active' ? 'Aktif' : 'Tidak Aktif'}
                         </span>
                       </div>
@@ -386,7 +428,7 @@ const BranchDetailPage: React.FC<BranchDetailPageProps> = ({ params }) => {
                       <div className="mt-2">
                         <Button
                           type="button"
-                          variant="text"
+                          variant="outline"
                           onClick={() => router.push(`/divisions/${division.id}`)}
                           className="text-sm text-primary"
                         >

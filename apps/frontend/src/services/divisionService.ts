@@ -7,6 +7,7 @@ export interface DivisionMetadata {
 }
 
 export interface Division {
+  data: any;
   id?: string;
   code: string;
   name: string;

@@ -4,10 +4,10 @@ import '@testing-library/jest-dom';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
-import LoginForm from '@/components/organisms/LoginForm';
+import LoginForm from '../../../components/organisms/LoginForm';
 
 // Mock the useAuth hook
-jest.mock('@/hooks/useAuth', () => ({
+jest.mock('../../hooks/useAuth', () => ({
   __esModule: true,
   default: () => ({
     login: jest.fn().mockImplementation((credentials) => {
@@ -100,7 +100,7 @@ describe('LoginForm Component', () => {
   });
 
   it('submits the form with valid credentials', async () => {
-    const useAuth = require('@/hooks/useAuth').default;
+    const useAuth = require('../../hooks/useAuth').default;
     const mockLogin = jest.fn().mockResolvedValue(undefined);
     useAuth.mockImplementation(() => ({
       login: mockLogin,
@@ -129,7 +129,7 @@ describe('LoginForm Component', () => {
   });
 
   it('displays loading state when submitting', async () => {
-    const useAuth = require('@/hooks/useAuth').default;
+    const useAuth = require('../../hooks/useAuth').default;
     useAuth.mockImplementation(() => ({
       login: jest.fn().mockImplementation(() => new Promise(resolve => setTimeout(resolve, 100))),
       isLoading: true,
@@ -148,7 +148,7 @@ describe('LoginForm Component', () => {
   });
 
   it('displays error message when login fails', async () => {
-    const useAuth = require('@/hooks/useAuth').default;
+    const useAuth = require('../../hooks/useAuth').default;
     useAuth.mockImplementation(() => ({
       login: jest.fn(),
       isLoading: false,

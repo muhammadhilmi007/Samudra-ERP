@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import FormField from '../molecules/FormField';
 import Button from '../atoms/Button';
-import useAuth from '@/hooks/useAuth';
+import useAuth from '../../hooks/useAuth';
 
 /**
  * LoginForm - Form component for user authentication

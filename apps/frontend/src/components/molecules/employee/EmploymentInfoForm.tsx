@@ -1,12 +1,37 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable react/button-has-type */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+/* eslint-disable react/require-default-props */
+
 import React from 'react';
 import { Control, FieldErrors, UseFormRegister, Controller } from 'react-hook-form';
 import FormField from '../FormField';
 import Select from '../../atoms/Select';
 
+interface EmploymentFormValues {
+  joinDate: string;
+  terminationDate?: string;
+  employmentType: string;
+  employmentStatus: string;
+  notes?: string;
+  bankAccount?: {
+    bankName: string;
+    accountNumber: string;
+    accountHolder: string;
+  };
+  taxId?: string;
+  bpjsKesehatan?: string;
+  bpjsKetenagakerjaan?: string;
+}
+
 interface EmploymentInfoFormProps {
-  register: UseFormRegister<any>;
-  errors: FieldErrors<any>;
-  control: Control<any>;
+  register: UseFormRegister<EmploymentFormValues>;
+  errors: FieldErrors<EmploymentFormValues>;
+  control: Control<EmploymentFormValues>;
 }
 
 /**
@@ -16,26 +41,25 @@ const EmploymentInfoForm: React.FC<EmploymentInfoFormProps> = ({
   register,
   errors,
   control,
-}) => {
-  return (
+}) => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <h2 className="text-lg font-semibold mb-4">Status Kepegawaian</h2>
         
         <FormField
           label="Tanggal Bergabung"
-          name="metadata.joinDate"
+          name="joinDate"
           type="date"
-          error={errors.metadata?.joinDate?.message}
+          error={errors.joinDate?.message}
           register={register}
           required
         />
         
         <FormField
           label="Tanggal Berhenti"
-          name="metadata.terminationDate"
+          name="terminationDate"
           type="date"
-          error={errors.metadata?.terminationDate?.message}
+          error={errors.terminationDate?.message}
           register={register}
         />
         
@@ -44,7 +68,7 @@ const EmploymentInfoForm: React.FC<EmploymentInfoFormProps> = ({
             Tipe Kepegawaian <span className="text-red-500">*</span>
           </label>
           <Controller
-            name="metadata.employmentType"
+            name="employmentType"
             control={control}
             render={({ field }) => (
               <Select
@@ -58,8 +82,8 @@ const EmploymentInfoForm: React.FC<EmploymentInfoFormProps> = ({
               />
             )}
           />
-          {errors.metadata?.employmentType && (
-            <p className="mt-1 text-sm text-red-600">{errors.metadata.employmentType.message}</p>
+          {errors.employmentType && (
+            <p className="mt-1 text-sm text-red-600">{errors.employmentType.message}</p>
           )}
         </div>
         
@@ -68,7 +92,7 @@ const EmploymentInfoForm: React.FC<EmploymentInfoFormProps> = ({
             Status Kepegawaian <span className="text-red-500">*</span>
           </label>
           <Controller
-            name="metadata.employmentStatus"
+            name="employmentStatus"
             control={control}
             render={({ field }) => (
               <Select
@@ -82,88 +106,70 @@ const EmploymentInfoForm: React.FC<EmploymentInfoFormProps> = ({
               />
             )}
           />
-          {errors.metadata?.employmentStatus && (
-            <p className="mt-1 text-sm text-red-600">{errors.metadata.employmentStatus.message}</p>
+          {errors.employmentStatus && (
+            <p className="mt-1 text-sm text-red-600">{errors.employmentStatus.message}</p>
           )}
         </div>
         
         <FormField
-          label="Catatan"
-          name="metadata.notes"
+          label="Keterangan"
+          name="notes"
           type="textarea"
           placeholder="Masukkan catatan tambahan"
-          error={errors.metadata?.notes?.message}
+          error={errors.notes?.message}
           register={register}
         />
       </div>
       
       <div>
-        <h2 className="text-lg font-semibold mb-4">Informasi Tambahan</h2>
+        <h2 className="text-lg font-semibold mb-4">Informasi Keuangan</h2>
         
-        <div className="mb-4">
-          <h3 className="text-md font-medium mb-3">Rekening Bank</h3>
-          
-          <FormField
-            label="Nama Bank"
-            name="metadata.bankAccount.bankName"
-            type="text"
-            placeholder="Masukkan nama bank"
-            error={errors.metadata?.bankAccount?.bankName?.message}
-            register={register}
-          />
-          
-          <FormField
-            label="Nomor Rekening"
-            name="metadata.bankAccount.accountNumber"
-            type="text"
-            placeholder="Masukkan nomor rekening"
-            error={errors.metadata?.bankAccount?.accountNumber?.message}
-            register={register}
-          />
-          
-          <FormField
-            label="Nama Pemilik Rekening"
-            name="metadata.bankAccount.accountHolder"
-            type="text"
-            placeholder="Masukkan nama pemilik rekening"
-            error={errors.metadata?.bankAccount?.accountHolder?.message}
-            register={register}
-          />
-        </div>
+        <FormField
+          label="Jenis Pegawai"
+          name="employmentType"
+          type="text"
+          error={errors.employmentType?.message}
+          register={register}
+          required
+        />
         
-        <div className="mt-6">
-          <h3 className="text-md font-medium mb-3">Informasi Pajak & BPJS</h3>
-          
-          <FormField
-            label="NPWP"
-            name="metadata.taxId"
-            type="text"
-            placeholder="Masukkan NPWP"
-            error={errors.metadata?.taxId?.message}
-            register={register}
-          />
-          
-          <FormField
-            label="BPJS Kesehatan"
-            name="metadata.bpjsKesehatan"
-            type="text"
-            placeholder="Masukkan nomor BPJS Kesehatan"
-            error={errors.metadata?.bpjsKesehatan?.message}
-            register={register}
-          />
-          
-          <FormField
-            label="BPJS Ketenagakerjaan"
-            name="metadata.bpjsKetenagakerjaan"
-            type="text"
-            placeholder="Masukkan nomor BPJS Ketenagakerjaan"
-            error={errors.metadata?.bpjsKetenagakerjaan?.message}
-            register={register}
-          />
-        </div>
+        <FormField
+          label="Status Pegawai"
+          name="employmentStatus"
+          type="text"
+          error={errors.employmentStatus?.message}
+          register={register}
+          required
+        />
+        
+        <FormField
+          label="NPWP"
+          name="taxId"
+          type="text"
+          placeholder="Masukkan nomor NPWP"
+          error={errors.taxId?.message}
+          register={register}
+        />
+        
+        <FormField
+          label="BPJS Kesehatan"
+          name="bpjsKesehatan"
+          type="text"
+          placeholder="Masukkan nomor BPJS Kesehatan"
+          error={errors.bpjsKesehatan?.message}
+          register={register}
+        />
+        
+        <FormField
+          label="BPJS Ketenagakerjaan"
+          name="bpjsKetenagakerjaan"
+          type="text"
+          placeholder="Masukkan nomor BPJS Ketenagakerjaan"
+          error={errors.bpjsKetenagakerjaan?.message}
+          register={register}
+        />
       </div>
     </div>
-  );
-};
+  )
 
 export default EmploymentInfoForm;

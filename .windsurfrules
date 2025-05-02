@@ -16,6 +16,7 @@
 
 - Follow Next.js patterns and use the App Router.
 - Correctly determine when to use server vs. client components in Next.js.
+- must use javascript language on frontend
 - Structure the project according to feature-based modules as specified in TDD Section 3.1.1:
   ```
   /frontend

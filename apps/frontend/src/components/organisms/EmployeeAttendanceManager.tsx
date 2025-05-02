@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Calendar, Clock, MapPin } from 'lucide-react';
-import { EmployeeAttendance } from '@/services/employeeService';
+import { EmployeeAttendance } from '../../services/employeeService';
 import FormField from '../molecules/FormField';
 import Button from '../atoms/Button';
 import Select from '../atoms/Select';

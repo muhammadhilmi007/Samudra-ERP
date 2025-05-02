@@ -3,12 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { zodResolver } from '@hookform/resolvers';
 import { z } from 'zod';
 import { useQuery } from '@tanstack/react-query';
 import { Building, Save, Loader2 } from 'lucide-react';
-import divisionService, { Division } from '@/services/divisionService';
-import branchService from '@/services/branchService';
+import divisionService, { Division } from '../../services/divisionService';
+import branchService from '../../services/branchService';
 import FormField from '../atoms/FormField';
 import Button from '../atoms/Button';
 import Select from '../atoms/Select';
@@ -73,7 +73,7 @@ const DivisionForm: React.FC<DivisionFormProps> = ({ initialData, isEdit = false
     watch,
   } = useForm<DivisionFormValues>({
     resolver: zodResolver(divisionSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       code: '',
       name: '',
       description: '',

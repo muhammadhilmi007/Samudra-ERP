@@ -1,18 +1,24 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import positionService, { Position, PositionListParams } from '@/services/positionService';
-import branchService from '@/services/branchService';
-import divisionService from '@/services/divisionService';
-import PositionFilter from '@/components/molecules/PositionFilter';
-import PositionTable from '@/components/organisms/PositionTable';
-import Button from '@/components/atoms/Button';
-import Pagination from '@/components/molecules/Pagination';
-import AuthGuard from '@/components/organisms/AuthGuard';
-import DeleteConfirmationModal from '@/components/molecules/DeleteConfirmationModal';
+import positionService, { PositionListParams } from '../../services/positionService';
+import branchService from '../../services/branchService';
+import divisionService from '../../services/divisionService';
+import PositionFilter from '../../components/molecules/PositionFilter';
+import PositionTable from '../../components/organisms/PositionTable';
+import Button from '../../components/atoms/Button';
+import Pagination from '../../components/molecules/Pagination';
+import AuthGuard from '../../components/organisms/AuthGuard';
+import DeleteConfirmationModal from '../../components/molecules/DeleteConfirmationModal';
 
 /**
  * PositionListPage - Page for displaying and managing positions

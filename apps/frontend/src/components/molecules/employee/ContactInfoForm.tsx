@@ -1,11 +1,43 @@
+/* eslint-disable react/button-has-type */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+/* eslint-disable react/require-default-props */
+
 import React from 'react';
 import { Control, FieldErrors, UseFormRegister } from 'react-hook-form';
 import FormField from '../FormField';
 
+interface ContactFormValues {
+  contact: {
+    phone: string;
+    email: string;
+    alternativePhone?: string;
+    emergencyContact?: {
+      name: string;
+      relationship: string;
+      phone: string;
+    };
+  };
+  address: {
+    street: string;
+    city: string;
+    province: string;
+    postalCode: string;
+    country: string;
+    coordinates?: {
+      latitude: number;
+      longitude: number;
+    };
+  };
+}
+
 interface ContactInfoFormProps {
-  register: UseFormRegister<any>;
-  errors: FieldErrors<any>;
-  control: Control<any>;
+  register: UseFormRegister<ContactFormValues>;
+  errors: FieldErrors<ContactFormValues>;
+  control: Control<ContactFormValues>;
 }
 
 /**
@@ -15,8 +47,7 @@ const ContactInfoForm: React.FC<ContactInfoFormProps> = ({
   register,
   errors,
   control,
-}) => {
-  return (
+}) => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div>
         <h2 className="text-lg font-semibold mb-4">Informasi Kontak</h2>
@@ -167,6 +198,5 @@ const ContactInfoForm: React.FC<ContactInfoFormProps> = ({
       </div>
     </div>
   );
-};
 
 export default ContactInfoForm;

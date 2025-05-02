@@ -1,14 +1,20 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { Plus, UserPlus } from 'lucide-react';
-import employeeService, { EmployeeListParams } from '@/services/employeeService';
-import Button from '@/components/atoms/Button';
-import EmployeeFilter from '@/components/molecules/EmployeeFilter';
-import EmployeeTable from '@/components/organisms/EmployeeTable';
-import DeleteConfirmationModal from '@/components/molecules/DeleteConfirmationModal';
+import { UserPlus } from 'lucide-react';
+import employeeService, { EmployeeListParams } from '../../services/employeeService';
+import Button from '../../components/atoms/Button';
+import EmployeeFilter from '../../components/molecules/EmployeeFilter';
+import EmployeeTable from '../../components/organisms/EmployeeTable';
+import DeleteConfirmationModal from '../../components/molecules/DeleteConfirmationModal';
 
 /**
  * EmployeesPage - Page component for listing employees
@@ -76,7 +82,7 @@ export default function EmployeesPage() {
 
       {isLoading ? (
         <div className="text-center py-8">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
           <p className="mt-2 text-gray-500">Memuat data karyawan...</p>
         </div>
       ) : isError ? (

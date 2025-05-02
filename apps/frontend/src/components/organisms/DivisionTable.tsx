@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Edit, Eye, Trash2, Building, Users } from 'lucide-react';
-import { Division } from '@/services/divisionService';
+import { Division } from '../../services/divisionService';
 import Button from '../atoms/Button';
 
 interface DivisionTableProps {

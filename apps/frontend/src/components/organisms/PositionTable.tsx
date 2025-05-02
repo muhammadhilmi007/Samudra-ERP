@@ -3,7 +3,7 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Edit, Eye, Trash2, Briefcase, Building, Users } from 'lucide-react';
-import { Position } from '@/services/positionService';
+import { Position } from '../../services/positionService';
 import Button from '../atoms/Button';
 
 interface PositionTableProps {

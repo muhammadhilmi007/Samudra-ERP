@@ -1,15 +1,20 @@
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { Edit, ArrowLeft, Trash2, Building, Users, Clock, MapPin, Phone, Mail, User } from 'lucide-react';
-import divisionService from '@/services/divisionService';
-import branchService from '@/services/branchService';
-import positionService from '@/services/positionService';
-import Button from '@/components/atoms/Button';
-import AuthGuard from '@/components/organisms/AuthGuard';
-import DeleteConfirmationModal from '@/components/molecules/DeleteConfirmationModal';
+import { Edit, ArrowLeft, Trash2, Building, Users, Clock, MapPin, User } from 'lucide-react';
+import divisionService from '../../../services/divisionService';
+import branchService from '../../../services/branchService';
+import positionService from '../../../services/positionService';
+import Button from '../../../components/atoms/Button';
+import AuthGuard from '../../../components/organisms/AuthGuard';
+import DeleteConfirmationModal from '../../../components/molecules/DeleteConfirmationModal';
 
 interface DivisionDetailPageProps {
   params: {
@@ -76,10 +81,10 @@ const DivisionDetailPage: React.FC<DivisionDetailPageProps> = ({ params }) => {
       <AuthGuard>
         <div className="container mx-auto px-4 py-8">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
+            <div className="h-8 bg-gray-200 rounded w-1/4 mb-6" />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="h-64 bg-gray-200 rounded"></div>
-              <div className="h-64 bg-gray-200 rounded"></div>
+              <div className="h-64 bg-gray-200 rounded" />
+              <div className="h-64 bg-gray-200 rounded" />
             </div>
           </div>
         </div>
@@ -272,8 +277,8 @@ const DivisionDetailPage: React.FC<DivisionDetailPageProps> = ({ params }) => {
               </h2>
               <Button
                 type="button"
-                variant="text"
-                onClick={() => router.push('/positions/create?division=' + divisionId)}
+                variant="outline"
+                onClick={() => router.push(`/positions/create?division=${  divisionId}`)}
                 className="text-sm"
               >
                 Tambah Jabatan
@@ -291,7 +296,7 @@ const DivisionDetailPage: React.FC<DivisionDetailPageProps> = ({ params }) => {
                       </div>
                       <Button
                         type="button"
-                        variant="text"
+                        variant="outline"
                         onClick={() => router.push(`/positions/${position.id}`)}
                         className="text-sm"
                       >
@@ -307,7 +312,7 @@ const DivisionDetailPage: React.FC<DivisionDetailPageProps> = ({ params }) => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => router.push('/positions/create?division=' + divisionId)}
+                  onClick={() => router.push(`/positions/create?division=${  divisionId}`)}
                   className="text-sm"
                 >
                   Tambah Jabatan Baru

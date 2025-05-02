@@ -1,12 +1,17 @@
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/function-component-definition */
+
 'use client';
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { ArrowLeft } from 'lucide-react';
-import employeeService from '@/services/employeeService';
-import Button from '@/components/atoms/Button';
-import EmployeeForm from '@/components/organisms/EmployeeForm';
+import employeeService from '../../../services/employeeService';
+import Button from '../../../components/atoms/Button';
+import EmployeeForm from '../../../components/organisms/EmployeeForm';
 
 /**
  * CreateEmployeePage - Page component for creating a new employee

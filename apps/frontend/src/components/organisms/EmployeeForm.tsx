@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery } from '@tanstack/react-query';
-import { Employee } from '@/services/employeeService';
+import { Employee } from '../../services/employeeService';
 import FormField from '../molecules/FormField';
 import Button from '../atoms/Button';
 import Select from '../atoms/Select';
