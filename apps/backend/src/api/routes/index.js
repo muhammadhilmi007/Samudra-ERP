@@ -16,6 +16,7 @@ const forwarderRoutes = require('./forwarderRoutes');
 const employeeRoutes = require('./employeeRoutes');
 const attendanceRoutes = require('./attendanceRoutes');
 const leaveRoutes = require('./leaveRoutes');
+const customerRoutes = require('./customerRoutes');
 
 const router = express.Router();
 
@@ -44,5 +45,6 @@ router.use('/forwarders', forwarderRoutes);
 router.use('/employees', employeeRoutes);
 router.use('/attendance', attendanceRoutes);
 router.use('/leaves', leaveRoutes);
+router.use('/customers', customerRoutes);
 
 module.exports = router;

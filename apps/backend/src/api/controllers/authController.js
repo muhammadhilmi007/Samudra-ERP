@@ -4,7 +4,6 @@
  */
 
 const jwt = require('jsonwebtoken');
-// const crypto = require('crypto'); // Not used in this file
 const { createApiError } = require('../../domain/utils/errorUtils');
 const MongoUserRepository = require('../../infrastructure/repositories/mongoUserRepository');
 const { logger } = require('../middleware/gateway/logger');

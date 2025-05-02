@@ -5,7 +5,6 @@
 
 const { createApiError } = require('../../domain/utils/errorUtils');
 const MongoUserRepository = require('../../infrastructure/repositories/mongoUserRepository');
-// const MongoRoleRepository = require('../../infrastructure/repositories/mongoRoleRepository');
 const { logger } = require('./gateway/logger');
 
 // Initialize repositories

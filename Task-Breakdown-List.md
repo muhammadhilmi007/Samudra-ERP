@@ -194,7 +194,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 
 ### A. Backend: Modul Pengambilan Barang (Pickup)
 
-#### Customer Management Service
+#### Customer Management Service [Doing]
 - [ ] Desain dan implementasi database schema untuk customers
 - [ ] Implementasi CRUD endpoints untuk customers
 - [ ] Implementasi customer search dan filtering

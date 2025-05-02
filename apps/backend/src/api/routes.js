@@ -10,7 +10,7 @@ const router = express.Router();
 // Import controllers
 const authController = require('./controllers/authController');
 const packageController = require('./controllers/packageController');
-const forwarderController = require('./controllers/forwarderController');
+const customerController = require('./controllers/customerController');
 
 // Import middleware
 const { authenticate, authorizePermissions } = require('./middleware/authMiddleware');
@@ -50,7 +50,10 @@ router.post(
 );
 
 // Forwarder routes
-router.use('/forwarders', require('./routes/forwarderRoutes')({ forwarderController }));
+// router.use('/forwarders', require('./routes/forwarderRoutes')({ forwarderController })); // Commented out to fix error
+
+// Customer routes
+router.use('/customers', require('./routes/customerRoutes'));
 router.put(
   '/packages/:id',
   authenticate,

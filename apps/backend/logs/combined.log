@@ -738,3 +738,65 @@
 {"level":"info","message":"Server running on port 5000","service":"samudra-api","timestamp":"2025-04-30 23:01:06"}
 {"level":"info","message":"API Documentation: http://localhost:5000/api/docs","service":"samudra-api","timestamp":"2025-04-30 23:01:06"}
 {"level":"info","message":"Environment: development","service":"samudra-api","timestamp":"2025-04-30 23:01:06"}
+{"level":"info","message":"MongoDB connected successfully","service":"samudra-api","timestamp":"2025-05-02 21:27:30"}
+{"level":"info","message":"Server running on port 5000","service":"samudra-api","timestamp":"2025-05-02 21:27:30"}
+{"level":"info","message":"API Documentation: http://localhost:5000/api/docs","service":"samudra-api","timestamp":"2025-05-02 21:27:30"}
+{"level":"info","message":"Environment: development","service":"samudra-api","timestamp":"2025-05-02 21:27:30"}
+{"level":"info","message":"MongoDB connected successfully","service":"samudra-api","timestamp":"2025-05-02 21:27:44"}
+{"level":"info","message":"Server running on port 5000","service":"samudra-api","timestamp":"2025-05-02 21:27:44"}
+{"level":"info","message":"API Documentation: http://localhost:5000/api/docs","service":"samudra-api","timestamp":"2025-05-02 21:27:44"}
+{"level":"info","message":"Environment: development","service":"samudra-api","timestamp":"2025-05-02 21:27:44"}
+{"level":"info","message":"MongoDB connected successfully","service":"samudra-api","timestamp":"2025-05-02 21:28:31"}
+{"level":"info","message":"Server running on port 5000","service":"samudra-api","timestamp":"2025-05-02 21:28:31"}
+{"level":"info","message":"API Documentation: http://localhost:5000/api/docs","service":"samudra-api","timestamp":"2025-05-02 21:28:31"}
+{"level":"info","message":"Environment: development","service":"samudra-api","timestamp":"2025-05-02 21:28:31"}
+{"level":"info","message":"::1 - - [02/May/2025:14:28:49 +0000] \"GET / HTTP/1.1\" 200 9884 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\" - 8.573 ms","service":"samudra-api","timestamp":"2025-05-02 21:28:49"}
+{"level":"info","message":"::1 - - [02/May/2025:14:28:50 +0000] \"GET /favicon.ico HTTP/1.1\" 404 1275 \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\" - 5.819 ms","service":"samudra-api","timestamp":"2025-05-02 21:28:50"}
+{"level":"info","message":"User logged in: admin (admin@samudrapaket.com)","service":"samudra-api","timestamp":"2025-05-02 21:28:52"}
+{"level":"info","message":"::1 - - [02/May/2025:14:28:52 +0000] \"POST /api/auth/login HTTP/1.1\" 200 697 \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\" - 193.759 ms","service":"samudra-api","timestamp":"2025-05-02 21:28:52"}
+{"level":"info","message":"Token refreshed for user: admin","service":"samudra-api","timestamp":"2025-05-02 21:28:53"}
+{"level":"info","message":"::1 - - [02/May/2025:14:28:53 +0000] \"POST /api/auth/refresh HTTP/1.1\" 200 521 \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\" - 25.567 ms","service":"samudra-api","timestamp":"2025-05-02 21:28:53"}
+{"authHeader":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTA3NjM4OTBkMDg4MDdmOTQ0ZjFiZiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiNjgxMDVhNDE3N2I4NWVkN2ExYmQ0ZjM4IiwicGVybWlzc2lvbnMiOlsiQUxMIl0sImlhdCI6MTc0NjE5NjEzMywiZXhwIjoxNzQ2MTk5NzMzfQ.iBc7lg01OazhosLT_jQwIK4ISkvneIg5YM491qbBGy0","level":"info","message":"Auth header:","service":"samudra-api","timestamp":"2025-05-02 21:28:54"}
+{"level":"info","message":"Token extracted:","service":"samudra-api","timestamp":"2025-05-02 21:28:54","token":"eyJhbGciOi..."}
+{"level":"info","message":"Verifying token...","service":"samudra-api","timestamp":"2025-05-02 21:28:54"}
+{"decoded":{"exp":1746199733,"iat":1746196133,"id":"6810763890d08807f944f1bf","permissions":["ALL"],"role":"68105a4177b85ed7a1bd4f38","username":"admin"},"level":"info","message":"Token verified:","service":"samudra-api","timestamp":"2025-05-02 21:28:54"}
+{"level":"info","message":"Getting user from database:","service":"samudra-api","timestamp":"2025-05-02 21:28:54","userId":"6810763890d08807f944f1bf"}
+{"level":"info","message":"User retrieved:","service":"samudra-api","timestamp":"2025-05-02 21:28:54","user":{"id":"6810763890d08807f944f1bf","isActive":true,"role":"{id: h\u0010ZAw�^ס�O8, \n        name: undefined}","username":"admin"}}
+{"isActive":true,"level":"info","message":"Checking if user is active:","service":"samudra-api","timestamp":"2025-05-02 21:28:54"}
+{"level":"info","message":"User logged out: admin","service":"samudra-api","timestamp":"2025-05-02 21:28:54"}
+{"level":"info","message":"::1 - - [02/May/2025:14:28:54 +0000] \"POST /api/auth/logout HTTP/1.1\" 200 52 \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\" - 16.072 ms","service":"samudra-api","timestamp":"2025-05-02 21:28:54"}
+{"level":"info","message":"User logged in: admin (admin@samudrapaket.com)","service":"samudra-api","timestamp":"2025-05-02 21:28:55"}
+{"level":"info","message":"::1 - - [02/May/2025:14:28:55 +0000] \"POST /api/auth/login HTTP/1.1\" 200 697 \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\" - 133.154 ms","service":"samudra-api","timestamp":"2025-05-02 21:28:55"}
+{"authHeader":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTA3NjM4OTBkMDg4MDdmOTQ0ZjFiZiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiNjgxMDVhNDE3N2I4NWVkN2ExYmQ0ZjM4IiwicGVybWlzc2lvbnMiOlsiQUxMIl0sImlhdCI6MTc0NjE5NjEzNSwiZXhwIjoxNzQ2MTk5NzM1fQ.UfqDNlBFbfrMyK8dlLAeDSV-14hkJIEULt3Wm6Xm-Bw","level":"info","message":"Auth header:","service":"samudra-api","timestamp":"2025-05-02 21:28:57"}
+{"level":"info","message":"Token extracted:","service":"samudra-api","timestamp":"2025-05-02 21:28:57","token":"eyJhbGciOi..."}
+{"level":"info","message":"Verifying token...","service":"samudra-api","timestamp":"2025-05-02 21:28:57"}
+{"decoded":{"exp":1746199735,"iat":1746196135,"id":"6810763890d08807f944f1bf","permissions":["ALL"],"role":"68105a4177b85ed7a1bd4f38","username":"admin"},"level":"info","message":"Token verified:","service":"samudra-api","timestamp":"2025-05-02 21:28:57"}
+{"level":"info","message":"Getting user from database:","service":"samudra-api","timestamp":"2025-05-02 21:28:57","userId":"6810763890d08807f944f1bf"}
+{"level":"info","message":"User retrieved:","service":"samudra-api","timestamp":"2025-05-02 21:28:57","user":{"id":"6810763890d08807f944f1bf","isActive":true,"role":"{id: h\u0010ZAw�^ס�O8, \n        name: undefined}","username":"admin"}}
+{"isActive":true,"level":"info","message":"Checking if user is active:","service":"samudra-api","timestamp":"2025-05-02 21:28:57"}
+{"level":"info","message":"::1 - - [02/May/2025:14:28:57 +0000] \"GET /api/packages HTTP/1.1\" 200 45 \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\" - 13.551 ms","service":"samudra-api","timestamp":"2025-05-02 21:28:57"}
+{"authHeader":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MTA3NjM4OTBkMDg4MDdmOTQ0ZjFiZiIsInVzZXJuYW1lIjoiYWRtaW4iLCJyb2xlIjoiNjgxMDVhNDE3N2I4NWVkN2ExYmQ0ZjM4IiwicGVybWlzc2lvbnMiOlsiQUxMIl0sImlhdCI6MTc0NjE5NjEzNSwiZXhwIjoxNzQ2MTk5NzM1fQ.UfqDNlBFbfrMyK8dlLAeDSV-14hkJIEULt3Wm6Xm-Bw","level":"info","message":"Auth header:","service":"samudra-api","timestamp":"2025-05-02 21:28:58"}
+{"level":"info","message":"Token extracted:","service":"samudra-api","timestamp":"2025-05-02 21:28:58","token":"eyJhbGciOi..."}
+{"level":"info","message":"Verifying token...","service":"samudra-api","timestamp":"2025-05-02 21:28:58"}
+{"decoded":{"exp":1746199735,"iat":1746196135,"id":"6810763890d08807f944f1bf","permissions":["ALL"],"role":"68105a4177b85ed7a1bd4f38","username":"admin"},"level":"info","message":"Token verified:","service":"samudra-api","timestamp":"2025-05-02 21:28:58"}
+{"level":"info","message":"Getting user from database:","service":"samudra-api","timestamp":"2025-05-02 21:28:58","userId":"6810763890d08807f944f1bf"}
+{"level":"info","message":"User retrieved:","service":"samudra-api","timestamp":"2025-05-02 21:28:58","user":{"id":"6810763890d08807f944f1bf","isActive":true,"role":"{id: h\u0010ZAw�^ס�O8, \n        name: undefined}","username":"admin"}}
+{"isActive":true,"level":"info","message":"Checking if user is active:","service":"samudra-api","timestamp":"2025-05-02 21:28:58"}
+{"level":"info","message":"::1 - - [02/May/2025:14:28:58 +0000] \"POST /api/packages HTTP/1.1\" 400 631 \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\" - 13.067 ms","service":"samudra-api","timestamp":"2025-05-02 21:28:58"}
+{"level":"info","message":"::1 - - [02/May/2025:14:29:03 +0000] \"GET /api/docs/ HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\" - 1.532 ms","service":"samudra-api","timestamp":"2025-05-02 21:29:03"}
+{"level":"info","message":"MongoDB connected successfully","service":"samudra-api","timestamp":"2025-05-02 21:32:54"}
+{"level":"info","message":"Server running on port 5000","service":"samudra-api","timestamp":"2025-05-02 21:32:54"}
+{"level":"info","message":"API Documentation: http://localhost:5000/api/docs","service":"samudra-api","timestamp":"2025-05-02 21:32:54"}
+{"level":"info","message":"Environment: development","service":"samudra-api","timestamp":"2025-05-02 21:32:54"}
+{"level":"info","message":"MongoDB connected successfully","service":"samudra-api","timestamp":"2025-05-02 21:57:34"}
+{"level":"info","message":"Server running on port 5000","service":"samudra-api","timestamp":"2025-05-02 21:57:34"}
+{"level":"info","message":"API Documentation: http://localhost:5000/api/docs","service":"samudra-api","timestamp":"2025-05-02 21:57:34"}
+{"level":"info","message":"Environment: development","service":"samudra-api","timestamp":"2025-05-02 21:57:34"}
+{"level":"info","message":"::1 - - [02/May/2025:14:57:50 +0000] \"GET / HTTP/1.1\" 304 - \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\" - 8.690 ms","service":"samudra-api","timestamp":"2025-05-02 21:57:50"}
+{"level":"info","message":"::1 - - [02/May/2025:14:57:50 +0000] \"GET /favicon.ico HTTP/1.1\" 404 1275 \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\" - 8.321 ms","service":"samudra-api","timestamp":"2025-05-02 21:57:50"}
+{"level":"info","message":"User logged in: admin (admin@samudrapaket.com)","service":"samudra-api","timestamp":"2025-05-02 21:57:53"}
+{"level":"info","message":"::1 - - [02/May/2025:14:57:53 +0000] \"POST /api/auth/login HTTP/1.1\" 200 697 \"http://localhost:5000/\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\" - 214.116 ms","service":"samudra-api","timestamp":"2025-05-02 21:57:53"}
+{"level":"info","message":"MongoDB connected successfully","service":"samudra-api","timestamp":"2025-05-02 22:00:05"}
+{"level":"info","message":"Server running on port 5000","service":"samudra-api","timestamp":"2025-05-02 22:00:05"}
+{"level":"info","message":"API Documentation: http://localhost:5000/api/docs","service":"samudra-api","timestamp":"2025-05-02 22:00:05"}
+{"level":"info","message":"Environment: development","service":"samudra-api","timestamp":"2025-05-02 22:00:05"}
