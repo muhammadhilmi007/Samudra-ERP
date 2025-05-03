@@ -323,7 +323,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi customer activity history view
 - [ ] Unit testing untuk customer management components
 
-#### Pickup Management UI
+#### Pickup Management UI [Doing]
 - [ ] Implementasi pickup request create page
 - [ ] Implementasi pickup request list page dengan filtering
 - [ ] Implementasi pickup assignment management
@@ -331,7 +331,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi pickup schedule visualization
 - [ ] Unit testing untuk pickup management components
 
-#### Shipment & Resi UI
+#### Shipment & Resi UI [Doing]
 - [ ] Implementasi resi/STT creation form
 - [ ] Implementasi pricing calculator
 - [ ] Implementasi shipment list page dengan search dan filtering
@@ -340,7 +340,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi waybill tracking interface
 - [ ] Unit testing untuk shipment components
 
-#### Loading & Delivery UI
+#### Loading & Delivery UI [Doing]
 - [ ] Implementasi loading management interface
 - [ ] Implementasi vehicle loading visualization
 - [ ] Implementasi inter-branch shipment tracking

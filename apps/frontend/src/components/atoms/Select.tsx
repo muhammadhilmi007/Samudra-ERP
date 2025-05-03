@@ -8,32 +8,35 @@
 
 'use client';
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 
-interface SelectProps {
-  options: Array<{ value: string; label: string }>;
-  onChange: (value: string) => void;
-  value?: string;
-  isDisabled?: boolean;
-  isRequired?: boolean;
+// In Select.tsx
+interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  children?: React.ReactNode;
+  error?: string;
 }
 
-function Select({ options, onChange, value, isDisabled, isRequired }: SelectProps) {
-  return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      disabled={isDisabled}
-      required={isRequired}
-      className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-    >
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
-  );
-}
+const Select = forwardRef<HTMLSelectElement, SelectProps>(
+  ({ children, error, className, ...props }, ref) => {
+    return (
+      <div className="w-full">
+        <select
+          ref={ref}
+          className={`block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 ${
+            error ? 'border-red-500' : 'border-gray-300'
+          } ${className}`}
+          {...props}
+        >
+          {/* Add null check for children */}
+          {React.Children.map(children, (child) => {
+            if (!React.isValidElement(child)) return null;
+            return child;
+          })}
+        </select>
+        {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+      </div>
+    );
+  }
+);
 
-export default Select;
+export { Select };

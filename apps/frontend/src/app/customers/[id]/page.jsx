@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/atoms/Card';
-import { Button } from '@/components/atoms/Button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/atoms/Tabs';
-import { PageHeader } from '@/components/molecules/PageHeader';
-import { Timeline } from '@/components/molecules/Timeline';
-import { useToast } from '@/hooks/useToast';
-import { customerService } from '@/services/customerService';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../components/atoms/Card';
+import { Button } from '../../components/atoms/Button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/atoms/Tabs';
+import { PageHeader } from '../../components/molecules/PageHeader';
+import { Timeline } from '../../components/molecules/Timeline';
+import { useToast } from '../../hooks/useToast';
+import { customerService } from '../../services/customerService';
 
 export default function CustomerDetailPage({ params }) {
   const { id } = params;

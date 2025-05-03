@@ -1,12 +1,12 @@
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable react/jsx-filename-extension */
 /**
  * Samudra Paket ERP - Frontend
  * Root layout component
  */
 
+
 import './globals.css';
 import ReduxProvider from '../store/provider';
+import { NotificationProvider } from '../store/context/NotificationContext';
 
 export const metadata = {
   title: 'Samudra Paket ERP',
@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
     <html lang="id" className="h-full">
       <body className="min-h-screen bg-gray-50">
         <ReduxProvider>
-          {children}
+          <NotificationProvider>{children}</NotificationProvider>
         </ReduxProvider>
       </body>
     </html>

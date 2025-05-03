@@ -1,6 +1,6 @@
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/atoms/Card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/atoms/Tabs';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../../components/atoms/Card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/atoms/Tabs';
 import { CalendarIcon, TruckIcon, ClipboardCheckIcon, MapPinIcon, BarChart3Icon } from 'lucide-react';
 import Link from 'next/link';
 

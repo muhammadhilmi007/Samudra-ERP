@@ -4,16 +4,16 @@ import { format, parseISO } from 'date-fns';
 import { Search, Filter, ChevronDown, ChevronUp, Calendar, User, MapPin, Clock, AlertCircle, RefreshCw } from 'lucide-react';
 import Link from 'next/link';
 
-import pickupService from '@/services/pickupService';
+import pickupService from '../../../services/pickupService';
 
-import { Button } from '@/components/atoms/Button';
-import { Input } from '@/components/atoms/Input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/atoms/Select';
-import { Pagination } from '@/components/molecules/Pagination';
-import { Card, CardContent } from '@/components/atoms/Card';
-import { Badge } from '@/components/atoms/Badge';
-import { Skeleton } from '@/components/atoms/Skeleton';
-import { DateRangePicker } from '@/components/molecules/DateRangePicker';
+import { Button } from '../../../components/atoms/Button';
+import { Input } from '../../../components/atoms/Input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/atoms/Select';
+import { Pagination } from '../../../components/molecules/Pagination';
+import { Card, CardContent } from '../../../components/atoms/Card';
+import { Badge } from '../../../components/atoms/Badge';
+import { Skeleton } from '../../../components/atoms/Skeleton';
+import { DateRangePicker } from '../../../components/molecules/DateRangePicker';
 
 /**
  * Status badge component

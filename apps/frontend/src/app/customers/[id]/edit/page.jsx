@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/atoms/Card';
-import { Button } from '@/components/atoms/Button';
-import { PageHeader } from '@/components/molecules/PageHeader';
-import { CustomerForm } from '@/components/organisms/CustomerForm';
-import { useToast } from '@/hooks/useToast';
-import { customerService } from '@/services/customerService';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/atoms/Card';
+import { Button } from '../../components/atoms/Button';
+import { PageHeader } from '../../components/molecules/PageHeader';
+import { CustomerForm } from '../../components/organisms/CustomerForm';
+import { useToast } from '../../hooks/useToast';
+import { customerService } from '../../services/customerService';
 
 export default function EditCustomerPage({ params }) {
   const { id } = params;

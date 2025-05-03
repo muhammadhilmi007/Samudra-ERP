@@ -9,18 +9,18 @@ import { CalendarIcon, Clock, MapPin, User, Package, AlertCircle } from 'lucide-
 
 import pickupService from '@/services/pickupService';
 
-import { Button } from '@/components/atoms/Button';
-import { Input } from '@/components/atoms/Input';
-import { Textarea } from '@/components/atoms/Textarea';
+import { Button } from '../../../components/atoms/Button';
+import { Input } from '../../../components/atoms/Input';
+import { Textarea } from '../../../components/atoms/Textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/atoms/Select';
-import { Calendar } from '@/components/atoms/Calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/atoms/Popover';
+} from '../../../components/atoms/Select';
+import { Calendar } from '../../../components/atoms/Calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '../../../components/atoms/Popover';
 import {
   Card,
   CardContent,
@@ -28,7 +28,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@/components/atoms/Card';
+} from '../../../components/atoms/Card';
 import {
   Form,
   FormControl,
@@ -37,9 +37,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/atoms/Form';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/atoms/Tabs';
-import { Alert, AlertDescription, AlertTitle } from '@/components/atoms/Alert';
+} from '../../../components/atoms/Form';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/atoms/Tabs';
+import { Alert, AlertDescription, AlertTitle } from '../../../components/atoms/Alert';
 
 // Form validation schema
 const pickupRequestSchema = z.object({

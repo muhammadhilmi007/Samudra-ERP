@@ -1,6 +1,6 @@
 import React from 'react';
 import { Metadata } from 'next';
-import PickupDashboard from '@/components/organisms/pickup/PickupDashboard';
+import PickupDashboard from '../../components/organisms/pickup/PickupDashboard';
 
 export const metadata = {
   title: 'Pickup Management - Samudra Paket',

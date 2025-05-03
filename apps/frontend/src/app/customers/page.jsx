@@ -2,14 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/atoms/Card';
-import { Button } from '@/components/atoms/Button';
-import { Input } from '@/components/atoms/Input';
-import { Select } from '@/components/atoms/Select';
-import { DataTable } from '@/components/organisms/DataTable';
-import { PageHeader } from '@/components/molecules/PageHeader';
-import { useToast } from '@/hooks/useToast';
-import { customerService } from '@/services/customerService';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/atoms/Card';
+import { Button } from '../../components/atoms/Button';
+import { Input } from '../../components/atoms/Input';
+import { Select } from '../../components/atoms/Select';
+import { DataTable } from '../../components/organisms/DataTable';
+import { PageHeader } from '../../components/molecules/PageHeader';
+import { useToast } from '../../hooks/useToast';
+import { customerService } from '../../services/customerService';
 
 export default function CustomerListPage() {
   const router = useRouter();

@@ -4,15 +4,15 @@ import { format, parseISO } from 'date-fns';
 import { MapPin, Calendar, User, Truck, Clock, MoreHorizontal, Search, Filter, Phone, RefreshCw, AlertCircle, Navigation, Package } from 'lucide-react';
 import Link from 'next/link';
 
-import pickupService from '@/services/pickupService';
+import pickupService from '../../../services/pickupService';
 
-import { Button } from '@/components/atoms/Button';
-import { Input } from '@/components/atoms/Input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/atoms/Select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/atoms/Card';
-import { Badge } from '@/components/atoms/Badge';
-import { Skeleton } from '@/components/atoms/Skeleton';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/atoms/Tabs';
+import { Button } from '../../../components/atoms/Button';
+import { Input } from '../../../components/atoms/Input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../components/atoms/Select';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../components/atoms/Card';
+import { Badge } from '../../../components/atoms/Badge';
+import { Skeleton } from '../../../components/atoms/Skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/atoms/Tabs';
 
 /**
  * Status badge component
