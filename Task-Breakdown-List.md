@@ -289,7 +289,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 
 ### D. Backend: Modul Tracking dan Monitoring
 
-#### Tracking Service
+#### Tracking Service [Doing]
 - [ ] Desain dan implementasi database schema untuk tracking events
 - [ ] Implementasi tracking query endpoints
 - [ ] Implementasi status update endpoints
@@ -298,7 +298,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi ETA calculation dan updates
 - [ ] Unit testing untuk tracking functionality
 
-#### Notification Service
+#### Notification Service [Doing]
 - [ ] Desain dan implementasi database schema untuk notifications
 - [ ] Implementasi notification generation endpoints
 - [ ] Implementasi notification delivery (email, SMS, in-app)

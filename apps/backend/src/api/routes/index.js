@@ -27,6 +27,8 @@ const fileUploadRoutes = require('./fileUploadRoutes');
 const loadingFormRoutes = require('./loadingFormRoutes');
 const shipmentRoutes = require('./shipmentRoutes');
 const deliveryOrderRoutes = require('./deliveryOrderRoutes');
+const trackingRoutes = require('./trackingRoutes');
+const notificationRoutes = require('./notificationRoutes');
 
 const router = express.Router();
 
@@ -66,5 +68,7 @@ router.use('/uploads', fileUploadRoutes);
 router.use('/loading-forms', loadingFormRoutes);
 router.use('/inter-branch-shipments', shipmentRoutes);
 router.use('/delivery-orders', deliveryOrderRoutes);
+router.use('/tracking', trackingRoutes);
+router.use('/notifications', notificationRoutes);
 
 module.exports = router;
