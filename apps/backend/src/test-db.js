@@ -13,7 +13,7 @@ async function testConnection() {
     console.log('Testing MongoDB connection...');
     
     // Get MongoDB connection details from environment variables
-    const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/samudra_paket';
+    const mongoUri = process.env.MONGODB_URI || 'mongodb://mongo:oFgiQXbTppRRDKapRNAEIwATDWMnUfzv@caboose.proxy.rlwy.net:51544';
     console.log(`MongoDB URI: ${mongoUri.replace(/\/\/([^:]+):([^@]+)@/, '//***:***@')}`);
     
     // Connection options

@@ -17,7 +17,7 @@ const connectToDatabase = async () => {
     console.log('Attempting to connect to MongoDB...');
 
     // Gunakan URI default jika tidak ada yang disediakan
-    const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/samudra_paket';
+    const uri = process.env.MONGODB_URI || 'mongodb://mongo:oFgiQXbTppRRDKapRNAEIwATDWMnUfzv@caboose.proxy.rlwy.net:51544';
 
     // Opsi koneksi sederhana
     const options = {
@@ -66,7 +66,7 @@ const connectToDatabase = async () => {
     console.error('1. Pastikan MongoDB Compass sudah terbuka dan terhubung');
     console.error('2. Periksa connection string di MongoDB Compass');
     console.error('3. Gunakan format connection string berikut di file .env:');
-    console.error('   MONGODB_URI=mongodb://127.0.0.1:27017/samudra_paket');
+    console.error('   MONGODB_URI=mongodb://mongo:oFgiQXbTppRRDKapRNAEIwATDWMnUfzv@caboose.proxy.rlwy.net:51544');
     console.error('   (Gunakan 127.0.0.1 bukan localhost)');
 
     console.error('\nJika menggunakan autentikasi:');

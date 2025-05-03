@@ -112,7 +112,7 @@ async function testConnection() {
 
     // Suggest direct connection string
     console.error('\nCOBA CONNECTION STRING INI:');
-    console.error('MONGODB_URI=mongodb://127.0.0.1:27017/samudra_paket');
+    console.error('MONGODB_URI=mongodb://mongo:oFgiQXbTppRRDKapRNAEIwATDWMnUfzv@caboose.proxy.rlwy.net:51544');
     console.error('(Gunakan 127.0.0.1 alih-alih localhost)');
 
     // Suggest creating .env file
@@ -120,7 +120,7 @@ async function testConnection() {
       console.error('\nFile .env tidak ditemukan. Buat file .env dengan konten:');
       console.error('NODE_ENV=development');
       console.error('PORT=5000');
-      console.error('MONGODB_URI=mongodb://127.0.0.1:27017/samudra_paket');
+      console.error('MONGODB_URI=mongodb://mongo:oFgiQXbTppRRDKapRNAEIwATDWMnUfzv@caboose.proxy.rlwy.net:51544');
     }
   } finally {
     // Close connection
