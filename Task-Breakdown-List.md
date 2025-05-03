@@ -259,7 +259,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 
 ### C. Backend: Modul Muat & Langsir Barang
 
-#### Loading Management Service
+#### Loading Management Service [Doing]
 - [ ] Desain dan implementasi database schema untuk loading forms
 - [ ] Implementasi CRUD endpoints untuk loading forms
 - [ ] Implementasi shipment allocation ke vehicles
@@ -268,7 +268,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi loading document generation
 - [ ] Unit testing untuk loading management
 
-#### Inter-Branch Shipment Service
+#### Inter-Branch Shipment Service [Doing]
 - [ ] Desain dan implementasi database schema untuk shipments
 - [ ] Implementasi shipment tracking endpoints
 - [ ] Implementasi GPS location updates
@@ -277,7 +277,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi shipment coordination between branches
 - [ ] Unit testing untuk shipment tracking
 
-#### Delivery Order Service
+#### Delivery Order Service [Doing]
 - [ ] Desain dan implementasi database schema untuk delivery orders
 - [ ] Implementasi delivery planning endpoints
 - [ ] Implementasi route optimization

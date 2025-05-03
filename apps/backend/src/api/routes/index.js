@@ -24,6 +24,9 @@ const shipmentOrderRoutes = require('./shipmentOrderRoutes');
 const pricingRoutes = require('./pricingRoutes');
 const waybillDocumentRoutes = require('./waybillDocumentRoutes');
 const fileUploadRoutes = require('./fileUploadRoutes');
+const loadingFormRoutes = require('./loadingFormRoutes');
+const shipmentRoutes = require('./shipmentRoutes');
+const deliveryOrderRoutes = require('./deliveryOrderRoutes');
 
 const router = express.Router();
 
@@ -60,5 +63,8 @@ router.use('/shipments', shipmentOrderRoutes);
 router.use('/pricing', pricingRoutes);
 router.use('/documents', waybillDocumentRoutes);
 router.use('/uploads', fileUploadRoutes);
+router.use('/loading-forms', loadingFormRoutes);
+router.use('/inter-branch-shipments', shipmentRoutes);
+router.use('/delivery-orders', deliveryOrderRoutes);
 
 module.exports = router;
