@@ -306,7 +306,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi notification preferences
 - [ ] Unit testing untuk notification system
 
-#### Monitoring Service
+#### Monitoring Service [Doing]
 - [ ] Implementasi operational metrics collection
 - [ ] Implementasi performance metrics endpoints
 - [ ] Implementasi alert thresholds dan triggers
@@ -316,7 +316,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 
 ### E. Frontend: Operasional Modules
 
-#### Customer Management UI
+#### Customer Management UI [Doing]
 - [ ] Implementasi customer list page dengan search dan filtering
 - [ ] Implementasi customer detail page
 - [ ] Implementasi customer create/edit forms

@@ -29,6 +29,7 @@ const shipmentRoutes = require('./shipmentRoutes');
 const deliveryOrderRoutes = require('./deliveryOrderRoutes');
 const trackingRoutes = require('./trackingRoutes');
 const notificationRoutes = require('./notificationRoutes');
+const monitoringRoutes = require('./monitoringRoutes');
 
 const router = express.Router();
 
@@ -70,5 +71,6 @@ router.use('/inter-branch-shipments', shipmentRoutes);
 router.use('/delivery-orders', deliveryOrderRoutes);
 router.use('/tracking', trackingRoutes);
 router.use('/notifications', notificationRoutes);
+router.use('/monitoring', monitoringRoutes);
 
 module.exports = router;

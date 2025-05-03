@@ -10,6 +10,7 @@ const corsConfig = require('./corsConfig');
 const { apiLimiter, authLimiter } = require('./rateLimiter');
 const { httpLogger, requestLogger } = require('./logger');
 const { notFoundHandler, errorHandler } = require('./errorHandler');
+const performanceMonitoringMiddleware = require('../performanceMonitoringMiddleware');
 
 /**
  * Configure API Gateway middleware
@@ -46,6 +47,9 @@ const configureApiGateway = (app) => {
 
   // Apply general rate limiting to all other routes
   app.use('/api', apiLimiter);
+
+  // Apply performance monitoring middleware
+  app.use('/api', performanceMonitoringMiddleware);
 
   return app;
 };
