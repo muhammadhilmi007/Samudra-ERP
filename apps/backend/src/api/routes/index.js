@@ -17,6 +17,10 @@ const employeeRoutes = require('./employeeRoutes');
 const attendanceRoutes = require('./attendanceRoutes');
 const leaveRoutes = require('./leaveRoutes');
 const customerRoutes = require('./customerRoutes');
+const pickupRequestRoutes = require('./pickupRequestRoutes');
+const pickupAssignmentRoutes = require('./pickupAssignmentRoutes');
+const pickupItemRoutes = require('./pickupItemRoutes');
+const fileUploadRoutes = require('./fileUploadRoutes');
 
 const router = express.Router();
 
@@ -46,5 +50,9 @@ router.use('/employees', employeeRoutes);
 router.use('/attendance', attendanceRoutes);
 router.use('/leaves', leaveRoutes);
 router.use('/customers', customerRoutes);
+router.use('/pickup-requests', pickupRequestRoutes);
+router.use('/pickup-assignments', pickupAssignmentRoutes);
+router.use('/pickup-items', pickupItemRoutes);
+router.use('/uploads', fileUploadRoutes);
 
 module.exports = router;

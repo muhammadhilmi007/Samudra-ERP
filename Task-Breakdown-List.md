@@ -202,7 +202,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi customer activity history
 - [ ] Unit testing untuk customer management
 
-#### Pickup Request Service
+#### Pickup Request Service [Doing]
 - [ ] Desain dan implementasi database schema untuk pickup requests
 - [ ] Implementasi CRUD endpoints untuk pickup requests
 - [ ] Implementasi validation untuk service area coverage
@@ -211,7 +211,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi notification triggers
 - [ ] Unit testing untuk pickup request management
 
-#### Pickup Assignment Service
+#### Pickup Assignment Service [Doing]
 - [ ] Desain dan implementasi database schema untuk pickup assignments
 - [ ] Implementasi assignment creation endpoints
 - [ ] Implementasi route optimization algorithm

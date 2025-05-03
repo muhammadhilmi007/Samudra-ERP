@@ -800,3 +800,7 @@
 {"level":"info","message":"Server running on port 5000","service":"samudra-api","timestamp":"2025-05-02 22:00:05"}
 {"level":"info","message":"API Documentation: http://localhost:5000/api/docs","service":"samudra-api","timestamp":"2025-05-02 22:00:05"}
 {"level":"info","message":"Environment: development","service":"samudra-api","timestamp":"2025-05-02 22:00:05"}
+{"level":"info","message":"MongoDB connected successfully","service":"samudra-api","timestamp":"2025-05-03 07:52:49"}
+{"level":"info","message":"Server running on port 5000","service":"samudra-api","timestamp":"2025-05-03 07:52:49"}
+{"level":"info","message":"API Documentation: http://localhost:5000/api/docs","service":"samudra-api","timestamp":"2025-05-03 07:52:49"}
+{"level":"info","message":"Environment: development","service":"samudra-api","timestamp":"2025-05-03 07:52:49"}
