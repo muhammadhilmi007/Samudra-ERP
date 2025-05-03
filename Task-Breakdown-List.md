@@ -220,7 +220,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi GPS tracking integration
 - [ ] Unit testing untuk pickup assignment functionality
 
-#### Pickup Execution Service
+#### Pickup Execution Service [Doing]
 - [ ] Desain dan implementasi database schema untuk pickup items
 - [ ] Implementasi pickup confirmation endpoints
 - [ ] Implementasi item documentation endpoints (photos, notes)
@@ -230,7 +230,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 
 ### B. Backend: Modul Penjualan dan Pembuatan Resi
 
-#### Shipment Order Service
+#### Shipment Order Service [Doing]
 - [ ] Desain dan implementasi database schema untuk shipment orders
 - [ ] Implementasi order creation endpoints
 - [ ] Implementasi waybill generation dengan format terstandarisasi
@@ -241,7 +241,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi document attachment management
 - [ ] Unit testing untuk shipment order management
 
-#### Pricing Service
+#### Pricing Service [Doing]
 - [ ] Desain dan implementasi database schema untuk pricing rules
 - [ ] Implementasi pricing calculation endpoints
 - [ ] Implementasi weight-based pricing
@@ -250,7 +250,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi discount management
 - [ ] Unit testing untuk pricing calculation
 
-#### Waybill Document Service
+#### Waybill Document Service [Doing]
 - [ ] Implementasi waybill generation endpoint
 - [ ] Implementasi barcode/QR code generation
 - [ ] Implementasi PDF generation untuk resi/STT

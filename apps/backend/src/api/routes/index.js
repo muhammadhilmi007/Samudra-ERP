@@ -20,6 +20,9 @@ const customerRoutes = require('./customerRoutes');
 const pickupRequestRoutes = require('./pickupRequestRoutes');
 const pickupAssignmentRoutes = require('./pickupAssignmentRoutes');
 const pickupItemRoutes = require('./pickupItemRoutes');
+const shipmentOrderRoutes = require('./shipmentOrderRoutes');
+const pricingRoutes = require('./pricingRoutes');
+const waybillDocumentRoutes = require('./waybillDocumentRoutes');
 const fileUploadRoutes = require('./fileUploadRoutes');
 
 const router = express.Router();
@@ -53,6 +56,9 @@ router.use('/customers', customerRoutes);
 router.use('/pickup-requests', pickupRequestRoutes);
 router.use('/pickup-assignments', pickupAssignmentRoutes);
 router.use('/pickup-items', pickupItemRoutes);
+router.use('/shipments', shipmentOrderRoutes);
+router.use('/pricing', pricingRoutes);
+router.use('/documents', waybillDocumentRoutes);
 router.use('/uploads', fileUploadRoutes);
 
 module.exports = router;
