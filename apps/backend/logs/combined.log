@@ -834,3 +834,11 @@
 {"level":"info","message":"Server running on port 5000","service":"samudra-api","timestamp":"2025-05-03 13:33:27"}
 {"level":"info","message":"API Documentation: http://localhost:5000/api/docs","service":"samudra-api","timestamp":"2025-05-03 13:33:27"}
 {"level":"info","message":"Environment: development","service":"samudra-api","timestamp":"2025-05-03 13:33:27"}
+{"level":"info","message":"MongoDB connected successfully","service":"samudra-api","timestamp":"2025-05-03 13:51:33"}
+{"level":"info","message":"Server running on port 5000","service":"samudra-api","timestamp":"2025-05-03 13:51:33"}
+{"level":"info","message":"API Documentation: http://localhost:5000/api/docs","service":"samudra-api","timestamp":"2025-05-03 13:51:33"}
+{"level":"info","message":"Environment: development","service":"samudra-api","timestamp":"2025-05-03 13:51:33"}
+{"level":"info","message":"MongoDB connected successfully","service":"samudra-api","timestamp":"2025-05-03 13:53:36"}
+{"level":"info","message":"Server running on port 5000","service":"samudra-api","timestamp":"2025-05-03 13:53:36"}
+{"level":"info","message":"API Documentation: http://localhost:5000/api/docs","service":"samudra-api","timestamp":"2025-05-03 13:53:36"}
+{"level":"info","message":"Environment: development","service":"samudra-api","timestamp":"2025-05-03 13:53:36"}

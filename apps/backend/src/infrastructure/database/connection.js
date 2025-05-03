@@ -16,23 +16,8 @@ const connectToDatabase = async () => {
     // Khusus untuk MongoDB Compass - gunakan koneksi sederhana
     console.log('Attempting to connect to MongoDB...');
 
-    // Railway MongoDB connection variables
-    const MONGO_USERNAME = process.env.MONGO_INITDB_ROOT_USERNAME || process.env.MONGOUSER || 'mongo';
-    const MONGO_PASSWORD = process.env.MONGO_INITDB_ROOT_PASSWORD || process.env.MONGOPASSWORD || 'oFgiQXbTppRRDKapRNAEIwATDWMnUfzv';
-    const MONGO_HOST = process.env.RAILWAY_PRIVATE_DOMAIN || process.env.MONGOHOST || '127.0.0.1';
-    const MONGO_PORT = process.env.MONGOPORT || '27017';
-    const DB_NAME = 'samudra_paket';
-
-    // Construct MongoDB URI
-    let uri;
-    
-    // Check if we're using Railway
-    if (process.env.RAILWAY_PRIVATE_DOMAIN) {
-      uri = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${DB_NAME}`;
-    } else {
-      // Fallback to provided MONGODB_URI or local development URI
-      uri = process.env.MONGODB_URI || `mongodb://127.0.0.1:27017/${DB_NAME}`;
-    }
+    // Gunakan URI default jika tidak ada yang disediakan
+    const uri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/samudra_paket';
 
     // Opsi koneksi sederhana
     const options = {
