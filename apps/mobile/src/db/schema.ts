@@ -140,6 +140,25 @@ export const schema = appSchema({
       ]
     }),
     
+    // Item conditions
+    tableSchema({
+      name: 'item_conditions',
+      columns: [
+        { name: 'item_id', type: 'string', isIndexed: true },
+        { name: 'condition_rating', type: 'number' },
+        { name: 'has_damage', type: 'boolean' },
+        { name: 'damage_description', type: 'string', isOptional: true },
+        { name: 'packaging_quality', type: 'string' },
+        { name: 'special_handling', type: 'string', isOptional: true },
+        { name: 'verification_status', type: 'string', isIndexed: true },
+        { name: 'verification_notes', type: 'string', isOptional: true },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' },
+        { name: 'is_synced', type: 'boolean' },
+        { name: 'sync_error', type: 'string', isOptional: true },
+      ]
+    }),
+    
     // Sync queue
     tableSchema({
       name: 'sync_queue',

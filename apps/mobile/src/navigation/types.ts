@@ -14,6 +14,12 @@ export type MainStackParamList = {
   ShipmentTracking: undefined;
   Profile: undefined;
   Settings: undefined;
+  CheckerApp: undefined;
+};
+
+export type CheckerStackParamList = {
+  ItemList: { pickupRequestId: string } | undefined;
+  ItemDetail: { itemId: string } | undefined;
 };
 
 export type RootStackParamList = {

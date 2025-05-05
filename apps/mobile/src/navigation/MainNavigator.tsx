@@ -10,10 +10,13 @@ import { Ionicons } from '@expo/vector-icons';
 // Import implemented screens
 import ProfileScreen from '../screens/profile/ProfileScreen';
 import SettingsScreen from '../screens/profile/SettingsScreen';
+import PickupManagementScreen from '../screens/pickup/PickupManagementScreen';
+
+// Import navigators
+import CheckerNavigator from './CheckerNavigator';
 
 // Screens to be implemented later
 const HomeScreen = () => null;
-const PickupManagementScreen = () => null;
 const DeliveryManagementScreen = () => null;
 const ShipmentTrackingScreen = () => null;
 
@@ -30,6 +33,7 @@ const HomeStack = () => (
 const PickupStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="PickupManagement" component={PickupManagementScreen} />
+    <Stack.Screen name="CheckerApp" component={CheckerNavigator} />
   </Stack.Navigator>
 );
 
@@ -57,8 +61,8 @@ const MainNavigator: React.FC = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-
+          let iconName: string = 'circle';
+          
           if (route.name === 'HomeTab') {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'PickupTab') {
@@ -71,7 +75,7 @@ const MainNavigator: React.FC = () => {
             iconName = focused ? 'person' : 'person-outline';
           }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
+          return <Ionicons name={iconName as any} size={size} color={color} />;
         },
         tabBarActiveTintColor: '#2563EB',
         tabBarInactiveTintColor: '#64748B',

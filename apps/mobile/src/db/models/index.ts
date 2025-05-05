@@ -10,6 +10,7 @@ import ItemPhoto from './ItemPhoto';
 import Signature from './Signature';
 import GPSTracking from './GPSTracking';
 import SyncQueue from './SyncQueue';
+import ItemCondition from './ItemCondition';
 
 // Export all model classes for database initialization
 export const modelClasses = [
@@ -21,6 +22,7 @@ export const modelClasses = [
   Signature,
   GPSTracking,
   SyncQueue,
+  ItemCondition,
 ];
 
 export {
@@ -32,4 +34,5 @@ export {
   Signature,
   GPSTracking,
   SyncQueue,
+  ItemCondition,
 };

@@ -9,10 +9,9 @@ import {
   Image, 
   TouchableOpacity, 
   ScrollView, 
-  Alert,
-  ActivityIndicator
+  Alert
 } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
