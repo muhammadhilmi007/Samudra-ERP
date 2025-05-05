@@ -38,5 +38,8 @@
     "apps/mobile",
     "packages/shared",
     "packages/types"
-  ]
+  ],
+  "dependencies": {
+    "task-master-ai": "^0.13.2"
+  }
 }
