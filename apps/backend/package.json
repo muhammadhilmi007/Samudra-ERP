@@ -8,7 +8,12 @@
     "build": "babel src -d dist",
     "start": "nodemon src/index.js",
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest --setupFilesAfterEnv=./tests/setup.js --verbose",
+    "mongodb": "node src/scripts/startMongoDB.js",
+    "seed": "node src/scripts/runSeeders.js",
+    "seed:dev": "cross-env NODE_ENV=development node src/scripts/runSeeders.js",
+    "seed:test": "cross-env NODE_ENV=test node src/scripts/runSeeders.js",
+    "seed:forwarder": "node src/infrastructure/database/seeds/forwarderPartnerSeeder.js"
   },
   "dependencies": {
     "@jest/globals": "^29.7.0",
@@ -34,6 +39,7 @@
     "@babel/cli": "^7.23.4",
     "@babel/core": "^7.23.5",
     "@babel/preset-env": "^7.23.5",
+    "cross-env": "^7.0.3",
     "cypress": "^14.3.2",
     "eslint": "^8.55.0",
     "eslint-config-airbnb-base": "^15.0.0",

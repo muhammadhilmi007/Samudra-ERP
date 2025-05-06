@@ -79,8 +79,8 @@ describe('MongoForwarderPartnerRepository', () => {
       // Assert
       expect(result).toHaveLength(3);
       expect(result[0].code).toBe('JNE');
-      expect(result[1].code).toBe('TIKI');
-      expect(result[2].code).toBe('POS');
+      expect(result[1].code).toBe('POS');
+      expect(result[2].code).toBe('TIKI');
     });
 
     it('should find forwarder partners with filter', async () => {

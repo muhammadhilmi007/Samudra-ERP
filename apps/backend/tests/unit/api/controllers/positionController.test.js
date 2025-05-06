@@ -16,6 +16,7 @@ describe('Position Controller', () => {
   let res;
   let next;
   let mockPosition;
+  let mockRepositoryInstance;
 
   beforeEach(() => {
     // Reset mocks
@@ -72,7 +73,7 @@ describe('Position Controller', () => {
 
     // Setup mock pagination response
     const mockPaginatedResponse = {
-      data: [mockPosition],
+      results: [mockPosition],
       pagination: {
         total: 1,
         page: 1,
@@ -81,8 +82,8 @@ describe('Position Controller', () => {
       },
     };
 
-    // Setup repository method mocks
-    MongoPositionRepository.mockImplementation(() => ({
+    // Create a mock repository instance
+    mockRepositoryInstance = {
       create: jest.fn().mockResolvedValue(mockPosition),
       findById: jest.fn().mockResolvedValue(mockPosition),
       findByQuery: jest.fn().mockResolvedValue(mockPaginatedResponse),
@@ -91,7 +92,10 @@ describe('Position Controller', () => {
       getHierarchy: jest.fn().mockResolvedValue([mockPosition]),
       findByDivision: jest.fn().mockResolvedValue([mockPosition]),
       findSubordinates: jest.fn().mockResolvedValue([mockPosition]),
-    }));
+    };
+
+    // Mock the repository constructor to return our instance
+    MongoPositionRepository.mockImplementation(() => mockRepositoryInstance);
   });
 
   describe('createPosition', () => {
@@ -99,7 +103,7 @@ describe('Position Controller', () => {
       await positionController.createPosition(req, res, next);
 
       expect(MongoPositionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoPositionRepository.mock.instances[0].create).toHaveBeenCalledWith(req.body);
+      expect(mockRepositoryInstance.create).toHaveBeenCalledWith(req.body);
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith({
         success: true,
@@ -111,9 +115,7 @@ describe('Position Controller', () => {
 
     it('should call next with error if creation fails', async () => {
       const error = new Error('Creation failed');
-      MongoPositionRepository.mockImplementation(() => ({
-        create: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryInstance.create.mockRejectedValueOnce(error);
 
       await positionController.createPosition(req, res, next);
 
@@ -130,7 +132,7 @@ describe('Position Controller', () => {
       await positionController.getAllPositions(req, res, next);
 
       expect(MongoPositionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoPositionRepository.mock.instances[0].findByQuery).toHaveBeenCalled();
+      expect(mockRepositoryInstance.findByQuery).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -152,7 +154,7 @@ describe('Position Controller', () => {
 
       await positionController.getAllPositions(req, res, next);
 
-      expect(MongoPositionRepository.mock.instances[0].findByQuery).toHaveBeenCalledWith(
+      expect(mockRepositoryInstance.findByQuery).toHaveBeenCalledWith(
         expect.objectContaining({
           code: expect.any(RegExp),
           title: expect.any(RegExp),
@@ -167,9 +169,7 @@ describe('Position Controller', () => {
 
     it('should handle errors correctly', async () => {
       const error = new Error('Query failed');
-      MongoPositionRepository.mockImplementation(() => ({
-        findByQuery: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryInstance.findByQuery.mockRejectedValueOnce(error);
 
       await positionController.getAllPositions(req, res, next);
 
@@ -182,7 +182,7 @@ describe('Position Controller', () => {
       await positionController.getPositionById(req, res, next);
 
       expect(MongoPositionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoPositionRepository.mock.instances[0].findById).toHaveBeenCalledWith(
+      expect(mockRepositoryInstance.findById).toHaveBeenCalledWith(
         'test-position-id',
       );
       expect(res.status).toHaveBeenCalledWith(200);
@@ -194,9 +194,7 @@ describe('Position Controller', () => {
     });
 
     it('should handle not found positions', async () => {
-      MongoPositionRepository.mockImplementation(() => ({
-        findById: jest.fn().mockResolvedValue(null),
-      }));
+      mockRepositoryInstance.findById.mockResolvedValueOnce(null);
 
       await positionController.getPositionById(req, res, next);
 
@@ -205,9 +203,7 @@ describe('Position Controller', () => {
 
     it('should handle errors correctly', async () => {
       const error = new Error('Find failed');
-      MongoPositionRepository.mockImplementation(() => ({
-        findById: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryInstance.findById.mockRejectedValueOnce(error);
 
       await positionController.getPositionById(req, res, next);
 
@@ -220,7 +216,7 @@ describe('Position Controller', () => {
       await positionController.updatePosition(req, res, next);
 
       expect(MongoPositionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoPositionRepository.mock.instances[0].update).toHaveBeenCalledWith(
+      expect(mockRepositoryInstance.update).toHaveBeenCalledWith(
         'test-position-id',
         req.body,
       );
@@ -234,9 +230,7 @@ describe('Position Controller', () => {
 
     it('should handle errors correctly', async () => {
       const error = new Error('Update failed');
-      MongoPositionRepository.mockImplementation(() => ({
-        update: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryInstance.update.mockRejectedValueOnce(error);
 
       await positionController.updatePosition(req, res, next);
 
@@ -249,7 +243,7 @@ describe('Position Controller', () => {
       await positionController.deletePosition(req, res, next);
 
       expect(MongoPositionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoPositionRepository.mock.instances[0].delete).toHaveBeenCalledWith(
+      expect(mockRepositoryInstance.delete).toHaveBeenCalledWith(
         'test-position-id',
       );
       expect(res.status).toHaveBeenCalledWith(200);
@@ -262,9 +256,7 @@ describe('Position Controller', () => {
 
     it('should handle errors correctly', async () => {
       const error = new Error('Delete failed');
-      MongoPositionRepository.mockImplementation(() => ({
-        delete: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryInstance.delete.mockRejectedValueOnce(error);
 
       await positionController.deletePosition(req, res, next);
 
@@ -279,7 +271,7 @@ describe('Position Controller', () => {
       await positionController.getPositionHierarchy(req, res, next);
 
       expect(MongoPositionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoPositionRepository.mock.instances[0].getHierarchy).toHaveBeenCalledWith(
+      expect(mockRepositoryInstance.getHierarchy).toHaveBeenCalledWith(
         'test-position-id',
       );
       expect(res.status).toHaveBeenCalledWith(200);
@@ -293,14 +285,12 @@ describe('Position Controller', () => {
     it('should handle null rootId correctly', async () => {
       await positionController.getPositionHierarchy(req, res, next);
 
-      expect(MongoPositionRepository.mock.instances[0].getHierarchy).toHaveBeenCalledWith(null);
+      expect(mockRepositoryInstance.getHierarchy).toHaveBeenCalledWith(null);
     });
 
     it('should handle errors correctly', async () => {
       const error = new Error('Hierarchy retrieval failed');
-      MongoPositionRepository.mockImplementation(() => ({
-        getHierarchy: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryInstance.getHierarchy.mockRejectedValueOnce(error);
 
       await positionController.getPositionHierarchy(req, res, next);
 
@@ -313,7 +303,7 @@ describe('Position Controller', () => {
       await positionController.getPositionsByDivision(req, res, next);
 
       expect(MongoPositionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoPositionRepository.mock.instances[0].findByDivision).toHaveBeenCalledWith(
+      expect(mockRepositoryInstance.findByDivision).toHaveBeenCalledWith(
         'test-division-id',
       );
       expect(res.status).toHaveBeenCalledWith(200);
@@ -326,9 +316,7 @@ describe('Position Controller', () => {
 
     it('should handle errors correctly', async () => {
       const error = new Error('Division query failed');
-      MongoPositionRepository.mockImplementation(() => ({
-        findByDivision: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryInstance.findByDivision.mockRejectedValueOnce(error);
 
       await positionController.getPositionsByDivision(req, res, next);
 
@@ -341,7 +329,7 @@ describe('Position Controller', () => {
       await positionController.getSubordinatePositions(req, res, next);
 
       expect(MongoPositionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoPositionRepository.mock.instances[0].findSubordinates).toHaveBeenCalledWith(
+      expect(mockRepositoryInstance.findSubordinates).toHaveBeenCalledWith(
         'test-parent-id',
       );
       expect(res.status).toHaveBeenCalledWith(200);
@@ -354,9 +342,7 @@ describe('Position Controller', () => {
 
     it('should handle errors correctly', async () => {
       const error = new Error('Subordinates query failed');
-      MongoPositionRepository.mockImplementation(() => ({
-        findSubordinates: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryInstance.findSubordinates.mockRejectedValueOnce(error);
 
       await positionController.getSubordinatePositions(req, res, next);
 

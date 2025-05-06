@@ -3,13 +3,11 @@
  * Seeds the database with initial users for testing
  */
 
-// Set NODE_ENV to development if not already set
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-
 const mongoose = require('mongoose');
-const User = require('../../../domain/models/user');
-const Role = require('../../../domain/models/role');
-const { connectToDatabase, disconnectFromDatabase } = require('../connection');
+const User = require('../../../../domain/models/user');
+const Role = require('../../../../domain/models/role');
+const { connectToDatabase, disconnectFromDatabase } = require('../config');
+const { seedRBAC } = require('./rbacSeeder');
 
 /**
  * Initial users data with different roles
@@ -92,36 +90,22 @@ const userTemplates = [
  */
 const seedUsers = async () => {
   try {
-    // eslint-disable-next-line no-console
     console.log('Starting user seeder...');
-    // eslint-disable-next-line no-console
-    console.log(`MongoDB URI: ${process.env.MONGODB_URI || 'Not set (will use in-memory DB)'}`);
 
-    // Connect to database
-    // eslint-disable-next-line no-console
-    console.log('Connecting to MongoDB...');
-    await connectToDatabase();
+    // Connect to database if not already connected
+    if (mongoose.connection.readyState === 0) {
+      await connectToDatabase();
+    }
 
     // Check if we're connected
     if (mongoose.connection.readyState !== 1) {
-      // eslint-disable-next-line max-len
       throw new Error(`Failed to connect to MongoDB. Connection state: ${['disconnected', 'connected', 'connecting', 'disconnecting'][mongoose.connection.readyState]}`);
     }
 
-    // eslint-disable-next-line no-console
     console.log('Connected to MongoDB successfully');
-    // eslint-disable-next-line no-console
     console.log('Database name:', mongoose.connection.name);
 
-    // Delete existing users
-    // eslint-disable-next-line no-console
-    console.log('Deleting existing users...');
-    const deleteResult = await User.deleteMany({});
-    // eslint-disable-next-line no-console
-    console.log(`Deleted ${deleteResult.deletedCount} existing users`);
-
     // Find roles first
-    // eslint-disable-next-line no-console
     console.log('Finding roles...');
     const roles = await Role.find({});
     const roleMap = {};
@@ -131,21 +115,16 @@ const seedUsers = async () => {
       roleMap[role.name] = role.id;
     });
 
-    // eslint-disable-next-line no-console
     console.log('Role mapping:', roleMap);
 
     // Check if roles exist, if not, create them first
     if (Object.keys(roleMap).length === 0) {
-      // eslint-disable-next-line no-console
       console.log('No roles found. Running RBAC seeder first...');
 
-      // Import and run the RBAC seeder
-      // eslint-disable-next-line global-require
-      const { seedRBAC } = require('../../seeds/rbacSeeder');
+      // Run the RBAC seeder
       await seedRBAC();
 
       // Get roles again
-      // eslint-disable-next-line no-console
       console.log('Finding roles again after seeding...');
       const freshRoles = await Role.find({});
 
@@ -154,8 +133,20 @@ const seedUsers = async () => {
         roleMap[role.name] = role.id;
       });
 
-      // eslint-disable-next-line no-console
       console.log('Updated role mapping:', roleMap);
+    }
+
+    // Ask if existing users should be deleted
+    console.log('Checking for existing users...');
+    const existingCount = await User.countDocuments({});
+    
+    if (existingCount > 0) {
+      console.log(`Found ${existingCount} existing users`);
+      console.log('Deleting existing users...');
+      const deleteResult = await User.deleteMany({});
+      console.log(`Deleted ${deleteResult.deletedCount} existing users`);
+    } else {
+      console.log('No existing users found');
     }
 
     // Prepare users with proper role references
@@ -165,7 +156,6 @@ const seedUsers = async () => {
       if (roleMap[template.roleName]) {
         user.role = roleMap[template.roleName];
       } else {
-        // eslint-disable-next-line no-console, max-len
         console.warn(`Warning: Role '${template.roleName}' not found in database. User '${template.username}' will not be created.`);
         return null;
       }
@@ -175,70 +165,50 @@ const seedUsers = async () => {
     }).filter(Boolean); // Remove null entries
 
     // Create new users
-    // eslint-disable-next-line no-console
     console.log('Creating new users...');
     const createdUsers = await User.create(users);
-    // eslint-disable-next-line no-console
     console.log(`Created ${createdUsers.length} users`);
 
     // Log created users (without passwords)
     createdUsers.forEach((user) => {
-      // eslint-disable-next-line no-console
       console.log(`- ${user.username} (${user.legacyRole}): ${user.id}`);
     });
 
-    // eslint-disable-next-line no-console
     console.log('User seeding completed successfully');
-
-    // Close database connection
-    // eslint-disable-next-line no-console
-    console.log('Closing database connection...');
-    await disconnectFromDatabase();
-    // eslint-disable-next-line no-console
-    console.log('Database connection closed');
-
-    process.exit(0);
+    return createdUsers;
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('Error seeding users:', error.message);
     if (error.name === 'MongooseServerSelectionError') {
-      // eslint-disable-next-line no-console
       console.error('\nMongoDB connection error details:');
-      // eslint-disable-next-line no-console
       console.error('1. Make sure MongoDB is running on your machine');
-      // eslint-disable-next-line no-console
       console.error('2. Check if the MongoDB URI in .env file is correct');
-      // eslint-disable-next-line no-console
       console.error('3. Verify that the username and password are correct');
-      // eslint-disable-next-line no-console
       console.error('4. Ensure that the database name exists or can be created');
-      // eslint-disable-next-line no-console
-      console.error('\nFor MongoDB Compass users:');
-      // eslint-disable-next-line no-console
-      console.error('- Check that the connection string format is correct');
-      // eslint-disable-next-line no-console
-      console.error('- Try using the connection string from MongoDB Compass');
-      // eslint-disable-next-line no-console
-      console.error('- Example format: mongodb://localhost:27017/samudra_paket');
     }
-
-    // Close database connection if it's open
-    try {
-      if (mongoose.connection.readyState !== 0) {
-        // eslint-disable-next-line no-console
-        console.log('Closing database connection...');
-        await disconnectFromDatabase();
-        // eslint-disable-next-line no-console
-        console.log('Database connection closed');
-      }
-    } catch (disconnectError) {
-      // eslint-disable-next-line no-console
-      console.error('Error closing database connection:', disconnectError.message);
-    }
-
-    process.exit(1);
+    throw error;
   }
 };
 
-// Run seeder
-seedUsers();
+// Run seeder if this script is executed directly
+if (require.main === module) {
+  (async () => {
+    try {
+      await connectToDatabase();
+      await seedUsers();
+      await disconnectFromDatabase();
+      console.log('User seeder completed successfully');
+      process.exit(0);
+    } catch (error) {
+      console.error('User seeder failed:', error);
+      // Close database connection if it's open
+      if (mongoose.connection.readyState !== 0) {
+        await disconnectFromDatabase();
+      }
+      process.exit(1);
+    }
+  })();
+}
+
+module.exports = {
+  seedUsers
+};

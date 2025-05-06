@@ -349,7 +349,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi delivery status dashboard
 - [ ] Unit testing untuk loading & delivery components
 
-#### Tracking & Monitoring UI
+#### Tracking & Monitoring UI [Doing]
 - [ ] Implementasi shipment tracking interface
 - [ ] Implementasi tracking timeline visualization
 - [ ] Implementasi maps integration untuk location tracking
@@ -360,7 +360,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 
 ### F. Mobile: Foundation & Checker App
 
-#### Mobile App Foundation
+#### Mobile App Foundation [Doing]
 - [ ] Setup React Native project dengan Expo
 - [ ] Implementasi navigation structure
 - [ ] Implementasi authentication flow
@@ -370,7 +370,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi error handling
 - [ ] Implementasi push notification handling
 
-#### Checker App - Authentication & Profile
+#### Checker App - Authentication & Profile [Doing]
 - [ ] Implementasi login screen
 - [ ] Implementasi biometric authentication
 - [ ] Implementasi user profile management
@@ -378,7 +378,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi session management
 - [ ] Unit testing untuk authentication flow
 
-#### Checker App - Item Management
+#### Checker App - Item Management [Doing]
 - [ ] Implementasi item verification workflow
 - [ ] Implementasi item weighing and measuring
 - [ ] Implementasi item condition assessment
@@ -386,7 +386,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi real-time validation
 - [ ] Unit testing untuk item management
 
-#### Checker App - Documentation
+#### Checker App - Documentation [Doing]
 - [ ] Implementasi camera integration
 - [ ] Implementasi photo capture dengan annotation
 - [ ] Implementasi barcode/QR scanner
@@ -394,7 +394,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi signature capture
 - [ ] Unit testing untuk documentation features
 
-#### Checker App - Warehouse Operations
+#### Checker App - Warehouse Operations [Doing]
 - [ ] Implementasi incoming item processing
 - [ ] Implementasi item allocation interface
 - [ ] Implementasi loading management
@@ -402,7 +402,7 @@ Checklist ini disusun berdasarkan fase implementasi (Backend → Frontend → Mo
 - [ ] Implementasi inventory view
 - [ ] Unit testing untuk warehouse operations
 
-### G. Integration Testing - Phase 2
+### G. Integration Testing - Phase 2 [Doing]
 - [ ] End-to-end testing untuk pickup workflow
 - [ ] End-to-end testing untuk shipment creation workflow
 - [ ] End-to-end testing untuk loading dan delivery workflow

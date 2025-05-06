@@ -11,6 +11,11 @@ import Signature from './Signature';
 import GPSTracking from './GPSTracking';
 import SyncQueue from './SyncQueue';
 import ItemCondition from './ItemCondition';
+import WarehouseItem from './WarehouseItem';
+import ItemAllocation from './ItemAllocation';
+import ItemBatch from './ItemBatch';
+import LoadingManifest from './LoadingManifest';
+import LoadingItem from './LoadingItem';
 
 // Export all model classes for database initialization
 export const modelClasses = [
@@ -23,6 +28,11 @@ export const modelClasses = [
   GPSTracking,
   SyncQueue,
   ItemCondition,
+  WarehouseItem,
+  ItemAllocation,
+  ItemBatch,
+  LoadingManifest,
+  LoadingItem,
 ];
 
 export {
@@ -35,4 +45,9 @@ export {
   GPSTracking,
   SyncQueue,
   ItemCondition,
+  WarehouseItem,
+  ItemAllocation,
+  ItemBatch,
+  LoadingManifest,
+  LoadingItem,
 };

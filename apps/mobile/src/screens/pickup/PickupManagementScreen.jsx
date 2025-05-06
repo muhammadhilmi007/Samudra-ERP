@@ -26,6 +26,13 @@ const PickupManagementScreen = ({ navigation }) => {
     });
   };
   
+  // Navigate to Warehouse Operations
+  const navigateToWarehouseOperations = () => {
+    navigation.navigate('CheckerApp', {
+      screen: 'WarehouseOperations'
+    });
+  };
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -49,6 +56,26 @@ const PickupManagementScreen = ({ navigation }) => {
               <Text style={styles.actionTitle}>Checker App</Text>
               <Text style={styles.actionDescription}>
                 Verify, measure, and assess item conditions
+              </Text>
+              <Ionicons 
+                name="chevron-forward" 
+                size={16} 
+                color={colors.text.tertiary} 
+                style={styles.actionArrow}
+              />
+            </TouchableOpacity>
+            
+            {/* Warehouse Operations Card */}
+            <TouchableOpacity 
+              style={styles.actionCard}
+              onPress={navigateToWarehouseOperations}
+            >
+              <View style={[styles.actionIconContainer, { backgroundColor: '#e6f2ff' }]}>
+                <Ionicons name="cube-outline" size={24} color="#2563EB" />
+              </View>
+              <Text style={styles.actionTitle}>Warehouse Operations</Text>
+              <Text style={styles.actionDescription}>
+                Manage warehouse items, loading, and inventory
               </Text>
               <Ionicons 
                 name="chevron-forward" 

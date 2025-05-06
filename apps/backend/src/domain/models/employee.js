@@ -171,7 +171,6 @@ const employeeSchema = new Schema(
 );
 
 // Indexes for performance optimization
-employeeSchema.index({ employeeId: 1 }, { unique: true });
 employeeSchema.index({ position: 1 });
 employeeSchema.index({ branch: 1 });
 employeeSchema.index({ status: 1 });

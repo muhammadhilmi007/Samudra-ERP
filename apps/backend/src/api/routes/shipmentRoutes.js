@@ -36,6 +36,17 @@ router.get(
 );
 
 /**
+ * @route   GET /api/shipments/today
+ * @desc    Get today's shipments
+ * @access  Private (Admin, Manager, Operations, Warehouse)
+ */
+router.get(
+  '/today',
+  authorize(['admin', 'manager', 'operations', 'warehouse']),
+  shipmentController.getTodayShipments,
+);
+
+/**
  * @route   GET /api/shipments/:id
  * @desc    Get shipment by ID
  * @access  Private (Admin, Manager, Operations, Warehouse, Driver)
@@ -165,17 +176,6 @@ router.get(
   '/coordination/:originBranchId/:destinationBranchId',
   authorize(['admin', 'manager', 'operations']),
   shipmentController.getShipmentsBetweenBranches,
-);
-
-/**
- * @route   GET /api/shipments/today
- * @desc    Get today's shipments
- * @access  Private (Admin, Manager, Operations, Warehouse)
- */
-router.get(
-  '/today',
-  authorize(['admin', 'manager', 'operations', 'warehouse']),
-  shipmentController.getTodayShipments,
 );
 
 /**

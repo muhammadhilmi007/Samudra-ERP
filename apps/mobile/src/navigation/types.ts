@@ -20,6 +20,14 @@ export type MainStackParamList = {
 export type CheckerStackParamList = {
   ItemList: { pickupRequestId: string } | undefined;
   ItemDetail: { itemId: string } | undefined;
+  // Warehouse Operations screens
+  WarehouseOperations: undefined;
+  IncomingItemProcessing: undefined;
+  ItemAllocation: undefined;
+  LoadingManagement: undefined;
+  BatchScanning: undefined;
+  InventoryView: undefined;
+  WarehouseItemDetail: { itemId: string };
 };
 
 export type RootStackParamList = {

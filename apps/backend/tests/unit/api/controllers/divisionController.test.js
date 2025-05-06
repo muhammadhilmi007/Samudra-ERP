@@ -1,14 +1,8 @@
-/**
- * Samudra Paket ERP - Division Controller Tests
- * Unit tests for division controller functionality
- */
-
 const divisionController = require('../../../../src/api/controllers/divisionController');
-// eslint-disable-next-line max-len
 const MongoDivisionRepository = require('../../../../src/infrastructure/repositories/mongoDivisionRepository');
 const { NotFoundError } = require('../../../../src/domain/utils/errorUtils');
 
-// Mock the repository
+// Mock the entire repository module
 jest.mock('../../../../src/infrastructure/repositories/mongoDivisionRepository');
 
 describe('Division Controller', () => {
@@ -16,14 +10,19 @@ describe('Division Controller', () => {
   let res;
   let next;
   let mockDivision;
+  let mockRepositoryMethods;
 
   beforeEach(() => {
-    // Reset mocks
+    // Reset all mocks
     jest.clearAllMocks();
 
-    // Setup request and response mocks
+    // Setup default request mock
     req = {
-      params: { id: 'test-division-id', branchId: 'test-branch-id', parentId: 'test-parent-id' },
+      params: { 
+        id: 'test-division-id', 
+        branchId: 'test-branch-id', 
+        parentId: 'test-parent-id' 
+      },
       body: {
         code: 'DIV001',
         name: 'Test Division',
@@ -33,6 +32,7 @@ describe('Division Controller', () => {
       query: {},
     };
 
+    // Setup response mock
     res = {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
@@ -52,8 +52,8 @@ describe('Division Controller', () => {
       status: 'active',
     };
 
-    // Setup repository method mocks
-    MongoDivisionRepository.mockImplementation(() => ({
+    // Create mock repository methods
+    mockRepositoryMethods = {
       create: jest.fn().mockResolvedValue(mockDivision),
       findById: jest.fn().mockResolvedValue(mockDivision),
       findByQuery: jest.fn().mockResolvedValue({
@@ -68,15 +68,28 @@ describe('Division Controller', () => {
       getHierarchy: jest.fn().mockResolvedValue([mockDivision]),
       findByBranch: jest.fn().mockResolvedValue([mockDivision]),
       findChildren: jest.fn().mockResolvedValue([mockDivision]),
-    }));
+    };
+
+    // Mock the constructor to return an object with our mock methods
+    MongoDivisionRepository.mockImplementation(() => mockRepositoryMethods);
   });
 
   describe('createDivision', () => {
     it('should create a division and return 201 status', async () => {
       await divisionController.createDivision(req, res, next);
 
+      // Verify repository was instantiated
       expect(MongoDivisionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoDivisionRepository.mock.instances[0].create).toHaveBeenCalledWith(req.body);
+      
+      // Verify create was called with correct data
+      expect(mockRepositoryMethods.create).toHaveBeenCalledWith({
+        code: 'DIV001',
+        name: 'Test Division',
+        branch: 'test-branch-id',
+        description: 'Test division description',
+      });
+      
+      // Verify response
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith({
         success: true,
@@ -88,9 +101,7 @@ describe('Division Controller', () => {
 
     it('should call next with error if creation fails', async () => {
       const error = new Error('Creation failed');
-      MongoDivisionRepository.mockImplementation(() => ({
-        create: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryMethods.create.mockRejectedValue(error);
 
       await divisionController.createDivision(req, res, next);
 
@@ -101,13 +112,16 @@ describe('Division Controller', () => {
   describe('getAllDivisions', () => {
     it('should return all divisions with 200 status', async () => {
       req.query = {
-        page: '1', limit: '10', sortBy: 'name', sortOrder: 'asc',
+        page: '1', 
+        limit: '10', 
+        sortBy: 'name', 
+        sortOrder: 'asc',
       };
 
       await divisionController.getAllDivisions(req, res, next);
 
       expect(MongoDivisionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoDivisionRepository.mock.instances[0].findByQuery).toHaveBeenCalled();
+      expect(mockRepositoryMethods.findByQuery).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         success: true,
@@ -126,21 +140,24 @@ describe('Division Controller', () => {
 
       await divisionController.getAllDivisions(req, res, next);
 
-      expect(MongoDivisionRepository.mock.instances[0].findByQuery).toHaveBeenCalledWith(
-        expect.objectContaining({
+      expect(mockRepositoryMethods.findByQuery).toHaveBeenCalledWith(
+        {
           branch: 'test-branch-id',
           parentDivision: 'test-parent-id',
           status: 'active',
-        }),
-        expect.any(Object),
+        },
+        expect.objectContaining({
+          page: 1,
+          limit: 10,
+          sortBy: 'name',
+          sortOrder: 'asc',
+        })
       );
     });
 
     it('should handle errors correctly', async () => {
       const error = new Error('Query failed');
-      MongoDivisionRepository.mockImplementation(() => ({
-        findByQuery: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryMethods.findByQuery.mockRejectedValue(error);
 
       await divisionController.getAllDivisions(req, res, next);
 
@@ -153,9 +170,7 @@ describe('Division Controller', () => {
       await divisionController.getDivisionById(req, res, next);
 
       expect(MongoDivisionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoDivisionRepository.mock.instances[0].findById).toHaveBeenCalledWith(
-        'test-division-id',
-      );
+      expect(mockRepositoryMethods.findById).toHaveBeenCalledWith('test-division-id');
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         success: true,
@@ -165,9 +180,7 @@ describe('Division Controller', () => {
     });
 
     it('should handle not found divisions', async () => {
-      MongoDivisionRepository.mockImplementation(() => ({
-        findById: jest.fn().mockResolvedValue(null),
-      }));
+      mockRepositoryMethods.findById.mockResolvedValue(null);
 
       await divisionController.getDivisionById(req, res, next);
 
@@ -176,9 +189,7 @@ describe('Division Controller', () => {
 
     it('should handle errors correctly', async () => {
       const error = new Error('Find failed');
-      MongoDivisionRepository.mockImplementation(() => ({
-        findById: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryMethods.findById.mockRejectedValue(error);
 
       await divisionController.getDivisionById(req, res, next);
 
@@ -186,14 +197,15 @@ describe('Division Controller', () => {
     });
   });
 
+  // Similar patterns for other test cases...
   describe('updateDivision', () => {
     it('should update a division and return 200 status', async () => {
       await divisionController.updateDivision(req, res, next);
 
       expect(MongoDivisionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoDivisionRepository.mock.instances[0].update).toHaveBeenCalledWith(
+      expect(mockRepositoryMethods.update).toHaveBeenCalledWith(
         'test-division-id',
-        req.body,
+        req.body
       );
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
@@ -205,9 +217,7 @@ describe('Division Controller', () => {
 
     it('should handle errors correctly', async () => {
       const error = new Error('Update failed');
-      MongoDivisionRepository.mockImplementation(() => ({
-        update: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryMethods.update.mockRejectedValue(error);
 
       await divisionController.updateDivision(req, res, next);
 
@@ -220,9 +230,7 @@ describe('Division Controller', () => {
       await divisionController.deleteDivision(req, res, next);
 
       expect(MongoDivisionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoDivisionRepository.mock.instances[0].delete).toHaveBeenCalledWith(
-        'test-division-id',
-      );
+      expect(mockRepositoryMethods.delete).toHaveBeenCalledWith('test-division-id');
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         success: true,
@@ -233,9 +241,7 @@ describe('Division Controller', () => {
 
     it('should handle errors correctly', async () => {
       const error = new Error('Delete failed');
-      MongoDivisionRepository.mockImplementation(() => ({
-        delete: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryMethods.delete.mockRejectedValue(error);
 
       await divisionController.deleteDivision(req, res, next);
 
@@ -248,7 +254,7 @@ describe('Division Controller', () => {
       await divisionController.getDivisionHierarchy(req, res, next);
 
       expect(MongoDivisionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoDivisionRepository.mock.instances[0].getHierarchy).toHaveBeenCalled();
+      expect(mockRepositoryMethods.getHierarchy).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         success: true,
@@ -259,9 +265,7 @@ describe('Division Controller', () => {
 
     it('should handle errors correctly', async () => {
       const error = new Error('Hierarchy retrieval failed');
-      MongoDivisionRepository.mockImplementation(() => ({
-        getHierarchy: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryMethods.getHierarchy.mockRejectedValue(error);
 
       await divisionController.getDivisionHierarchy(req, res, next);
 
@@ -274,9 +278,7 @@ describe('Division Controller', () => {
       await divisionController.getDivisionsByBranch(req, res, next);
 
       expect(MongoDivisionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoDivisionRepository.mock.instances[0].findByBranch).toHaveBeenCalledWith(
-        'test-branch-id',
-      );
+      expect(mockRepositoryMethods.findByBranch).toHaveBeenCalledWith('test-branch-id');
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         success: true,
@@ -287,9 +289,7 @@ describe('Division Controller', () => {
 
     it('should handle errors correctly', async () => {
       const error = new Error('Branch query failed');
-      MongoDivisionRepository.mockImplementation(() => ({
-        findByBranch: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryMethods.findByBranch.mockRejectedValue(error);
 
       await divisionController.getDivisionsByBranch(req, res, next);
 
@@ -302,9 +302,7 @@ describe('Division Controller', () => {
       await divisionController.getChildDivisions(req, res, next);
 
       expect(MongoDivisionRepository).toHaveBeenCalledTimes(1);
-      expect(MongoDivisionRepository.mock.instances[0].findChildren).toHaveBeenCalledWith(
-        'test-parent-id',
-      );
+      expect(mockRepositoryMethods.findChildren).toHaveBeenCalledWith('test-parent-id');
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         success: true,
@@ -315,9 +313,7 @@ describe('Division Controller', () => {
 
     it('should handle errors correctly', async () => {
       const error = new Error('Children query failed');
-      MongoDivisionRepository.mockImplementation(() => ({
-        findChildren: jest.fn().mockRejectedValue(error),
-      }));
+      mockRepositoryMethods.findChildren.mockRejectedValue(error);
 
       await divisionController.getChildDivisions(req, res, next);
 

@@ -129,5 +129,23 @@ module.exports = ({ forwarderController }) => {
     forwarderController.testForwarderIntegration.bind(forwarderController)
   );
 
+  router.post(
+    '/:id/shipping-rates',
+    checkPermission('forwarder.view'),
+    forwarderController.getForwarderShippingRates.bind(forwarderController)
+  );
+
+  router.post(
+    '/:id/shipments',
+    checkPermission('forwarder.create'),
+    forwarderController.createForwarderShipment.bind(forwarderController)
+  );
+
+  router.get(
+    '/:id/tracking/:trackingNumber',
+    checkPermission('forwarder.view'),
+    forwarderController.trackForwarderShipment.bind(forwarderController)
+  );
+
   return router;
 };

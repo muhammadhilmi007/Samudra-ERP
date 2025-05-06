@@ -65,6 +65,19 @@ describe('Employee Service', () => {
   beforeEach(() => {
     // Clear all mocks before each test
     jest.clearAllMocks();
+
+    // Define the mock methods for each repository
+    branchRepository.findById = jest.fn();
+    positionRepository.findById = jest.fn();
+    userRepository.findById = jest.fn();
+    employeeRepository.findByEmployeeId = jest.fn();
+    employeeRepository.findByUserId = jest.fn();
+    employeeRepository.create = jest.fn();
+    employeeRepository.update = jest.fn();
+    employeeRepository.findById = jest.fn();
+    employeeRepository.addDocument = jest.fn();
+    employeeRepository.updateStatus = jest.fn();
+    employeeRepository.delete = jest.fn();
   });
 
   describe('createEmployee', () => {
@@ -73,7 +86,7 @@ describe('Employee Service', () => {
       branchRepository.findById.mockResolvedValue(mockBranch);
       positionRepository.findById.mockResolvedValue(mockPosition);
       employeeRepository.findByEmployeeId.mockRejectedValue(
-        new NotFoundError('Employee not found'),
+        new NotFoundError('Employee not found')
       );
       employeeRepository.create.mockResolvedValue(mockEmployee);
 
@@ -95,7 +108,7 @@ describe('Employee Service', () => {
       userRepository.findById.mockResolvedValue(mockUser);
       employeeRepository.findByUserId.mockRejectedValue(new NotFoundError('Employee not found'));
       employeeRepository.findByEmployeeId.mockRejectedValue(
-        new NotFoundError('Employee not found'),
+        new NotFoundError('Employee not found')
       );
       employeeRepository.create.mockResolvedValue(mockEmployeeWithUser);
 
@@ -108,7 +121,7 @@ describe('Employee Service', () => {
       expect(userRepository.findById).toHaveBeenCalledWith(mockEmployeeWithUser.user);
       expect(employeeRepository.findByUserId).toHaveBeenCalledWith(mockEmployeeWithUser.user);
       expect(employeeRepository.findByEmployeeId).toHaveBeenCalledWith(
-        mockEmployeeWithUser.employeeId,
+        mockEmployeeWithUser.employeeId
       );
       expect(employeeRepository.create).toHaveBeenCalledWith(mockEmployeeWithUser, mockUser);
       expect(result).toEqual(mockEmployeeWithUser);
@@ -122,7 +135,7 @@ describe('Employee Service', () => {
 
       // Call the service and expect it to throw
       await expect(employeeService.createEmployee(mockEmployee, mockUser)).rejects.toThrow(
-        ConflictError,
+        ConflictError
       );
 
       // Assertions
@@ -142,7 +155,7 @@ describe('Employee Service', () => {
 
       // Call the service and expect it to throw
       await expect(employeeService.createEmployee(mockEmployeeWithUser, mockUser)).rejects.toThrow(
-        ConflictError,
+        ConflictError
       );
 
       // Assertions
@@ -196,7 +209,7 @@ describe('Employee Service', () => {
       expect(employeeRepository.update).toHaveBeenCalledWith(
         mockEmployee._id,
         updateData,
-        mockUser,
+        mockUser
       );
       expect(result).toEqual(updatedEmployee);
     });
@@ -216,14 +229,14 @@ describe('Employee Service', () => {
       const result = await employeeService.addEmployeeDocument(
         mockEmployee._id,
         mockDocument,
-        mockUser,
+        mockUser
       );
 
       // Assertions
       expect(employeeRepository.addDocument).toHaveBeenCalledWith(
         mockEmployee._id,
         mockDocument,
-        mockUser,
+        mockUser
       );
       expect(result).toEqual(employeeWithDoc);
     });
@@ -234,7 +247,7 @@ describe('Employee Service', () => {
 
       // Call the service and expect it to throw
       await expect(
-        employeeService.addEmployeeDocument(mockEmployee._id, invalidDocument, mockUser),
+        employeeService.addEmployeeDocument(mockEmployee._id, invalidDocument, mockUser)
       ).rejects.toThrow(BadRequestError);
 
       // Assertions
@@ -254,14 +267,14 @@ describe('Employee Service', () => {
       const result = await employeeService.updateEmployeeStatus(
         mockEmployee._id,
         newStatus,
-        mockUser,
+        mockUser
       );
 
       // Assertions
       expect(employeeRepository.update).toHaveBeenCalledWith(
         mockEmployee._id,
         { status: newStatus },
-        mockUser,
+        mockUser
       );
       expect(result).toEqual(updatedEmployee);
     });
@@ -272,7 +285,7 @@ describe('Employee Service', () => {
 
       // Call the service and expect it to throw
       await expect(
-        employeeService.updateEmployeeStatus(mockEmployee._id, invalidStatus, mockUser),
+        employeeService.updateEmployeeStatus(mockEmployee._id, invalidStatus, mockUser)
       ).rejects.toThrow(BadRequestError);
 
       // Assertions

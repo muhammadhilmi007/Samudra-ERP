@@ -4,9 +4,9 @@
  */
 
 const mongoose = require('mongoose');
-const Role = require('../../domain/models/role');
-const Permission = require('../../domain/models/permission');
-const config = require('../../config/config');
+const Role = require('../../../../domain/models/role');
+const Permission = require('../../../../domain/models/permission');
+const { connectToDatabase, disconnectFromDatabase } = require('../config');
 
 /**
  * Default system modules
@@ -194,14 +194,11 @@ const ROLE_PERMISSION_MAPPINGS = {
  */
 const seedRBAC = async () => {
   try {
-    // eslint-disable-next-line no-console
     console.log('Starting RBAC seeding...');
 
     // Connect to MongoDB if not already connected
     if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(config.mongodb.uri, config.mongodb.options);
-      // eslint-disable-next-line no-console
-      console.log('Connected to MongoDB');
+      await connectToDatabase();
     }
 
     // Generate default permissions
@@ -213,7 +210,6 @@ const seedRBAC = async () => {
       if (!existingPermission) {
         const permission = new Permission(permissionData);
         await permission.save();
-        // eslint-disable-next-line no-console
         console.log(`Created permission: ${permissionData.code}`);
         return permission;
       }
@@ -221,7 +217,6 @@ const seedRBAC = async () => {
     });
 
     const permissions = await Promise.all(permissionPromises);
-    // eslint-disable-next-line no-console
     console.log(`Total permissions: ${permissions.length}`);
 
     // Create roles if they don't exist
@@ -230,7 +225,6 @@ const seedRBAC = async () => {
       if (!existingRole) {
         const role = new Role(roleData);
         await role.save();
-        // eslint-disable-next-line no-console
         console.log(`Created role: ${roleData.name}`);
         return role;
       }
@@ -238,7 +232,6 @@ const seedRBAC = async () => {
     });
 
     const roles = await Promise.all(rolePromises);
-    // eslint-disable-next-line no-console
     console.log(`Total roles: ${roles.length}`);
 
     // Assign permissions to roles - using Promise.all instead of for...of loop
@@ -251,39 +244,125 @@ const seedRBAC = async () => {
           .map((p) => p.id);
 
         // Update role with permissions
-        // eslint-disable-next-line no-param-reassign
         role.permissions = permissionIds;
         await role.save();
-        // eslint-disable-next-line no-console
         console.log(`Assigned ${permissionIds.length} permissions to ${roleName}`);
       }
       return role;
     }));
 
-    // eslint-disable-next-line no-console
     console.log('RBAC seeding completed successfully');
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.error('Error seeding RBAC:', error);
+    throw error;
   }
 };
 
-// Export for use in other scripts
-module.exports = {
-  seedRBAC,
+/**
+ * Migrate existing users to the new RBAC system
+ */
+const migrateUsersToRbac = async () => {
+  try {
+    console.log('Starting user migration to RBAC...');
+
+    // Connect to MongoDB if not already connected
+    if (mongoose.connection.readyState === 0) {
+      await connectToDatabase();
+    }
+
+    const User = require('../../../../domain/models/user');
+
+    // Get all roles
+    const roles = await Role.find({});
+    const roleMap = {};
+
+    // Create a map of legacy role names to role IDs
+    roles.forEach((role) => {
+      roleMap[role.name] = role.id;
+    });
+
+    console.log('Role mapping:', roleMap);
+
+    // Get all users
+    const users = await User.find({});
+    console.log(`Found ${users.length} users to migrate`);
+
+    // Process users in batches to avoid memory issues
+    const batchSize = 100;
+    const batches = Math.ceil(users.length / batchSize);
+
+    for (let i = 0; i < batches; i += 1) {
+      const start = i * batchSize;
+      const end = Math.min(start + batchSize, users.length);
+      const batch = users.slice(start, end);
+
+      console.log(`Processing batch ${i + 1}/${batches} (${start}-${end})`);
+
+      // Process each user in the batch
+      await Promise.all(batch.map(async (user) => {
+        // Skip users that already have a role reference
+        if (user.role && mongoose.Types.ObjectId.isValid(user.role)) {
+          return;
+        }
+
+        // Set the legacy role
+        const legacyRole = user.role;
+
+        // Find the corresponding role ID
+        const roleId = roleMap[legacyRole];
+
+        if (!roleId) {
+          console.warn(`No matching role found for user ${user.username} with legacy role ${legacyRole}`);
+          return;
+        }
+
+        // Update the user with the new role reference and legacy role
+        user.legacyRole = legacyRole;
+        user.role = roleId;
+
+        // Save the user
+        await user.save();
+        console.log(`Migrated user ${user.username}: ${legacyRole} -> ${roleId}`);
+      }));
+    }
+
+    console.log('User migration completed successfully');
+  } catch (error) {
+    console.error('Error migrating users:', error);
+    throw error;
+  }
 };
 
 // Run directly if this script is executed directly
 if (require.main === module) {
-  seedRBAC()
-    .then(() => {
-      // eslint-disable-next-line no-console
-      console.log('RBAC seeding script completed');
-      process.exit(0);
-    })
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.error('RBAC seeding script failed:', error);
+  (async () => {
+    try {
+      await connectToDatabase();
+      await seedRBAC();
+      
+      // Ask if user wants to migrate users
+      const readline = require('readline').createInterface({
+        input: process.stdin,
+        output: process.stdout
+      });
+      
+      readline.question('Do you want to migrate users to the new RBAC system? (y/n): ', async (answer) => {
+        if (answer.toLowerCase() === 'y') {
+          await migrateUsersToRbac();
+        }
+        
+        readline.close();
+        await disconnectFromDatabase();
+        process.exit(0);
+      });
+    } catch (error) {
+      console.error('RBAC seeder script failed:', error);
       process.exit(1);
-    });
+    }
+  })();
 }
+
+module.exports = {
+  seedRBAC,
+  migrateUsersToRbac
+};

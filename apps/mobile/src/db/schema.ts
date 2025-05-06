@@ -2,10 +2,10 @@
  * Database schema for WatermelonDB
  * Defines tables and relationships for offline storage
  */
-import { appSchema, tableSchema } from '@watermelondb/schema';
+import { appSchema, tableSchema } from '@nozbe/watermelondb/Schema';
 
 export const schema = appSchema({
-  version: 1,
+  version: 2,
   tables: [
     // User table
     tableSchema({
@@ -172,6 +172,114 @@ export const schema = appSchema({
         { name: 'last_attempt_at', type: 'number', isOptional: true },
         { name: 'error', type: 'string', isOptional: true },
         { name: 'created_at', type: 'number' },
+      ]
+    }),
+    // Warehouse items
+    tableSchema({
+      name: 'warehouse_items',
+      columns: [
+        { name: 'item_code', type: 'string', isIndexed: true },
+        { name: 'tracking_number', type: 'string', isIndexed: true },
+        { name: 'status', type: 'string', isIndexed: true },
+        { name: 'source_type', type: 'string', isIndexed: true },
+        { name: 'source_id', type: 'string', isIndexed: true },
+        { name: 'item_type', type: 'string' },
+        { name: 'weight', type: 'number' },
+        { name: 'length', type: 'number' },
+        { name: 'width', type: 'number' },
+        { name: 'height', type: 'number' },
+        { name: 'volumetric_weight', type: 'number' },
+        { name: 'storage_location', type: 'string', isOptional: true },
+        { name: 'notes', type: 'string', isOptional: true },
+        { name: 'condition', type: 'string' },
+        { name: 'damage_description', type: 'string', isOptional: true },
+        { name: 'receiver_name', type: 'string' },
+        { name: 'receiver_address', type: 'string' },
+        { name: 'receiver_phone', type: 'string' },
+        { name: 'destination_branch_id', type: 'string', isIndexed: true },
+        { name: 'destination_branch_name', type: 'string' },
+        { name: 'processed_at', type: 'number', isOptional: true },
+        { name: 'allocated_at', type: 'number', isOptional: true },
+        { name: 'loaded_at', type: 'number', isOptional: true },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' },
+        { name: 'sync_status', type: 'string' },
+      ]
+    }),
+    
+    // Item allocations
+    tableSchema({
+      name: 'item_allocations',
+      columns: [
+        { name: 'warehouse_item_id', type: 'string', isIndexed: true },
+        { name: 'allocation_type', type: 'string', isIndexed: true },
+        { name: 'allocation_id', type: 'string', isIndexed: true },
+        { name: 'allocation_name', type: 'string' },
+        { name: 'status', type: 'string', isIndexed: true },
+        { name: 'allocated_by', type: 'string' },
+        { name: 'notes', type: 'string', isOptional: true },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' },
+        { name: 'sync_status', type: 'string' },
+      ]
+    }),
+    
+    // Item batches
+    tableSchema({
+      name: 'item_batches',
+      columns: [
+        { name: 'batch_code', type: 'string', isIndexed: true },
+        { name: 'warehouse_item_id', type: 'string', isIndexed: true },
+        { name: 'batch_type', type: 'string', isIndexed: true },
+        { name: 'status', type: 'string', isIndexed: true },
+        { name: 'processed_by', type: 'string' },
+        { name: 'location', type: 'string', isOptional: true },
+        { name: 'notes', type: 'string', isOptional: true },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' },
+        { name: 'sync_status', type: 'string' },
+      ]
+    }),
+    
+    // Loading manifests
+    tableSchema({
+      name: 'loading_manifests',
+      columns: [
+        { name: 'manifest_code', type: 'string', isIndexed: true },
+        { name: 'vehicle_id', type: 'string', isIndexed: true },
+        { name: 'vehicle_number', type: 'string' },
+        { name: 'driver_id', type: 'string', isIndexed: true },
+        { name: 'driver_name', type: 'string' },
+        { name: 'destination_type', type: 'string', isIndexed: true },
+        { name: 'destination_id', type: 'string', isIndexed: true },
+        { name: 'destination_name', type: 'string' },
+        { name: 'status', type: 'string', isIndexed: true },
+        { name: 'created_by', type: 'string' },
+        { name: 'notes', type: 'string', isOptional: true },
+        { name: 'scheduled_departure', type: 'number', isOptional: true },
+        { name: 'actual_departure', type: 'number', isOptional: true },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' },
+        { name: 'sync_status', type: 'string' },
+      ]
+    }),
+    
+    // Loading items
+    tableSchema({
+      name: 'loading_items',
+      columns: [
+        { name: 'loading_manifest_id', type: 'string', isIndexed: true },
+        { name: 'warehouse_item_id', type: 'string', isIndexed: true },
+        { name: 'item_code', type: 'string', isIndexed: true },
+        { name: 'tracking_number', type: 'string', isIndexed: true },
+        { name: 'status', type: 'string', isIndexed: true },
+        { name: 'loaded_by', type: 'string' },
+        { name: 'loading_position', type: 'string', isOptional: true },
+        { name: 'notes', type: 'string', isOptional: true },
+        { name: 'loaded_at', type: 'number', isOptional: true },
+        { name: 'created_at', type: 'number' },
+        { name: 'updated_at', type: 'number' },
+        { name: 'sync_status', type: 'string' },
       ]
     }),
   ]

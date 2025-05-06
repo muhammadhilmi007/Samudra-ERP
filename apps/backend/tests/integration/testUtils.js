@@ -6,6 +6,11 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
+// Import models to ensure they're registered with Mongoose
+require('../../src/domain/models/user');
+require('../../src/domain/models/role');
+require('../../src/domain/models/branch');
+
 /**
  * Clear all collections in the database
  */

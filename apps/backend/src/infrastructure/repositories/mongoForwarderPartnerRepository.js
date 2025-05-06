@@ -20,7 +20,8 @@ class MongoForwarderPartnerRepository {
    */
   async setupIndexes() {
     try {
-      await this.collection.createIndex({ code: 1 }, { unique: true });
+      // Note: We're using the MongoDB native driver's createIndex which doesn't cause duplicate index warnings
+      // unlike Mongoose's schema.index() when combined with field-level index definitions
       await this.collection.createIndex({ name: 1 });
       await this.collection.createIndex({ status: 1 });
     } catch (error) {
