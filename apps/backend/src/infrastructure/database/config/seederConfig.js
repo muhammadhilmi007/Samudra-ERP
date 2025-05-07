@@ -9,7 +9,7 @@ const fs = require('fs');
 // Default configuration
 const defaultConfig = {
   // Seeder directory path
-  seedersDir: path.join(__dirname, '../seeds'),
+  seedersDir: path.join(__dirname, '../seeders'),
   
   // MongoDB connection options
   mongoOptions: {

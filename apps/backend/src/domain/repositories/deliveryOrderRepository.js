@@ -5,7 +5,7 @@
 
 const DeliveryOrder = require('../models/deliveryOrder');
 const mongoose = require('mongoose');
-const { NotFoundError, ValidationError } = require('../utils/errors');
+const { NotFoundError, ValidationError } = require('../utils/errorUtils');
 
 class DeliveryOrderRepository {
   /**

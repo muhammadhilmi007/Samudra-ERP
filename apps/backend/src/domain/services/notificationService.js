@@ -3,7 +3,7 @@
  * Handles notification generation and delivery
  */
 
-const { NotFoundError, UnauthorizedError } = require('../utils/errors');
+const { NotFoundError, UnauthorizedError } = require('../utils/errorUtils');
 
 /**
  * @class NotificationService

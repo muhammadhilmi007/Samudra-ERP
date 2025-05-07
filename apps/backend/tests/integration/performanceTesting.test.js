@@ -8,7 +8,7 @@
 
 const request = require('supertest');
 const autocannon = require('autocannon');
-const app = require('../../src/app');
+const app = require('../../src/index');
 const mongoose = require('mongoose');
 const { setupTestDB, teardownTestDB } = require('../utils/testDB');
 

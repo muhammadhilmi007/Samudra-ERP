@@ -35,7 +35,7 @@ const notFoundHandler = (req, res, next) => {
 /**
  * Global error handler - handles all errors in the application
  */
-const errorHandler = (err, req, res) => {
+const errorHandler = (err, req, res, next) => {
   // Default error values
   let statusCode = err.statusCode || 500;
   let errorCode = err.code || 'SERVER_ERROR';

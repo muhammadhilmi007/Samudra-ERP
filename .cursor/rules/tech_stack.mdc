@@ -1,0 +1,215 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Tech Stack
+
+## Frontend
+
+### Web Application
+- Framework: Next.js dengan JavaScript
+  - Server-side rendering
+  - Client-side rendering
+  - API routes
+- UI Library: React
+  - Concurrent rendering
+  - Server Components
+  - Suspense
+
+### State Management
+- Global: Redux Toolkit
+  - Predictable state
+  - Immutable updates
+  - DevTools
+- Local: React Context
+- Persistence: Redux Persist
+
+### Data Fetching
+- Remote: React Query
+  - Server state
+  - Caching
+  - Pagination
+- Real-time: SWR
+- Optimistic Updates
+
+### Form Handling
+- Management: React Hook Form
+- Validation: Zod
+- Alternative: Yup
+
+### Styling
+- Framework: Tailwind CSS
+- Processing: PostCSS
+- Scoping: CSS Modules
+- Dynamic: Emotion/Styled Components
+
+### UI Components
+- Library: Custom (Atomic Design)
+- Accessibility: Shadcn UI
+- Complex: Radix UI
+- Development: Storybook
+
+### Data Visualization
+- Charts: Recharts
+- Advanced: D3.js
+- Statistical: Victory Charts
+
+### Mapping
+- Rendering: Mapbox GL JS
+- Analysis: Turf.js
+- Visualization: Deck.gl
+
+## Backend
+
+### Core
+- Runtime: Node.js
+- Framework: Express.js
+- API Style: RESTful
+- Documentation: Swagger/OpenAPI
+
+### Authentication
+- Token: JWT
+- Strategies: Passport.js
+- OAuth: OAuth 2.0
+- Access Control: RBAC
+
+### Database
+- Primary: MongoDB
+  - ODM: Mongoose
+  - Transactions
+  - Validation
+- Cache: Redis
+  - Rate limiting
+  - Job queue
+  - Pub/sub
+
+### Storage
+- Object: Minio (S3)
+- Image: Sharp
+- PDF: PDFKit
+
+### Testing
+- Unit: Jest
+- API: Supertest
+- Mocking: Sinon
+- Data: Factory/Fixture
+
+### Monitoring
+- Logging: Winston
+- HTTP: Morgan
+- Metrics: Prometheus
+- Errors: Sentry
+
+## Mobile
+
+### Core
+- Framework: React Native (Expo)
+- Language: TypeScript
+- SDK: Expo SDK
+- Build: EAS Build
+
+### State & Data
+- Global: Redux Toolkit
+- Persistence: Redux Persist
+- Local: Context API
+- Remote: React Query
+
+### UI & Navigation
+- Components: React Native Paper
+- Navigation: React Navigation
+- Theme: Custom Provider
+- Deep Linking
+
+### Device Features
+- Camera: Expo Camera
+- Barcode: Expo Barcode Scanner
+- Location: Expo Location
+- Bluetooth: React Native Bluetooth
+
+### Offline
+- Database: Watermelon DB
+- Storage: AsyncStorage
+- Sync: Custom strategies
+
+### Security
+- Storage: Expo SecureStore
+- Auth: Biometric
+- SSL: Certificate pinning
+
+## DevOps
+
+### Platform
+- Deployment: Railway.app
+- CI/CD: GitHub Actions
+- Monitoring: Railway
+- Logging: Railway
+
+### Containerization
+- Engine: Docker
+- Build: Multi-stage
+- Security: Container scanning
+- Orchestration: Railway
+
+### Configuration
+- Variables: Railway env vars
+- Shared: Railway shared vars
+- Secrets: Railway secrets
+
+### Monitoring
+- Metrics: Railway native
+- External: Datadog/New Relic
+- Dashboards: Custom
+- Alerting: Multiple channels
+
+## Testing
+
+### Web Testing
+- Unit: Jest
+- Component: React Testing Library
+- E2E: Cypress
+- API: MSW
+
+### Mobile Testing
+- Unit: Jest
+- Component: React Native Testing Library
+- E2E: Detox
+- Flow: Maestro
+
+### Performance
+- Load: k6
+- Stress: Artillery
+- Frontend: Lighthouse
+
+### Quality
+- Coverage: Istanbul
+- Analysis: SonarQube
+- Linting: ESLint/TSLint
+
+## Integrations
+
+### Maps
+- Provider: Google Maps
+- Alternative: Mapbox
+- APIs: Geocoding, Directions, Places
+
+### Payments
+- Provider: Midtrans
+- Alternative: Xendit
+- Features: Cards, Transfers, E-wallets
+
+### Communications
+- SMS: Twilio
+- Email: SendGrid
+- Features: OTP, Notifications
+
+### Storage
+- Provider: AWS S3
+- Alternative: DigitalOcean Spaces
+- Features: Documents, Images, Backups
+
+### Analytics
+- APM: New Relic
+- Errors: Sentry
+- Analytics: Amplitude
+

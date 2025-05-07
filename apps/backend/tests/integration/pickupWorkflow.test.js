@@ -7,7 +7,7 @@
  */
 
 const request = require('supertest');
-const app = require('../../src/app'); // Adjust if your express app entry is elsewhere
+const app = require('../../src/index'); // Adjust if your express app entry is elsewhere
 const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');

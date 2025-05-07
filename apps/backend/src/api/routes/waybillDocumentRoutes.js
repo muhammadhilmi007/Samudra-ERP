@@ -10,7 +10,7 @@ const MongoWaybillDocumentRepository = require('../../infrastructure/repositorie
 const MongoShipmentOrderRepository = require('../../infrastructure/repositories/mongoShipmentOrderRepository');
 const FileUploadService = require('../../domain/services/fileUploadService');
 const { authenticate } = require('../middleware/authMiddleware');
-const { authorize } = require('../middleware/permissionMiddleware');
+const { authorize } = require('../middleware/authorizationMiddleware');
 const {
   validateGenerateDocument,
   validateRegenerateDocument,

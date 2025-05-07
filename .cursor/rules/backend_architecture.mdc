@@ -1,0 +1,183 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Arsitektur Backend
+
+## Arsitektur Mikroservis
+
+### Layer Arsitektur
+
+1. **API Gateway Layer**
+   - Express.js API Gateway
+   - Autentikasi & Otorisasi berbasis Feature Permissions
+   - Rate Limiting & Caching
+   - Dokumentasi API
+   - Validasi & transformasi request
+
+2. **Microservices Layer**
+   - Core Services (User, Role, Branch, Division)
+   - Operational Services (Pickup, Shipment, Delivery)
+   - Financial Services (Payment, Invoice, Accounting)
+   - Reporting Services
+
+3. **Data Layer**
+   - MongoDB Database
+   - Redis Cache
+   - File Storage
+   - Mekanisme sinkronisasi data
+
+4. **Integration Layer**
+   - Integrasi API Eksternal
+   - Webhook Handlers
+   - Event Bus
+   - Adapter patterns
+
+## Arsitektur Hexagonal
+
+Setiap mikroservis mengikuti pola arsitektur hexagonal:
+
+```
+/service-name/
+├── /src/
+│   ├── /api                  # API Layer
+│   │   ├── /controllers      # Request handlers
+│   │   ├── /routes          # Route definitions
+│   │   ├── /middlewares     # API middlewares
+│   │   └── /validations     # Input validation
+│   │
+│   ├── /domain              # Domain Layer
+│   │   ├── /models         # Domain models
+│   │   ├── /services       # Domain services
+│   │   ├── /events         # Domain events
+│   │   └── /errors         # Domain errors
+│   │
+│   ├── /infrastructure      # Infrastructure Layer
+│   │   ├── /repositories    # Data access
+│   │   ├── /database       # DB config & models
+│   │   ├── /external       # External services
+│   │   └── /queues         # Message queues
+│   │
+│   └── /app                 # Application Layer
+│       ├── /use-cases      # Business logic
+│       ├── /commands       # Command handlers
+│       ├── /queries        # Query handlers
+│       └── /dtos           # Data Transfer Objects
+```
+
+## Standar API
+
+### Format Request
+
+```json
+{
+  "property1": "value1",
+  "property2": "value2",
+  "nestedObject": {
+    "nestedProperty": "nestedValue"
+  }
+}
+```
+
+### Format Response
+
+Response Sukses:
+```json
+{
+  "success": true,
+  "data": {
+    // Data resource atau array resources
+  },
+  "meta": {
+    "pagination": {
+      "page": 1,
+      "limit": 10,
+      "totalItems": 100,
+      "totalPages": 10
+    }
+  }
+}
+```
+
+Response Error:
+```json
+{
+  "success": false,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Pesan error yang dapat dibaca",
+    "details": {
+      // Detail error tambahan
+    }
+  }
+}
+```
+
+## Autentikasi & Otorisasi
+
+### Autentikasi
+- Menggunakan JSON Web Tokens (JWT)
+- Token akses dengan masa hidup 1 jam
+- Token refresh dengan masa hidup 7 hari
+- Mekanisme refresh token
+
+### Otorisasi
+- Role-Based Access Control (RBAC)
+- Feature-based permissions
+- Resource-based permissions
+- Action-based permissions
+- Scope-based permissions
+
+## Penanganan Error
+
+### Tipe Error
+- ValidationError: Data input tidak valid
+- AuthenticationError: Kegagalan autentikasi
+- AuthorizationError: Masalah perizinan
+- NotFoundError: Resource tidak ditemukan
+- ConflictError: Konflik resource
+- SystemError: Error internal sistem
+
+### Format Error
+```json
+{
+  "success": false,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Pesan error yang dapat dibaca",
+    "details": {
+      // Detail error tambahan
+    }
+  }
+}
+```
+
+## Middleware
+
+1. **Authentication Middleware**
+   - Verifikasi JWT token
+   - Ekstraksi informasi user
+   - Penanganan token expired
+
+2. **Authorization Middleware**
+   - Pengecekan perizinan user
+   - Enforcment role-based access
+   - Validasi kepemilikan resource
+
+3. **Validation Middleware**
+   - Validasi request body
+   - Sanitasi input
+   - Penyediaan pesan error validasi
+
+4. **Error Handling Middleware**
+   - Penangkapan dan pemrosesan error
+   - Formatting response error
+   - Logging error
+
+5. **Logging Middleware**
+   - Logging detail request
+   - Tracking response time
+   - Capture detail error
+
+

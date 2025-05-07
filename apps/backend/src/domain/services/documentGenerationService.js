@@ -10,7 +10,7 @@ const bwipjs = require('bwip-js');
 const PDFDocument = require('pdfkit');
 const nodemailer = require('nodemailer');
 const { createCanvas } = require('canvas');
-const { ValidationError } = require('../utils/errors');
+const { ValidationError } = require('../utils/errorUtils');
 
 /**
  * Document Generation Service

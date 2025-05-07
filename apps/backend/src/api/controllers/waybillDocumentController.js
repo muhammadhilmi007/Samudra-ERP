@@ -5,7 +5,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { ValidationError, NotFoundError } = require('../../domain/utils/errors');
+const { ValidationError } = require('../../domain/utils/errorUtils');
 
 /**
  * Waybill Document Controller

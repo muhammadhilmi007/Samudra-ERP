@@ -1,0 +1,284 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Standar Pengembangan Frontend
+
+## Konvensi Penamaan
+
+### JavaScript/TypeScript
+- Gunakan camelCase untuk variabel, fungsi, dan method
+- Gunakan PascalCase untuk komponen, kelas, dan interface
+- Gunakan UPPER_SNAKE_CASE untuk konstanta
+- Gunakan nama yang deskriptif dan jelas
+
+```typescript
+// Contoh Baik
+const userData = { ... };
+function calculateTotalPrice() { ... }
+const UserProfile = () => { ... }
+const MAX_RETRY_ATTEMPTS = 3;
+
+// Contoh Buruk
+const data = { ... };
+function calc() { ... }
+const profile = () => { ... }
+const max = 3;
+```
+
+### Struktur Komponen
+- Satu komponen per file
+- Gunakan functional components dengan hooks
+- Fokus pada single responsibility
+- Ekstrak logika kompleks ke custom hooks
+- Batasi ukuran komponen (maksimal 300 baris)
+
+```typescript
+// Contoh Struktur Komponen
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import styles from './ComponentName.styles';
+
+const ComponentName = ({ propName, ...props }) => {
+  // State dan hooks
+  const [state, setState] = useState(initialValue);
+  
+  // Effects
+  useEffect(() => {
+    // Effect logic
+    return () => {
+      // Cleanup logic
+    };
+  }, [dependencies]);
+  
+  // Handler functions
+  const handleEvent = () => {
+    // Event handling logic
+  };
+  
+  // Main render
+  return (
+    <div className={styles.container}>
+      {/* Component content */}
+    </div>
+  );
+};
+
+ComponentName.propTypes = {
+  propName: PropTypes.string.isRequired,
+};
+
+export default ComponentName;
+```
+
+## State Management
+
+### Redux Toolkit
+- Gunakan untuk state global
+- Buat slice untuk setiap fitur
+- Gunakan async thunks untuk API calls
+- Gunakan selectors untuk akses data
+
+```typescript
+// Contoh Redux Slice
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+export const fetchUserById = createAsyncThunk(
+  'users/fetchById',
+  async (userId, { rejectWithValue }) => {
+    try {
+      const response = await userAPI.fetchById(userId);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+const usersSlice = createSlice({
+  name: 'users',
+  initialState: {
+    entities: {},
+    loading: 'idle',
+    error: null,
+  },
+  reducers: {
+    userUpdated(state, action) {
+      const { id, ...changes } = action.payload;
+      state.entities[id] = { ...state.entities[id], ...changes };
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUserById.pending, (state) => {
+        state.loading = 'loading';
+      })
+      .addCase(fetchUserById.fulfilled, (state, action) => {
+        state.loading = 'idle';
+        state.entities[action.payload.id] = action.payload;
+      })
+      .addCase(fetchUserById.rejected, (state, action) => {
+        state.loading = 'idle';
+        state.error = action.payload;
+      });
+  },
+});
+```
+
+### React Query
+- Gunakan untuk server state
+- Implementasikan caching & invalidation
+- Gunakan optimistic updates
+- Dukung infinite scrolling
+
+```typescript
+// Contoh React Query
+const UserProfile = ({ userId }) => {
+  const { data: user, isLoading } = useQuery(
+    ['user', userId],
+    () => getUser(userId),
+    {
+      staleTime: 5 * 60 * 1000, // Data dianggap fresh selama 5 menit
+      cacheTime: 30 * 60 * 1000, // Cache data selama 30 menit
+    }
+  );
+
+  if (isLoading) return <Spinner />;
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      {/* User profile content */}
+    </div>
+  );
+};
+```
+
+## Form Handling
+
+### React Hook Form
+- Gunakan untuk form state management
+- Implementasikan validasi dengan Zod
+- Definisikan schema validasi terpisah
+- Berikan feedback error yang jelas
+
+```typescript
+// Contoh Form dengan React Hook Form dan Zod
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+
+const userSchema = z.object({
+  firstName: z.string().min(2, 'Nama depan minimal 2 karakter'),
+  lastName: z.string().min(2, 'Nama belakang minimal 2 karakter'),
+  email: z.string().email('Email tidak valid'),
+  age: z.number().min(18, 'Minimal 18 tahun'),
+});
+
+const UserForm = ({ onSubmit, defaultValues }) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    resolver: zodResolver(userSchema),
+    defaultValues,
+  });
+
+  const processSubmit = async (data) => {
+    try {
+      await onSubmit(data);
+      reset();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit(processSubmit)}>
+      <div>
+        <label htmlFor="firstName">Nama Depan</label>
+        <input id="firstName" {...register('firstName')} />
+        {errors.firstName && (
+          <p className="error">{errors.firstName.message}</p>
+        )}
+      </div>
+      {/* Other form fields */}
+      <button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? 'Mengirim...' : 'Kirim'}
+      </button>
+    </form>
+  );
+};
+```
+
+## Testing
+
+### Unit Testing
+- Gunakan Jest & React Testing Library
+- Test komponen dan fungsi secara terpisah
+- Fokus pada business logic
+- Target coverage tinggi untuk critical paths
+
+```typescript
+// Contoh Unit Test
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import Counter from './Counter';
+
+describe('Counter', () => {
+  test('renders initial count', () => {
+    render(<Counter initialCount={5} />);
+    expect(screen.getByText('Count: 5')).toBeInTheDocument();
+  });
+
+  test('increments count when button is clicked', async () => {
+    render(<Counter initialCount={5} />);
+    const button = screen.getByRole('button', { name: /increment/i });
+    await userEvent.click(button);
+    expect(screen.getByText('Count: 6')).toBeInTheDocument();
+  });
+});
+```
+
+## Accessibility
+
+### WCAG 2.1 Level AA
+- Gunakan semantic HTML
+- Implementasikan ARIA attributes
+- Dukung keyboard navigation
+- Pastikan color contrast memenuhi standar
+
+```typescript
+// Contoh Komponen yang Accessible
+const Accordion = ({ items }) => {
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  return (
+    <div className="accordion">
+      {items.map((item, index) => (
+        <div key={index} className="accordion-item">
+          <button
+            id={`accordion-header-${index}`}
+            aria-expanded={activeIndex === index}
+            aria-controls={`accordion-panel-${index}`}
+            onClick={() => setActiveIndex(index === activeIndex ? null : index)}
+          >
+            {item.title}
+          </button>
+          <div
+            id={`accordion-panel-${index}`}
+            role="region"
+            aria-labelledby={`accordion-header-${index}`}
+            hidden={activeIndex !== index}
+          >
+            {item.content}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+```
+

@@ -3,7 +3,7 @@
  * Tests business logic for role management
  */
 
-const RoleService = require('../../../../src/app/services/roleService');
+const RoleService = require('../../../../src/index/services/roleService');
 const RoleRepository = require('../../../../src/domain/repositories/roleRepository');
 const PermissionRepository = require('../../../../src/domain/repositories/permissionRepository');
 

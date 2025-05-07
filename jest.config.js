@@ -1,7 +1,10 @@
 module.exports = {
   projects: [
-    '<rootDir>/apps/*/jest.config.js',
-    '<rootDir>/packages/*/jest.config.js',
+    '<rootDir>/apps/frontend',
+    '<rootDir>/apps/backend',
+    // Tambahkan path lain jika ada, misal:
+    // '<rootDir>/packages/utils',
+    // '<rootDir>/packages/ui',
   ],
   collectCoverageFrom: [
     '**/*.{js,jsx,ts,tsx}',

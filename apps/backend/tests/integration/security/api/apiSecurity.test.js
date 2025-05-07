@@ -7,7 +7,7 @@ const request = require('supertest');
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const app = require('../../../../src/app');
+const app = require('../../../../src/index');
 const { 
   createTestUser, 
   createTestBranch,

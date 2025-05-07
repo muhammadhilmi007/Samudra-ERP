@@ -8,7 +8,8 @@ import { Search } from 'lucide-react';
 import { PositionListParams } from '../../services/positionService';
 import FormField from '../atoms/FormField';
 import Button from '../atoms/Button';
-import Select from '../atoms/Select';
+import {Select} from '../atoms/Select';
+
 
 // Define filter schema
 const filterSchema = z.object({

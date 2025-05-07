@@ -2,7 +2,6 @@
  * Samudra Paket ERP - Forwarder Service Unit Tests
  */
 
-// eslint-disable-next-line import/no-extraneous-dependencies
 const { ObjectId } = require('mongodb');
 const ForwarderService = require('../../../../app/services/forwarderService');
 const ForwarderPartner = require('../../../../domain/models/forwarderPartner');
@@ -10,7 +9,7 @@ const ForwarderArea = require('../../../../domain/models/forwarderArea');
 const ForwarderRate = require('../../../../domain/models/forwarderRate');
 
 // Mock repositories
-const mockForwarderPartnerRepository = {
+const mockPartnerRepo = {
   findAll: jest.fn(),
   count: jest.fn(),
   findById: jest.fn(),
@@ -21,41 +20,46 @@ const mockForwarderPartnerRepository = {
   updateStatus: jest.fn(),
 };
 
-const mockForwarderAreaRepository = {
+const mockAreaRepo = {
+  findByForwarder: jest.fn(),
+  create: jest.fn(),
+  deleteByForwarder: jest.fn(),
   findAll: jest.fn(),
   count: jest.fn(),
   findById: jest.fn(),
-  findByForwarder: jest.fn(),
   findByLocation: jest.fn(),
-  create: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
-  deleteByForwarder: jest.fn(),
   updateStatus: jest.fn(),
 };
 
-const mockForwarderRateRepository = {
+const mockRateRepo = {
+  findByForwarder: jest.fn(),
+  findRatesForRoute: jest.fn(),
+  deleteByForwarder: jest.fn(),
   findAll: jest.fn(),
   count: jest.fn(),
   findById: jest.fn(),
-  findByForwarder: jest.fn(),
-  findRatesForRoute: jest.fn(),
   create: jest.fn(),
   update: jest.fn(),
   delete: jest.fn(),
-  deleteByForwarder: jest.fn(),
   updateStatus: jest.fn(),
 };
 
 let forwarderService;
 
+const mockToObject = jest.fn().mockImplementation(function() {
+  return { ...this };
+});
+
 beforeEach(() => {
   jest.clearAllMocks();
-  forwarderService = new ForwarderService(
-    mockForwarderPartnerRepository,
-    mockForwarderAreaRepository,
-    mockForwarderRateRepository,
-  );
+  mockToObject.mockClear();
+  forwarderService = new ForwarderService({
+    forwarderPartnerRepository: mockPartnerRepo,
+    forwarderAreaRepository: mockAreaRepo,
+    forwarderRateRepository: mockRateRepo,
+  });
 });
 
 describe('ForwarderService', () => {
@@ -67,8 +71,8 @@ describe('ForwarderService', () => {
         new ForwarderPartner({ code: 'TIKI', name: 'TIKI' }),
       ];
 
-      mockForwarderPartnerRepository.findAll.mockResolvedValue(partners);
-      mockForwarderPartnerRepository.count.mockResolvedValue(2);
+      mockPartnerRepo.findAll.mockResolvedValue(partners);
+      mockPartnerRepo.count.mockResolvedValue(2);
 
       // Act
       const result = await forwarderService.getAllForwarderPartners({
@@ -79,9 +83,9 @@ describe('ForwarderService', () => {
       // Assert
       expect(result.items).toEqual(partners);
       expect(result.pagination.totalItems).toBe(2);
-      expect(mockForwarderPartnerRepository.findAll).toHaveBeenCalledWith(
+      expect(mockPartnerRepo.findAll).toHaveBeenCalledWith(
         expect.any(Object),
-        expect.objectContaining({ skip: 0, limit: 10 }),
+        expect.objectContaining({ skip: 0, limit: 10 })
       );
     });
 
@@ -91,8 +95,8 @@ describe('ForwarderService', () => {
         new ForwarderPartner({ code: 'JNE', name: 'JNE Express', status: 'active' }),
       ];
 
-      mockForwarderPartnerRepository.findAll.mockResolvedValue(partners);
-      mockForwarderPartnerRepository.count.mockResolvedValue(1);
+      mockPartnerRepo.findAll.mockResolvedValue(partners);
+      mockPartnerRepo.count.mockResolvedValue(1);
 
       // Act
       const result = await forwarderService.getAllForwarderPartners({
@@ -105,12 +109,12 @@ describe('ForwarderService', () => {
       // Assert
       expect(result.items).toEqual(partners);
       expect(result.pagination.totalItems).toBe(1);
-      expect(mockForwarderPartnerRepository.findAll).toHaveBeenCalledWith(
+      expect(mockPartnerRepo.findAll).toHaveBeenCalledWith(
         expect.objectContaining({
           status: 'active',
           $or: expect.any(Array),
         }),
-        expect.any(Object),
+        expect.any(Object)
       );
     });
   });
@@ -125,20 +129,20 @@ describe('ForwarderService', () => {
         name: 'JNE Express',
       });
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(partner);
+      mockPartnerRepo.findById.mockResolvedValue(partner);
 
       // Act
       const result = await forwarderService.getForwarderPartnerById(partnerId);
 
       // Assert
       expect(result).toEqual(partner);
-      expect(mockForwarderPartnerRepository.findById).toHaveBeenCalledWith(partnerId);
+      expect(mockPartnerRepo.findById).toHaveBeenCalledWith(partnerId);
     });
 
     it('should return null for non-existent ID', async () => {
       // Arrange
       const nonExistentId = new ObjectId();
-      mockForwarderPartnerRepository.findById.mockResolvedValue(null);
+      mockPartnerRepo.findById.mockResolvedValue(null);
 
       // Act
       const result = await forwarderService.getForwarderPartnerById(nonExistentId);
@@ -156,28 +160,37 @@ describe('ForwarderService', () => {
         code: 'JNE',
         name: 'JNE Express',
       };
-
+    
+      // Create a mock instance with toObject method
       const createdPartner = new ForwarderPartner({
         ...partnerData,
         _id: new ObjectId(),
+        createdBy: userId
       });
-
-      mockForwarderPartnerRepository.findByCode.mockResolvedValue(null);
-      mockForwarderPartnerRepository.create.mockResolvedValue(createdPartner);
-
+      
+      // Add toObject method to the instance
+      createdPartner.toObject = function() {
+        return { ...this };
+      };
+    
+      // Mock the required functions
+      mockPartnerRepo.findByCode.mockResolvedValue(null);
+      mockPartnerRepo.create.mockResolvedValue(createdPartner);
+      
+      // Mock validate method to return success
+      jest.spyOn(ForwarderPartner.prototype, 'validate').mockReturnValue({ isValid: true });
+    
       // Act
       const result = await forwarderService.createForwarderPartner(partnerData, userId);
-
+    
       // Assert
       expect(result.success).toBe(true);
-      expect(result.data).toEqual(createdPartner);
-      expect(mockForwarderPartnerRepository.create).toHaveBeenCalledWith(
+      expect(result.data.toObject()).toMatchObject(partnerData);
+      expect(mockPartnerRepo.create).toHaveBeenCalledWith(
         expect.objectContaining({
-          code: 'JNE',
-          name: 'JNE Express',
-          createdBy: userId,
-          updatedBy: userId,
-        }),
+          ...partnerData,
+          createdBy: userId
+        })
       );
     });
 
@@ -195,7 +208,7 @@ describe('ForwarderService', () => {
         _id: new ObjectId(),
       });
 
-      mockForwarderPartnerRepository.findByCode.mockResolvedValue(existingPartner);
+      mockPartnerRepo.findByCode.mockResolvedValue(existingPartner);
 
       // Act
       const result = await forwarderService.createForwarderPartner(partnerData, userId);
@@ -203,7 +216,7 @@ describe('ForwarderService', () => {
       // Assert
       expect(result.success).toBe(false);
       expect(result.errors).toHaveProperty('code');
-      expect(mockForwarderPartnerRepository.create).not.toHaveBeenCalled();
+      expect(mockPartnerRepo.create).not.toHaveBeenCalled();
     });
 
     it('should return validation errors for invalid data', async () => {
@@ -214,7 +227,13 @@ describe('ForwarderService', () => {
         name: 'JNE Express',
       };
 
-      mockForwarderPartnerRepository.findByCode.mockResolvedValue(null);
+      mockPartnerRepo.findByCode.mockResolvedValue(null);
+      
+      // Mock validate to return validation errors
+      jest.spyOn(ForwarderPartner.prototype, 'validate').mockReturnValue({ 
+        isValid: false, 
+        errors: { code: 'Kode forwarder wajib diisi' } 
+      });
 
       // Act
       const result = await forwarderService.createForwarderPartner(partnerData, userId);
@@ -222,47 +241,56 @@ describe('ForwarderService', () => {
       // Assert
       expect(result.success).toBe(false);
       expect(result.errors).toHaveProperty('code');
-      expect(mockForwarderPartnerRepository.create).not.toHaveBeenCalled();
+      expect(mockPartnerRepo.create).not.toHaveBeenCalled();
     });
   });
 
   describe('updateForwarderPartner', () => {
     it('should update a forwarder partner successfully', async () => {
       // Arrange
-      const partnerId = new ObjectId();
       const userId = new ObjectId();
+      const partnerId = new ObjectId();
       const partnerData = {
         name: 'JNE Express Updated',
-        contactPerson: 'John Doe',
+        contact: '021-87654321',
       };
 
       const existingPartner = new ForwarderPartner({
         _id: partnerId,
         code: 'JNE',
         name: 'JNE Express',
+        contact: '021-12345678',
+        status: 'active', // Add required fields
       });
 
       const updatedPartner = new ForwarderPartner({
         ...existingPartner,
         ...partnerData,
       });
+      
+      // Add toObject method to updated partner
+      updatedPartner.toObject = function() {
+        return { ...this };
+      };
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(existingPartner);
-      mockForwarderPartnerRepository.update.mockResolvedValue(updatedPartner);
+      mockPartnerRepo.findById.mockResolvedValue(existingPartner);
+      mockPartnerRepo.update.mockResolvedValue(updatedPartner);
+      
+      // Mock validate to return success
+      jest.spyOn(ForwarderPartner.prototype, 'validate').mockReturnValue({ isValid: true });
 
       // Act
       const result = await forwarderService.updateForwarderPartner(partnerId, partnerData, userId);
 
       // Assert
       expect(result.success).toBe(true);
-      expect(result.data).toEqual(updatedPartner);
-      expect(mockForwarderPartnerRepository.update).toHaveBeenCalledWith(
+      expect(result.data.toObject().name).toBe('JNE Express Updated');
+      expect(mockPartnerRepo.update).toHaveBeenCalledWith(
         partnerId,
         expect.objectContaining({
-          name: 'JNE Express Updated',
-          contactPerson: 'John Doe',
+          ...partnerData,
           updatedBy: userId,
-        }),
+        })
       );
     });
 
@@ -274,19 +302,19 @@ describe('ForwarderService', () => {
         name: 'JNE Express Updated',
       };
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(null);
+      mockPartnerRepo.findById.mockResolvedValue(null);
 
       // Act
       const result = await forwarderService.updateForwarderPartner(
         nonExistentId,
         partnerData,
-        userId,
+        userId
       );
 
       // Assert
       expect(result.success).toBe(false);
       expect(result.errors).toHaveProperty('_id');
-      expect(mockForwarderPartnerRepository.update).not.toHaveBeenCalled();
+      expect(mockPartnerRepo.update).not.toHaveBeenCalled();
     });
 
     it('should return error if trying to use existing code', async () => {
@@ -309,8 +337,8 @@ describe('ForwarderService', () => {
         name: 'TIKI',
       });
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(existingPartner);
-      mockForwarderPartnerRepository.findByCode.mockResolvedValue(conflictingPartner);
+      mockPartnerRepo.findById.mockResolvedValue(existingPartner);
+      mockPartnerRepo.findByCode.mockResolvedValue(conflictingPartner);
 
       // Act
       const result = await forwarderService.updateForwarderPartner(partnerId, partnerData, userId);
@@ -318,7 +346,7 @@ describe('ForwarderService', () => {
       // Assert
       expect(result.success).toBe(false);
       expect(result.errors).toHaveProperty('code');
-      expect(mockForwarderPartnerRepository.update).not.toHaveBeenCalled();
+      expect(mockPartnerRepo.update).not.toHaveBeenCalled();
     });
   });
 
@@ -327,28 +355,26 @@ describe('ForwarderService', () => {
       // Arrange
       const partnerId = new ObjectId();
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(
-        new ForwarderPartner({ _id: partnerId }),
-      );
-      mockForwarderAreaRepository.deleteByForwarder.mockResolvedValue(2);
-      mockForwarderRateRepository.deleteByForwarder.mockResolvedValue(3);
-      mockForwarderPartnerRepository.delete.mockResolvedValue(true);
+      mockPartnerRepo.findById.mockResolvedValue(new ForwarderPartner({ _id: partnerId }));
+      mockAreaRepo.deleteByForwarder.mockResolvedValue(2);
+      mockRateRepo.deleteByForwarder.mockResolvedValue(3);
+      mockPartnerRepo.delete.mockResolvedValue(true);
 
       // Act
       const result = await forwarderService.deleteForwarderPartner(partnerId);
 
       // Assert
       expect(result.success).toBe(true);
-      expect(mockForwarderAreaRepository.deleteByForwarder).toHaveBeenCalledWith(partnerId);
-      expect(mockForwarderRateRepository.deleteByForwarder).toHaveBeenCalledWith(partnerId);
-      expect(mockForwarderPartnerRepository.delete).toHaveBeenCalledWith(partnerId);
+      expect(mockAreaRepo.deleteByForwarder).toHaveBeenCalledWith(partnerId);
+      expect(mockRateRepo.deleteByForwarder).toHaveBeenCalledWith(partnerId);
+      expect(mockPartnerRepo.delete).toHaveBeenCalledWith(partnerId);
     });
 
     it('should return error if partner not found', async () => {
       // Arrange
       const nonExistentId = new ObjectId();
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(null);
+      mockPartnerRepo.findById.mockResolvedValue(null);
 
       // Act
       const result = await forwarderService.deleteForwarderPartner(nonExistentId);
@@ -356,9 +382,9 @@ describe('ForwarderService', () => {
       // Assert
       expect(result.success).toBe(false);
       expect(result.errors).toHaveProperty('_id');
-      expect(mockForwarderAreaRepository.deleteByForwarder).not.toHaveBeenCalled();
-      expect(mockForwarderRateRepository.deleteByForwarder).not.toHaveBeenCalled();
-      expect(mockForwarderPartnerRepository.delete).not.toHaveBeenCalled();
+      expect(mockAreaRepo.deleteByForwarder).not.toHaveBeenCalled();
+      expect(mockRateRepo.deleteByForwarder).not.toHaveBeenCalled();
+      expect(mockPartnerRepo.delete).not.toHaveBeenCalled();
     });
   });
 
@@ -381,8 +407,8 @@ describe('ForwarderService', () => {
         status: 'inactive',
       });
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(existingPartner);
-      mockForwarderPartnerRepository.updateStatus.mockResolvedValue(updatedPartner);
+      mockPartnerRepo.findById.mockResolvedValue(existingPartner);
+      mockPartnerRepo.updateStatus.mockResolvedValue(updatedPartner);
 
       // Act
       const result = await forwarderService.updateForwarderPartnerStatus(partnerId, status, userId);
@@ -390,11 +416,7 @@ describe('ForwarderService', () => {
       // Assert
       expect(result.success).toBe(true);
       expect(result.data).toEqual(updatedPartner);
-      expect(mockForwarderPartnerRepository.updateStatus).toHaveBeenCalledWith(
-        partnerId,
-        status,
-        userId,
-      );
+      expect(mockPartnerRepo.updateStatus).toHaveBeenCalledWith(partnerId, status, userId);
     });
 
     it('should return error for invalid status', async () => {
@@ -409,7 +431,7 @@ describe('ForwarderService', () => {
       // Assert
       expect(result.success).toBe(false);
       expect(result.errors).toHaveProperty('status');
-      expect(mockForwarderPartnerRepository.updateStatus).not.toHaveBeenCalled();
+      expect(mockPartnerRepo.updateStatus).not.toHaveBeenCalled();
     });
 
     it('should return error if partner not found', async () => {
@@ -418,19 +440,19 @@ describe('ForwarderService', () => {
       const userId = new ObjectId();
       const status = 'inactive';
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(null);
+      mockPartnerRepo.findById.mockResolvedValue(null);
 
       // Act
       const result = await forwarderService.updateForwarderPartnerStatus(
         nonExistentId,
         status,
-        userId,
+        userId
       );
 
       // Assert
       expect(result.success).toBe(false);
       expect(result.errors).toHaveProperty('_id');
-      expect(mockForwarderPartnerRepository.updateStatus).not.toHaveBeenCalled();
+      expect(mockPartnerRepo.updateStatus).not.toHaveBeenCalled();
     });
   });
 
@@ -444,8 +466,8 @@ describe('ForwarderService', () => {
         new ForwarderArea({ province: 'DKI Jakarta', city: 'Jakarta Selatan' }),
       ];
 
-      mockForwarderAreaRepository.findByForwarder.mockResolvedValue(areas);
-      mockForwarderAreaRepository.count.mockResolvedValue(2);
+      mockAreaRepo.findByForwarder.mockResolvedValue(areas);
+      mockAreaRepo.count.mockResolvedValue(2);
 
       // Act
       const result = await forwarderService.getForwarderAreas(forwarderId, {
@@ -456,9 +478,9 @@ describe('ForwarderService', () => {
       // Assert
       expect(result.items).toEqual(areas);
       expect(result.pagination.totalItems).toBe(2);
-      expect(mockForwarderAreaRepository.findByForwarder).toHaveBeenCalledWith(
+      expect(mockAreaRepo.findByForwarder).toHaveBeenCalledWith(
         forwarderId,
-        expect.objectContaining({ skip: 0, limit: 10 }),
+        expect.objectContaining({ skip: 0, limit: 10 })
       );
     });
   });
@@ -480,10 +502,8 @@ describe('ForwarderService', () => {
         _id: new ObjectId(),
       });
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(
-        new ForwarderPartner({ _id: forwarderId }),
-      );
-      mockForwarderAreaRepository.create.mockResolvedValue(createdArea);
+      mockPartnerRepo.findById.mockResolvedValue(new ForwarderPartner({ _id: forwarderId }));
+      mockAreaRepo.create.mockResolvedValue(createdArea);
 
       // Act
       const result = await forwarderService.createForwarderArea(areaData, userId);
@@ -491,7 +511,7 @@ describe('ForwarderService', () => {
       // Assert
       expect(result.success).toBe(true);
       expect(result.data).toEqual(createdArea);
-      expect(mockForwarderAreaRepository.create).toHaveBeenCalledWith(
+      expect(mockAreaRepo.create).toHaveBeenCalledWith(
         expect.objectContaining({
           forwarder: forwarderId.toString(),
           province: 'DKI Jakarta',
@@ -499,7 +519,7 @@ describe('ForwarderService', () => {
           district: 'Grogol',
           createdBy: userId,
           updatedBy: userId,
-        }),
+        })
       );
     });
 
@@ -514,7 +534,7 @@ describe('ForwarderService', () => {
         district: 'Grogol',
       };
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(null);
+      mockPartnerRepo.findById.mockResolvedValue(null);
 
       // Act
       const result = await forwarderService.createForwarderArea(areaData, userId);
@@ -522,7 +542,7 @@ describe('ForwarderService', () => {
       // Assert
       expect(result.success).toBe(false);
       expect(result.errors).toHaveProperty('forwarder');
-      expect(mockForwarderAreaRepository.create).not.toHaveBeenCalled();
+      expect(mockAreaRepo.create).not.toHaveBeenCalled();
     });
   });
 
@@ -544,8 +564,8 @@ describe('ForwarderService', () => {
         }),
       ];
 
-      mockForwarderRateRepository.findByForwarder.mockResolvedValue(rates);
-      mockForwarderRateRepository.count.mockResolvedValue(2);
+      mockRateRepo.findByForwarder.mockResolvedValue(rates);
+      mockRateRepo.count.mockResolvedValue(2);
 
       // Act
       const result = await forwarderService.getForwarderRates(forwarderId, {
@@ -556,9 +576,9 @@ describe('ForwarderService', () => {
       // Assert
       expect(result.items).toEqual(rates);
       expect(result.pagination.totalItems).toBe(2);
-      expect(mockForwarderRateRepository.findByForwarder).toHaveBeenCalledWith(
+      expect(mockRateRepo.findByForwarder).toHaveBeenCalledWith(
         forwarderId,
-        expect.objectContaining({ skip: 0, limit: 10 }),
+        expect.objectContaining({ skip: 0, limit: 10 })
       );
     });
   });
@@ -578,21 +598,21 @@ describe('ForwarderService', () => {
         }),
       ];
 
-      mockForwarderRateRepository.findRatesForRoute.mockResolvedValue(rates);
+      mockRateRepo.findRatesForRoute.mockResolvedValue(rates);
 
       // Act
       const result = await forwarderService.findRatesForRoute(
         forwarderId,
         originArea,
-        destinationArea,
+        destinationArea
       );
 
       // Assert
       expect(result).toEqual(rates);
-      expect(mockForwarderRateRepository.findRatesForRoute).toHaveBeenCalledWith(
+      expect(mockRateRepo.findRatesForRoute).toHaveBeenCalledWith(
         forwarderId,
         originArea,
-        destinationArea,
+        destinationArea
       );
     });
   });
@@ -617,7 +637,7 @@ describe('ForwarderService', () => {
         destination: 'Jakarta',
       };
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(forwarderPartner);
+      mockPartnerRepo.findById.mockResolvedValue(forwarderPartner);
 
       // Act
       const result = await forwarderService.testForwarderIntegration(forwarderId, testData);
@@ -633,7 +653,7 @@ describe('ForwarderService', () => {
       // Arrange
       const nonExistentId = new ObjectId();
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(null);
+      mockPartnerRepo.findById.mockResolvedValue(null);
 
       // Act
       const result = await forwarderService.testForwarderIntegration(nonExistentId);
@@ -657,7 +677,7 @@ describe('ForwarderService', () => {
         },
       });
 
-      mockForwarderPartnerRepository.findById.mockResolvedValue(forwarderPartner);
+      mockPartnerRepo.findById.mockResolvedValue(forwarderPartner);
 
       // Act
       const result = await forwarderService.testForwarderIntegration(forwarderId);

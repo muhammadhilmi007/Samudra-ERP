@@ -6,6 +6,9 @@
 const pickupRequestRepository = require('../../domain/repositories/pickupRequestRepository');
 const { createApiError } = require('../../domain/utils/errorUtils');
 const { logger } = require('../middleware/gateway/logger');
+const NotificationService = require('../../domain/services/notificationService');
+
+const notificationService = new NotificationService();
 
 /**
  * Create a new pickup request
@@ -51,6 +54,22 @@ exports.createPickupRequest = async (req, res, next) => {
       req.user.id,
       { details: 'Pickup request created' },
     );
+
+    // Kirim notifikasi ke customer
+    await notificationService.sendNotification({
+      recipient: pickupRequest.customer,
+      type: 'pickup_request_created',
+      entityType: 'PickupRequest',
+      entityId: pickupRequest._id,
+      title: 'Pickup Request Berhasil Dibuat',
+      message: `Pickup request dengan kode ${pickupRequest.code} telah berhasil dibuat dan akan segera diproses.`,
+      channels: ['inApp', 'email'],
+      data: {
+        pickupRequestId: pickupRequest._id,
+        scheduledDate: pickupRequest.scheduledDate,
+        branch: pickupRequest.branch,
+      },
+    });
     
     logger.info('Pickup request created successfully', { id: pickupRequest._id });
     

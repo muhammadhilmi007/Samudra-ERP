@@ -7,7 +7,8 @@ const mongoose = require('mongoose');
 const PickupItem = require('../models/pickupItem');
 const PickupRequest = require('../models/pickupRequest');
 const PickupAssignment = require('../models/pickupAssignment');
-const logger = require('../../utils/logger');
+const logger = require('../../api/middleware/gateway/logger');
+const { ValidationError } = require('../utils/errorUtils');
 
 /**
  * Create a new pickup item

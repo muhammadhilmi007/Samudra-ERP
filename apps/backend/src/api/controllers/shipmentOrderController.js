@@ -5,7 +5,10 @@
 
 const ShipmentOrderRepository = require('../../domain/repositories/shipmentOrderRepository');
 const ServiceAreaRepository = require('../../domain/repositories/serviceAreaRepository');
-const { NotFoundError, ValidationError, UnauthorizedError } = require('../../domain/utils/errors');
+const { NotFoundError, ValidationError } = require('../../domain/utils/errorUtils');
+const DocumentGenerationService = require('../../domain/services/documentGenerationService');
+const MongoWaybillDocumentRepository = require('../../infrastructure/repositories/mongoWaybillDocumentRepository');
+const FileUploadService = require('../../domain/services/fileUploadService');
 
 /**
  * Shipment Order Controller
@@ -15,10 +18,12 @@ class ShipmentOrderController {
    * Constructor
    * @param {ShipmentOrderRepository} shipmentOrderRepository - Repository for shipment orders
    * @param {ServiceAreaRepository} serviceAreaRepository - Repository for service areas
+   * @param {DocumentGenerationService} documentGenerationService - Service for generating documents
    */
-  constructor(shipmentOrderRepository, serviceAreaRepository) {
+  constructor(shipmentOrderRepository, serviceAreaRepository, documentGenerationService) {
     this.shipmentOrderRepository = shipmentOrderRepository;
     this.serviceAreaRepository = serviceAreaRepository;
+    this.documentGenerationService = documentGenerationService;
   }
 
   /**
@@ -444,22 +449,27 @@ class ShipmentOrderController {
   async generateWaybillDocument(req, res, next) {
     try {
       const { id } = req.params;
-
-      // Check if shipment order exists
-      const shipmentOrder = await this.shipmentOrderRepository.findById(id);
-      if (!shipmentOrder) {
-        throw new NotFoundError('Shipment order not found');
-      }
-
-      // TODO: Generate PDF document
-      // This would typically involve a PDF generation service
-      // For now, we'll just return the shipment order data
-
-      res.status(200).json({
+      const user = req.user;
+      // Generate waybill document (PDF) via DocumentGenerationService
+      const document = await this.documentGenerationService.generateDocument(
+        id,
+        'waybill',
+        {},
+        user
+      );
+      res.status(201).json({
         success: true,
         data: {
-          shipmentOrder,
-          message: 'Waybill document generation endpoint (PDF generation to be implemented)',
+          document: {
+            documentId: document.documentId,
+            documentType: document.documentType,
+            waybillNumber: document.waybillNumber,
+            fileUrl: document.fileUrl,
+            accessToken: document.accessToken,
+            createdAt: document.createdAt,
+          },
+          viewUrl: `${req.protocol}://${req.get('host')}/api/documents/view/${document.accessToken}`,
+          downloadUrl: `${req.protocol}://${req.get('host')}/api/documents/download/${document.accessToken}`,
         },
       });
     } catch (error) {

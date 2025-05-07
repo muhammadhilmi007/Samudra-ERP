@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Samudra Paket ERP CI/CD Pipeline
 
 on:
   push:
@@ -6,7 +6,27 @@ on:
   pull_request:
     branches: [main, develop]
 
+env:
+  NODE_VERSION: '18'
+
 jobs:
+  lint-type-check:
+    name: Lint and Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Lint
+        run: yarn lint
+      - name: Type check
+        run: yarn check-types
+
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -15,20 +35,16 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
       - name: Install dependencies
         run: yarn install --frozen-lockfile
-      - name: Lint
-        run: yarn lint
-      - name: Type check
-        run: yarn check-types
       - name: Test
         run: yarn test
 
   build:
     name: Build
-    needs: test
+    needs: [lint-type-check, test]
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
     steps:
@@ -36,37 +52,89 @@ jobs:
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
       - name: Install dependencies
         run: yarn install --frozen-lockfile
       - name: Build
-        run: yarn build
+        run: yarn build:railway
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: |
+            apps/backend/dist
+            apps/frontend/.next
+            apps/mobile/dist
 
-  deploy-staging:
-    name: Deploy to Staging
+  deploy-backend-staging:
+    name: Deploy Backend to Staging
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/develop'
     steps:
       - uses: actions/checkout@v3
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
       - name: Install Railway CLI
         run: npm i -g @railway/cli
-      - name: Deploy to Railway Staging
-        run: railway up --service backend-staging
+      - name: Deploy Backend to Railway Staging
+        run: railway up --service samudra-backend-staging
         env:
-          RAILWAY_TOKEN: 8de02fcf-1b95-40c1-b7d1-643352a53de1
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
-  deploy-production:
-    name: Deploy to Production
+  deploy-frontend-staging:
+    name: Deploy Frontend to Staging
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
+      - name: Deploy Frontend to Railway Staging
+        run: railway up --service samudra-frontend-staging
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+  deploy-backend-production:
+    name: Deploy Backend to Production
     needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
       - name: Install Railway CLI
         run: npm i -g @railway/cli
-      - name: Deploy to Railway Production
-        run: railway up --service backend-production
+      - name: Deploy Backend to Railway Production
+        run: railway up --service samudra-backend-production
         env:
-          RAILWAY_TOKEN: 8de02fcf-1b95-40c1-b7d1-643352a53de1
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+  deploy-frontend-production:
+    name: Deploy Frontend to Production
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: build-artifacts
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
+      - name: Deploy Frontend to Railway Production
+        run: railway up --service samudra-frontend-production
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

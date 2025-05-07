@@ -1,10 +1,10 @@
 import React from 'react';
-import { Metadata } from 'next';
+import { metadata as Metadata } from 'next';
 import PickupTrackingDashboard from '@/components/organisms/pickup/PickupTrackingDashboard';
 
 export const metadata = {
-  title: 'Pickup Tracking - Samudra Paket',
-  description: 'Real-time tracking and monitoring of pickup operations in the Samudra Paket ERP system',
+  title: 'Lacak Pengambilan',
+  description: 'Lacak status pengambilan paket',
 };
 
 /**

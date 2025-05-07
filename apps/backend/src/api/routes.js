@@ -11,6 +11,7 @@ const router = express.Router();
 const authController = require('./controllers/authController');
 const packageController = require('./controllers/packageController');
 const customerController = require('./controllers/customerController');
+const healthController = require('./controllers/healthController');
 
 // Import middleware
 const { authenticate, authorizePermissions } = require('./middleware/authMiddleware');
@@ -18,6 +19,9 @@ const { validateRequest, schemas } = require('./middleware/gateway/requestValida
 
 // Documentation route
 router.use('/docs', express.static('public/docs'));
+
+// Health check route
+router.get('/health', healthController.checkHealth);
 
 // Auth routes
 router.post('/auth/register', validateRequest(schemas.register), authController.register);

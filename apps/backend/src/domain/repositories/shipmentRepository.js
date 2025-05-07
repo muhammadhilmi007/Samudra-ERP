@@ -10,6 +10,7 @@ const Vehicle = require('../models/vehicle');
 const Employee = require('../models/employee');
 const Branch = require('../models/branch');
 const logger = require('../../api/middleware/gateway/logger');
+const { ValidationError } = require('../utils/errorUtils');
 
 /**
  * Create a new shipment

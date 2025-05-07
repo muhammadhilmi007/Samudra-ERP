@@ -10,6 +10,7 @@ const PickupRequest = require('../../../src/domain/models/pickupRequest');
 const Branch = require('../../../src/domain/models/branch');
 const User = require('../../../src/domain/models/user');
 const Customer = require('../../../src/domain/models/customer');
+const NotificationService = require('../../../src/domain/services/notificationService');
 
 let mongoServer;
 
@@ -143,6 +144,23 @@ describe('Pickup Request Repository', () => {
       expect(pickupRequest.items.length).toBe(1);
       expect(pickupRequest.activityHistory.length).toBe(1);
       expect(pickupRequest.activityHistory[0].action).toBe('created');
+
+      // Kirim notifikasi ke customer
+      const notificationService = new NotificationService();
+      await notificationService.sendNotification({
+        recipient: pickupRequest.customer,
+        type: 'pickup_request_created',
+        entityType: 'PickupRequest',
+        entityId: pickupRequest._id,
+        title: 'Pickup Request Berhasil Dibuat',
+        message: `Pickup request dengan kode ${pickupRequest.code} telah berhasil dibuat dan akan segera diproses.`,
+        channels: ['inApp', 'email'],
+        data: {
+          pickupRequestId: pickupRequest._id,
+          scheduledDate: pickupRequest.scheduledDate,
+          branch: pickupRequest.branch,
+        },
+      });
     });
 
     test('should throw error when required fields are missing', async () => {

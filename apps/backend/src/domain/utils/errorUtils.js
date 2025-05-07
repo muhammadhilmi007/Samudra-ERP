@@ -3,8 +3,30 @@
  * Utility functions for handling API errors
  */
 
-const NotFoundError = require('./errors/NotFoundError');
-const ValidationError = require('./errors/ValidationError');
+class ApplicationError extends Error {
+  constructor(message, code, status, details = {}) {
+    super(message);
+    this.name = this.constructor.name;
+    this.code = code || 'APPLICATION_ERROR';
+    this.status = status || 500;
+    this.details = details;
+    Error.captureStackTrace(this, this.constructor);
+  }
+}
+
+class NotFoundError extends ApplicationError {
+  constructor(resource, id) {
+    super(`${resource} dengan ID ${id} tidak ditemukan`, 'RESOURCE_NOT_FOUND', 404);
+    this.details = { resource, id };
+  }
+}
+
+class UnauthorizedError extends ApplicationError {
+  constructor(action) {
+    super(`Tidak diizinkan mengakses ${action}`, 'UNAUTHORIZED_ACCESS', 403);
+    this.details = { action };
+  }
+}
 
 /**
  * Create a standardized API error response
@@ -23,7 +45,8 @@ const createApiError = (code, message, details = {}) => ({
 });
 
 module.exports = {
-  createApiError,
+  ApplicationError,
   NotFoundError,
-  ValidationError,
+  UnauthorizedError,
+  createApiError,
 };

@@ -52,6 +52,7 @@ export interface Position {
 }
 
 export interface PositionListParams {
+  branch: string;
   page?: number;
   limit?: number;
   search?: string;

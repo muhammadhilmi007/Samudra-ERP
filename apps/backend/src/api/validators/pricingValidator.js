@@ -4,7 +4,7 @@
  */
 
 const { body, param, query, validationResult } = require('express-validator');
-const { ValidationError } = require('../../domain/utils/errors');
+const { ValidationError } = require('../../domain/utils/errorUtils');
 
 /**
  * Validate request data

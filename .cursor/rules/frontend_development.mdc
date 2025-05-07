@@ -1,0 +1,182 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Pengembangan Frontend Samudra Paket ERP
+
+## Arsitektur Frontend
+
+### Atomic Design
+
+Frontend mengikuti metodologi Atomic Design:
+
+1. **Atoms**
+   - Komponen dasar (Button, Input, Text)
+   - Tidak dapat dipecah lebih lanjut
+   - Dapat digunakan kembali
+
+2. **Molecules**
+   - Kombinasi atoms (Form, Card, List)
+   - Memiliki fungsi spesifik
+   - Dapat digunakan kembali
+
+3. **Organisms**
+   - Kombinasi molecules (Header, Footer, Sidebar)
+   - Komponen kompleks
+   - Dapat digunakan kembali
+
+4. **Templates**
+   - Tata letak halaman
+   - Struktur dasar
+   - Placeholder untuk konten
+
+5. **Pages**
+   - Implementasi template
+   - Konten spesifik
+   - Data fetching
+
+## State Management
+
+### Redux Toolkit
+- Global state management
+- Slices untuk setiap fitur
+- Async thunks untuk API calls
+- Selectors untuk data access
+
+### React Query
+- Server state management
+- Caching & invalidation
+- Optimistic updates
+- Infinite scrolling
+
+## Form Handling
+
+### React Hook Form
+- Form state management
+- Validasi form
+- Error handling
+- Performance optimization
+
+### Zod Validation
+- Schema validation
+- Type inference
+- Error messages
+- Custom validators
+
+## Styling
+
+### Tailwind CSS
+- Utility-first CSS
+- Custom color palette
+- Responsive design
+- Dark mode support
+
+### Custom Components
+- Komponen yang dapat digunakan kembali
+- Props interface
+- Variants & states
+- Accessibility
+
+## Routing
+
+### Next.js Pages
+- File-based routing
+- Dynamic routes
+- API routes
+- Middleware
+
+### Navigation
+- Client-side navigation
+- Route guards
+- Loading states
+- Error boundaries
+
+## Testing
+
+### Unit Testing
+- Jest & React Testing Library
+- Component testing
+- Hook testing
+- Utility testing
+
+### Integration Testing
+- Cypress
+- User flows
+- API integration
+- State management
+
+### E2E Testing
+- Playwright
+- Critical paths
+- Cross-browser testing
+- Performance testing
+
+## Performance
+
+### Code Splitting
+- Dynamic imports
+- Route-based splitting
+- Component-based splitting
+- Preloading
+
+### Optimization
+- Image optimization
+- Font optimization
+- Bundle analysis
+- Caching strategy
+
+## Accessibility
+
+### WCAG 2.1 Level AA
+- Semantic HTML
+- ARIA attributes
+- Keyboard navigation
+- Screen reader support
+
+### Testing
+- Lighthouse
+- Axe
+- Manual testing
+- User testing
+
+## Mobile Development
+
+### React Native
+- Cross-platform development
+- Native components
+- Platform-specific code
+- Performance optimization
+
+### Expo
+- Development workflow
+- OTA updates
+- Build process
+- Distribution
+
+## Best Practices
+
+### Code Organization
+- Feature-based structure
+- Shared components
+- Custom hooks
+- Utility functions
+
+### TypeScript
+- Type safety
+- Interface definitions
+- Generic types
+- Type guards
+
+### Error Handling
+- Error boundaries
+- Error logging
+- User feedback
+- Recovery strategies
+
+### Documentation
+- Component documentation
+- API documentation
+- Usage examples
+- Type definitions
+

@@ -4,8 +4,8 @@
  */
 
 const pickupItemRepository = require('../../domain/repositories/pickupItemRepository');
-const { createApiError } = require('../../utils/apiError');
-const logger = require('../../utils/logger');
+const { createApiError } = require('../../infrastructure/errors/ApiError');
+const logger = require('../middleware/gateway/logger');
 
 /**
  * Create a new pickup item

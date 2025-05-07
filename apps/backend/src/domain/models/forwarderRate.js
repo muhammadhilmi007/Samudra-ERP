@@ -58,11 +58,11 @@ class ForwarderRate {
 
     if (!this.forwarder) errors.forwarder = 'ID forwarder wajib diisi';
 
-    if (!this.originArea.province) errors['originArea.province'] = 'Provinsi asal wajib diisi';
-    if (!this.originArea.city) errors['originArea.city'] = 'Kota asal wajib diisi';
+    if (!this.originArea.province) errors.originArea = { province: 'Provinsi asal wajib diisi' };
+    if (!this.originArea.city) errors.originArea = { ...errors.originArea, city: 'Kota asal wajib diisi' };
 
-    if (!this.destinationArea.province) errors['destinationArea.province'] = 'Provinsi tujuan wajib diisi';
-    if (!this.destinationArea.city) errors['destinationArea.city'] = 'Kota tujuan wajib diisi';
+    if (!this.destinationArea.province) errors.destinationArea = { province: 'Provinsi tujuan wajib diisi' };
+    if (!this.destinationArea.city) errors.destinationArea = { ...errors.destinationArea, city: 'Kota tujuan wajib diisi' };
 
     if (this.rate <= 0) errors.rate = 'Tarif harus lebih dari 0';
     if (this.minWeight <= 0) errors.minWeight = 'Berat minimum harus lebih dari 0';

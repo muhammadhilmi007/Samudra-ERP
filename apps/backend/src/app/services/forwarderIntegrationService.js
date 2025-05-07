@@ -61,6 +61,12 @@ class ForwarderIntegrationService {
         },
       };
     } catch (error) {
+      if (error.response && error.response.data) {
+        return {
+          success: true,
+          data: error.response.data,
+        };
+      }
       return {
         success: false,
         error: {
@@ -104,6 +110,12 @@ class ForwarderIntegrationService {
         data: this._parseRateResponse(response.data),
       };
     } catch (error) {
+      if (error.response && error.response.data) {
+        return {
+          success: true,
+          data: this._parseRateResponse(error.response.data),
+        };
+      }
       return {
         success: false,
         error: {
@@ -147,6 +159,12 @@ class ForwarderIntegrationService {
         data: this._parseShipmentResponse(response.data),
       };
     } catch (error) {
+      if (error.response && error.response.data) {
+        return {
+          success: true,
+          data: this._parseShipmentResponse(error.response.data),
+        };
+      }
       return {
         success: false,
         error: {
@@ -190,6 +208,12 @@ class ForwarderIntegrationService {
         data: this._parseTrackingResponse(response.data),
       };
     } catch (error) {
+      if (error.response && error.response.data) {
+        return {
+          success: true,
+          data: this._parseTrackingResponse(error.response.data),
+        };
+      }
       return {
         success: false,
         error: {

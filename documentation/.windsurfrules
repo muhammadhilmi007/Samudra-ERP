@@ -1,0 +1,39 @@
+# Samudra Paket ERP System Development Rules
+
+## Architecture & Structure
+- Follow the microservice architecture with API-Gateway as specified in the Backend Structure Document
+- Maintain hexagonal architecture for each microservice (API, Business Logic, Data Access, Infrastructure layers)
+- Use the defined monorepo structure with Turborepo as in File Structure Document
+- Implement the file naming conventions from File Structure Document (kebab-case for directories, camelCase for files)
+
+## Frontend Development
+- Frontend must follow Atomic Design methodology (atoms, molecules, organisms, templates, pages)
+- Style using Tailwind CSS with the defined color palette (Primary: #2563EB, Secondary: #10B981, etc.)
+- Use Next.js for web and React Native (Expo) for mobile applications
+- Follow mobile-first responsive design approach with defined breakpoints
+- Implement the state management strategy using Redux Toolkit for global state and React Query for server state
+- Create comprehensive form handling with React Hook Form and Zod validation
+- Design all UI with WCAG 2.1 Level AA compliance in mind
+
+## Backend Development
+- Implement REST API principles with consistent request/response format
+- Develop with Node.js and Express.js using the defined service structure
+- Use MongoDB with Mongoose for data modeling and validation
+- Create comprehensive API documentation with Swagger/OpenAPI
+- Follow the error handling strategy with standardized error responses
+- Implement JWT-based authentication with RBAC authorization
+- Design APIs with proper semantic status codes (200, 201, 400, 401, 403, 404, 500)
+
+## Mobile Development
+- Design mobile apps with offline-first functionality using WatermelonDB
+- Implement device integration features (camera, GPS, Bluetooth, signature capture)
+- Follow the specified UI components and screens for each role-specific app
+- Use React Native with TypeScript and Expo SDK
+- Optimize for battery life and data usage for field conditions
+- Implement secure data synchronization with conflict resolution
+- Support both online and offline operations for field staff
+
+## Project Implementation
+- Follow the defined timeline and phasing from Project Detail Document
+- Implement success metrics tracking as defined in Project Detail Document
+- Address risk mitigation strategies for identified project risks

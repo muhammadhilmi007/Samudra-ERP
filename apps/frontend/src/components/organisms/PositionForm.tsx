@@ -12,7 +12,7 @@ import divisionService from '../../services/divisionService';
 import branchService from '../../services/branchService';
 import FormField from '../atoms/FormField';
 import Button from '../atoms/Button';
-import Select from '../atoms/Select';
+import {Select} from '../atoms/Select';
 
 // Define form schema
 const positionSchema = z.object({
@@ -76,7 +76,10 @@ const PositionForm: React.FC<PositionFormProps> = ({ initialData, isEdit = false
   // Fetch positions for parent position dropdown
   const { data: positionsData } = useQuery({
     queryKey: ['positions'],
-    queryFn: () => positionService.getPositions({ limit: 100 }),
+    queryFn: () => positionService.getPositions({
+      limit: 100,
+      branch: ''
+    }),
   });
 
   // Form setup

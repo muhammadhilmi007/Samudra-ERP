@@ -1,0 +1,85 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Struktur Proyek Samudra Paket ERP
+
+## Struktur Monorepo
+
+Proyek ini menggunakan struktur monorepo dengan Turborepo untuk mengelola berbagai paket dan aplikasi:
+
+```
+/samudra-paket-erp/
+├── /apps/                    # Direktori aplikasi
+│   ├── /web/                 # Aplikasi web (Next.js)
+│   ├── /mobile/              # Aplikasi mobile (React Native/Expo)
+│   ├── /api-gateway/         # Layanan API Gateway
+│   └── /services/            # Direktori microservices
+├── /packages/                # Direktori paket bersama
+│   ├── /ui/                  # Komponen UI bersama
+│   ├── /config/              # Konfigurasi bersama
+│   ├── /tsconfig/            # Konfigurasi TypeScript
+│   ├── /eslint-config/       # Konfigurasi ESLint
+│   └── /utils/               # Utilitas bersama
+```
+
+## Konvensi Penamaan File
+
+- Direktori: kebab-case (contoh: `/example-directory/`)
+- File: camelCase (contoh: `exampleFile.js`)
+- Komponen React: PascalCase (contoh: `ExampleComponent.jsx`)
+- Utilitas: camelCase (contoh: `exampleUtil.js`)
+- Variabel lingkungan: snake_case (contoh: `EXAMPLE_ENV_VAR`)
+
+## Struktur Aplikasi Web
+
+```
+/apps/web/
+├── /src/
+│   ├── /components/          # Komponen UI yang dapat digunakan kembali
+│   │   ├── /atoms/          # Blok bangunan dasar
+│   │   ├── /molecules/      # Kombinasi atom
+│   │   ├── /organisms/      # Komponen UI kompleks
+│   │   └── /templates/      # Tata letak halaman
+│   ├── /features/           # Modul berbasis fitur
+│   ├── /hooks/              # Custom React hooks
+│   ├── /pages/              # Halaman Next.js
+│   ├── /services/           # Integrasi layanan API
+│   └── /store/              # Konfigurasi Redux store
+```
+
+## Struktur Microservice
+
+```
+/apps/services/example-service/
+├── /src/
+│   ├── /api/                # Layer API
+│   ├── /domain/             # Layer Domain
+│   ├── /infrastructure/     # Layer Infrastruktur
+│   └── /app/                # Layer Aplikasi
+```
+
+## Impor Absolut
+
+Proyek menggunakan impor absolut untuk keterbacaan dan pemeliharaan yang lebih baik:
+
+```typescript
+// Backend
+import { someUtil } from '@shared/utils';
+import { SomeModel } from '@domain/models';
+
+// Frontend
+import { Button } from '@components/atoms';
+import { useAuth } from '@hooks/auth';
+```
+
+## Pengaturan Lingkungan Pengembangan
+
+1. Clone repositori
+2. Install PNPM: `npm install -g pnpm`
+3. Install dependencies: `pnpm install`
+4. Salin file .env: `cp .env.example .env`
+5. Jalankan server pengembangan: `pnpm dev`
+
+

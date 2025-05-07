@@ -3,7 +3,7 @@
  * Tests business logic for permission management
  */
 
-const PermissionService = require('../../../../src/app/services/permissionService');
+const PermissionService = require('../../../../src/index/services/permissionService');
 const PermissionRepository = require('../../../../src/domain/repositories/permissionRepository');
 const RoleRepository = require('../../../../src/domain/repositories/roleRepository');
 

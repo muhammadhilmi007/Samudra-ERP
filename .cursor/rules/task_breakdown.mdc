@@ -1,0 +1,201 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Task Breakdown dan Implementasi
+
+## Timeline Proyek
+
+### Fase 1: Foundation (Bulan 1-2)
+- Setup infrastruktur dan DevOps
+- Implementasi autentikasi dan otorisasi
+- Manajemen cabang dan divisi
+- Manajemen pegawai
+- Komponen frontend dasar
+
+### Fase 2: Operasional Inti (Bulan 3-4)
+- Modul pengambilan barang
+- Penjualan dan pembuatan resi
+- Muat dan langsir barang
+- Tracking dan monitoring
+- Aplikasi mobile dasar
+
+### Fase 3: Keuangan & Pelaporan (Bulan 5-6)
+- Manajemen kas dan bank
+- Akuntansi dan pembukuan
+- Penagihan dan koleksi
+- HRD dan pelaporan
+- Dashboard dan visualisasi
+
+### Fase 4: Mobile Apps (Bulan 7)
+- Penyempurnaan aplikasi mobile
+- Integrasi fitur lanjutan
+- Optimasi performa
+- Testing dan debugging
+
+### Fase 5: Optimasi & Penyempurnaan (Bulan 8)
+- Modul retur dan HRD
+- Integrasi sistem
+- Optimasi performa
+- Hardening keamanan
+- Persiapan go-live
+
+## Struktur Task
+
+### Backend Development
+```typescript
+// Contoh struktur service
+class ShipmentService {
+  // CRUD operations
+  async createShipment(data: ShipmentDTO): Promise<Shipment> {
+    // Validasi data
+    // Proses bisnis
+    // Simpan ke database
+    // Kirim notifikasi
+  }
+
+  // Business logic
+  async calculatePrice(data: PriceCalculationDTO): Promise<Price> {
+    // Hitung berdasarkan berat
+    // Hitung berdasarkan jarak
+    // Terapkan diskon
+    // Hitung total
+  }
+
+  // Integration
+  async syncWithExternalSystem(data: SyncDTO): Promise<void> {
+    // Validasi data
+    // Transformasi format
+    // Kirim ke sistem eksternal
+    // Update status
+  }
+}
+```
+
+### Frontend Development
+```typescript
+// Contoh struktur komponen
+const ShipmentForm = () => {
+  // State management
+  const [formData, setFormData] = useState<ShipmentFormData>({});
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Form handling
+  const handleSubmit = async (data: ShipmentFormData) => {
+    try {
+      setLoading(true);
+      await createShipment(data);
+      showSuccessMessage('Pengiriman berhasil dibuat');
+      navigate('/shipments');
+    } catch (error) {
+      setError(error.message);
+      showErrorMessage('Gagal membuat pengiriman');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Form onSubmit={handleSubmit}>
+      {/* Form fields */}
+    </Form>
+  );
+};
+```
+
+### Mobile Development
+```typescript
+// Contoh struktur screen
+const PickupScreen = () => {
+  // State management
+  const [pickups, setPickups] = useState<Pickup[]>([]);
+  const [isOffline, setIsOffline] = useState(false);
+
+  // Data fetching
+  const fetchPickups = async () => {
+    try {
+      const data = await api.getPickups();
+      setPickups(data);
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  // Offline handling
+  const handleOfflineAction = async (action: () => Promise<void>) => {
+    if (isOffline) {
+      await queueAction(action);
+      showOfflineMessage();
+    } else {
+      await action();
+    }
+  };
+
+  return (
+    <Screen>
+      {/* UI components */}
+    </Screen>
+  );
+};
+```
+
+## Metrik Monitoring
+
+### Metrik Operasional
+- Uptime sistem: 99.9%
+- Response time API: < 500ms
+- Rate transaksi sukses: > 99.5%
+- Rate sinkronisasi mobile: > 98%
+- Pengurangan waktu proses: 30%
+
+### Metrik Adopsi Pengguna
+- Persentase pengguna aktif: > 90%
+- Tingkat utilisasi fitur
+- Statistik penggunaan mobile
+- Tingkat penyelesaian pelatihan
+- Skor kepuasan pengguna: > 8/10
+
+### Metrik Dampak Bisnis
+- Pengurangan waktu proses manual: 40%
+- Peningkatan cash flow: 15%
+- Pengurangan error penagihan: 90%
+- Peningkatan on-time delivery: 25%
+- Pengurangan biaya operasional: 15%
+- Peningkatan akurasi data: 95%
+
+## Tech Stack
+
+### Backend
+- Runtime: Node.js
+- Framework: Express.js
+- Database: MongoDB
+- Cache: Redis
+- Auth: JWT
+- API Docs: Swagger/OpenAPI
+
+### Frontend
+- Framework: Next.js
+- State: Redux Toolkit
+- Styling: Tailwind CSS
+- Data Fetching: React Query
+- Forms: React Hook Form
+- Charts: Recharts
+
+### Mobile
+- Framework: React Native (Expo)
+- Language: TypeScript
+- State: Redux
+- Storage: WatermelonDB
+- Maps: React Native Maps
+- Features: Expo Camera, Location
+
+### DevOps
+- Platform: Railway.app
+- CI/CD: GitHub Actions
+- Monitoring: Railway
+- Logging: Railway
+- Database: MongoDB
+- Cache: Redis
+

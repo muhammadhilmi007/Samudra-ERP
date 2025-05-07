@@ -1,0 +1,165 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Sistem Prompt dan Pesan
+
+## Panduan Umum
+
+### Prinsip Dasar
+- Kejelasan: Semua prompt harus jelas dan tidak ambigu
+- Konsistensi: Gunakan terminologi dan nada yang konsisten
+- Keringkasan: Pesan harus singkat namun informatif
+- Bantuan: Berikan panduan untuk menyelesaikan masalah
+- Kesopanan: Pertahankan nada profesional dan hormat
+- Lokalisasi: Dukungan Bahasa Indonesia dan Inggris
+
+## Jenis Pesan Sistem
+
+### Pesan Sukses
+- Konfirmasi aksi yang berhasil diselesaikan
+- Format: "{Item} telah berhasil {action}"
+- Durasi toast: 3000ms
+- Contoh:
+  - "Anda telah berhasil masuk"
+  - "Pengiriman telah berhasil dibuat"
+  - "Perubahan telah berhasil disimpan"
+
+### Pesan Error
+- Informasi kegagalan aksi dan panduan penyelesaian
+- Format: "Gagal {action}. {guidance}"
+- Durasi toast: 10000ms
+- Kode error standar:
+  - AUTH001: Kredensial tidak valid
+  - AUTH002: Akun terkunci
+  - AUTH003: Sesi berakhir
+  - AUTH004: Izin tidak cukup
+  - VAL001: Field wajib kosong
+  - VAL002: Format tidak valid
+  - VAL003: Nilai di luar rentang
+  - VAL004: Entri duplikat
+
+### Pesan Peringatan
+- Peringatan potensi masalah atau konsekuensi
+- Format: "Peringatan: {message}"
+- Durasi toast: 7000ms
+- Contoh:
+  - "Anda memiliki perubahan yang belum disimpan"
+  - "Tindakan ini tidak dapat dibatalkan"
+  - "Stok di bawah ambang batas minimum"
+
+### Pesan Informasi
+- Konteks atau detail tambahan
+- Format: "{message}"
+- Durasi toast: 5000ms
+- Contoh:
+  - "Memuat data. Harap tunggu..."
+  - "Menampilkan 10 dari 100 item"
+  - "Terakhir disinkronkan: 10:00"
+
+## Implementasi
+
+### Komponen Dialog
+```typescript
+// ConfirmationDialog
+<ConfirmationDialog
+  title="Hapus Item"
+  message="Apakah Anda yakin ingin menghapus item ini? Tindakan ini tidak dapat dibatalkan."
+  confirmButtonText="Hapus"
+  cancelButtonText="Batal"
+  onConfirm={() => handleDelete()}
+  onCancel={() => closeDialog()}
+/>
+
+// InformationDialog
+<InformationDialog
+  title="Pemberitahuan Pemeliharaan"
+  message="Sistem akan mengalami pemeliharaan pada 15 Juli 2025, pukul 22:00 - 02:00."
+  buttonText="Mengerti"
+  onClose={() => closeDialog()}
+/>
+
+// ErrorDialog
+<ErrorDialog
+  title="Operasi Gagal"
+  message="Kami tidak dapat menyelesaikan permintaan Anda karena terjadi kesalahan."
+  errorDetails={errorDetails}
+  errorCode="SRV002"
+  buttonText="Tutup"
+  reportButtonText="Laporkan Masalah"
+  onClose={() => closeDialog()}
+  onReport={() => reportIssue()}
+/>
+```
+
+### Lokalisasi
+```typescript
+// en.json
+{
+  "login": {
+    "success": "You have successfully logged in.",
+    "failed": "Login failed. Please check your username and password."
+  }
+}
+
+// id.json
+{
+  "login": {
+    "success": "Anda telah berhasil masuk.",
+    "failed": "Gagal masuk. Silakan periksa nama pengguna dan kata sandi Anda."
+  }
+}
+```
+
+### Penggunaan
+```typescript
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+
+const CreateItemForm = () => {
+  const { t } = useTranslation();
+
+  const handleSubmit = async (data) => {
+    try {
+      const result = await createItem(data);
+      toast.success(t('item.created', { item: 'Produk' }));
+    } catch (error) {
+      toast.error(t('error.general', { code: error.code }));
+    }
+  };
+};
+```
+
+## Modul Spesifik
+
+### Modul Pengiriman
+- Pesan sukses:
+  - "Pengiriman #{id} telah berhasil dibuat"
+  - "Resi/STT #{id} telah berhasil dibuat"
+  - "Pengiriman #{id} sedang dalam proses pengiriman"
+- Pesan error:
+  - "Alamat pengiriman tidak dapat ditemukan"
+  - "Tidak ada pengemudi yang tersedia"
+  - "Perbedaan berat terdeteksi"
+
+### Modul Keuangan
+- Pesan sukses:
+  - "Faktur #{id} telah dibuat"
+  - "Pembayaran sebesar {amount} telah diterima"
+  - "Transaksi #{id} telah berhasil dicatat"
+- Pesan error:
+  - "Pembayaran terlambat {days} hari"
+  - "Pelanggan telah mencapai batas kredit"
+  - "Saldo tidak mencukupi"
+
+### Modul Mobile
+- Pesan sistem:
+  - "Izin lokasi diperlukan untuk fitur ini"
+  - "Anda dalam mode offline"
+  - "Sinkronisasi data diperlukan"
+- Pesan error:
+  - "Baterai lemah"
+  - "Sinyal GPS hilang"
+  - "Versi baru tersedia"
+

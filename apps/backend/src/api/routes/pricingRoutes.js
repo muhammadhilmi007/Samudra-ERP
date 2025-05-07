@@ -7,7 +7,7 @@ const express = require('express');
 const PricingController = require('../controllers/pricingController');
 const MongoPricingRuleRepository = require('../../infrastructure/repositories/mongoPricingRuleRepository');
 const { authenticate } = require('../middleware/authMiddleware');
-const { authorize } = require('../middleware/permissionMiddleware');
+const { authorize } = require('../middleware/authorizationMiddleware');
 const {
   validateCreatePricingRule,
   validateUpdatePricingRule,

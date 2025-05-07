@@ -7,9 +7,9 @@
  */
 
 const request = require('supertest');
-const app = require('../../src/app');
+const app = require('../../src/index');
 const mongoose = require('mongoose');
-const { setupTestDB, teardownTestDB } = require('../utils/testDB');
+const { setupTestDB, teardownTestDB } = require('../../src/test-db');
 
 // Test data and variables
 let checkerToken;

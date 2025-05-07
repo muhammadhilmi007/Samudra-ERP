@@ -1,10 +1,10 @@
 import React from 'react';
-import { Metadata } from 'next';
+import Head from 'next/head';
 import PickupDashboard from '../../components/organisms/pickup/PickupDashboard';
 
 export const metadata = {
-  title: 'Pickup Management - Samudra Paket',
-  description: 'Manage pickup requests and assignments for Samudra Paket ERP',
+  title: 'Manajemen Pengambilan',
+  description: 'Kelola proses pengambilan paket',
 };
 
 /**

@@ -3,7 +3,7 @@
  * Handles HTTP requests for branch management
  */
 
-const BranchRepository = require('../../domain/repositories/branchRepository');
+const branchManagementService = require('../../domain/services/branchManagementService');
 const { validateBranchInput, validateDivisionInput } = require('../validators/branchValidator');
 
 /**
@@ -15,7 +15,7 @@ class BranchController {
    * Constructor
    */
   constructor() {
-    this.branchRepository = BranchRepository;
+    this.branchService = branchManagementService;
   }
 
   /**
@@ -40,7 +40,7 @@ class BranchController {
       }
 
       // Check if branch with same code already exists
-      const existingBranch = await this.branchRepository.getBranchByCode(value.code);
+      const existingBranch = await this.branchService.getBranchByCode(value.code);
       if (existingBranch) {
         return res.status(409).json({
           success: false,
@@ -53,7 +53,7 @@ class BranchController {
       }
 
       // Create branch
-      const branch = await this.branchRepository.createBranch(value);
+      const branch = await this.branchService.createBranch(value);
 
       return res.status(201).json({
         success: true,
@@ -132,7 +132,7 @@ class BranchController {
       };
 
       // Get branches
-      const result = await this.branchRepository.getAllBranches(filter, options);
+      const result = await this.branchService.getAllBranches(filter, options);
 
       return res.status(200).json({
         success: true,
@@ -165,7 +165,7 @@ class BranchController {
 
       const populateFields = populate ? populate.split(',') : [];
 
-      const branch = await this.branchRepository.getBranchById(id, populateFields);
+      const branch = await this.branchService.getBranchById(id, populateFields);
 
       if (!branch) {
         return res.status(404).json({
@@ -391,7 +391,7 @@ class BranchController {
       }
 
       // Update branch status
-      const updatedBranch = await this.branchRepository.updateBranchStatus(id, status);
+      const updatedBranch = await this.branchService.updateBranchStatus(id, status);
 
       return res.status(200).json({
         success: true,
@@ -549,7 +549,7 @@ class BranchController {
       }
 
       // Update division
-      const updatedBranch = await this.branchRepository.updateDivision(branchId, divisionId, value);
+      const updatedBranch = await this.branchService.updateDivision(branchId, divisionId, value);
       const updatedDivision = updatedBranch.divisions.find(
         (div) => div._id.toString() === divisionId,
       );

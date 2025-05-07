@@ -4,7 +4,7 @@
  */
 
 const PricingRuleRepository = require('../../domain/repositories/pricingRuleRepository');
-const { NotFoundError, ValidationError } = require('../../domain/utils/errors');
+const { NotFoundError, ValidationError } = require('../../domain/utils/errorUtils');
 
 /**
  * Pricing Controller

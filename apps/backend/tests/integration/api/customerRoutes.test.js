@@ -5,7 +5,7 @@
 
 const request = require('supertest');
 const mongoose = require('mongoose');
-const app = require('../../../src/app');
+const app = require('../../../src/index');
 const Customer = require('../../../src/domain/models/customer');
 const User = require('../../../src/domain/models/user');
 const Branch = require('../../../src/domain/models/branch');

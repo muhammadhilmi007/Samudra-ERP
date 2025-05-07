@@ -85,6 +85,7 @@ describe('PricingRule Model', () => {
         priority: 1,
         isActive: true,
         applicableCustomerTypes: ['retail', 'corporate'],
+        createdBy: new mongoose.Types.ObjectId(),
       };
 
       const pricingRule = new PricingRule(pricingRuleData);
@@ -543,6 +544,7 @@ describe('PricingRule Model', () => {
         basePrice: 50000,
         minimumPrice: 50000,
         taxPercentage: 10,
+        createdBy: new mongoose.Types.ObjectId(),
       });
 
       await pricingRule.save();
@@ -564,13 +566,13 @@ describe('PricingRule Model', () => {
 
   describe('generateCode', () => {
     test('should generate a unique code', async () => {
-      const code = await PricingRuleSchema.generateCode();
-      expect(code).toMatch(/^PR-\d{6}$/);
+      const code = await PricingRule.generateCode();
+      expect(code).toMatch(/^PR-\d{8}-\d{3}$/);
     });
 
     test('should generate different codes for multiple calls', async () => {
-      const code1 = await PricingRuleSchema.generateCode();
-      const code2 = await PricingRuleSchema.generateCode();
+      const code1 = await PricingRule.generateCode();
+      const code2 = await PricingRule.generateCode();
       expect(code1).not.toBe(code2);
     });
   });

@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const Notification = require('../models/notification');
 const NotificationTemplate = require('../models/notificationTemplate');
 const NotificationPreference = require('../models/notificationPreference');
-const { NotFoundError, UnauthorizedError } = require('../utils/errors');
+const { NotFoundError, UnauthorizedError } = require('../utils/errorUtils');
 const logger = require('../../api/middleware/gateway/logger');
 
 /**

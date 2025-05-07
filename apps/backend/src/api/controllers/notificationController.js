@@ -8,7 +8,7 @@ const NotificationService = require('../../domain/services/notificationService')
 const EmailService = require('../../domain/services/emailService');
 const SmsService = require('../../domain/services/smsService');
 const PushNotificationService = require('../../domain/services/pushNotificationService');
-const { NotFoundError, UnauthorizedError } = require('../../domain/utils/errors');
+const { NotFoundError, UnauthorizedError } = require('../../domain/utils/errorUtils');
 const logger = require('../middleware/gateway/logger');
 const config = require('../../config/config');
 

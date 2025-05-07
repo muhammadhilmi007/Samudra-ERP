@@ -1,0 +1,320 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Pengembangan Mobile
+
+## Arsitektur Aplikasi
+
+### Struktur Proyek
+```
+/mobile/
+├── /src/
+│   ├── /components/          # Komponen UI yang dapat digunakan kembali
+│   │   ├── /atoms/          # Komponen dasar
+│   │   ├── /molecules/      # Kombinasi atom
+│   │   ├── /organisms/      # Komponen kompleks
+│   │   └── /templates/      # Layout halaman
+│   ├── /screens/            # Halaman aplikasi
+│   ├── /navigation/         # Konfigurasi navigasi
+│   ├── /services/           # Integrasi API
+│   ├── /store/              # State management
+│   ├── /hooks/              # Custom hooks
+│   ├── /utils/              # Fungsi utilitas
+│   └── /assets/             # Gambar, font, dll
+```
+
+## React Native Standards
+
+### Komponen
+- Gunakan functional components dengan hooks
+- Pisahkan styles dari komponen
+- Gunakan platform-specific code dengan platform modules
+- Gunakan react-native-size-matters untuk ukuran konsisten
+- Tangani safe areas dan notches dengan tepat
+
+```typescript
+// Contoh Komponen React Native
+import { Platform, StyleSheet } from 'react-native';
+import { scale, verticalScale } from 'react-native-size-matters';
+
+const Header = ({ title }) => {
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>{title}</Text>
+      {Platform.OS === 'ios' ? (
+        <TouchableOpacity style={styles.iosButton}>
+          <Text>iOS Button</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableNativeFeedback>
+          <View style={styles.androidButton}>
+            <Text>Android Button</Text>
+          </View>
+        </TouchableNativeFeedback>
+      )}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    height: verticalScale(60),
+    paddingHorizontal: scale(16),
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: scale(18),
+    fontWeight: 'bold',
+  },
+  iosButton: {
+    // iOS specific styles
+  },
+  androidButton: {
+    // Android specific styles
+  },
+});
+```
+
+### Performance Optimization
+- Gunakan React.memo untuk komponen yang jarang berubah
+- Hindari anonymous functions di render methods
+- Gunakan useMemo dan useCallback untuk operasi mahal
+- Implementasikan FlatList dengan optimasi untuk list panjang
+- Minimalkan bridge crossings antara JS dan native code
+
+```typescript
+// Contoh Optimasi FlatList
+const UserList = ({ users, onUserSelect }) => {
+  const keyExtractor = useCallback((item) => item.id, []);
+  
+  const renderItem = useCallback(({ item }) => (
+    <UserItem user={item} onPress={onUserSelect} />
+  ), [onUserSelect]);
+  
+  return (
+    <FlatList
+      data={users}
+      renderItem={renderItem}
+      keyExtractor={keyExtractor}
+      initialNumToRender={10}
+      maxToRenderPerBatch={10}
+      windowSize={5}
+      removeClippedSubviews={true}
+    />
+  );
+};
+```
+
+## Offline Support
+
+### WatermelonDB
+- Implementasi offline-first functionality
+- Sinkronisasi data otomatis
+- Penanganan konflik
+- Query builder untuk data lokal
+
+```typescript
+// Contoh WatermelonDB Model
+import { Model } from '@nozbe/watermelondb';
+import { field, date, children } from '@nozbe/watermelondb/decorators';
+
+export default class Shipment extends Model {
+  static table = 'shipments';
+  
+  @field('tracking_number') trackingNumber;
+  @field('status') status;
+  @field('origin') origin;
+  @field('destination') destination;
+  @date('created_at') createdAt;
+  @date('updated_at') updatedAt;
+  
+  @children('delivery_attempts') deliveryAttempts;
+}
+```
+
+### State Persistence
+- Gunakan Redux Persist untuk state persistence
+- Gunakan AsyncStorage untuk penyimpanan sederhana
+- Implementasikan WatermelonDB untuk data kompleks
+- Tangani sinkronisasi state saat online
+- Kelola resolusi konflik untuk perubahan offline
+
+```typescript
+// Contoh Redux Persist Configuration
+import { persistStore, persistReducer } from 'redux-persist';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { configureStore } from '@reduxjs/toolkit';
+import rootReducer from './reducers';
+
+const persistConfig = {
+  key: 'root',
+  storage: AsyncStorage,
+  whitelist: ['auth', 'user', 'settings'],
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
+      },
+    }),
+});
+
+export const persistor = persistStore(store);
+```
+
+## Device Integration
+
+### Camera
+- Implementasi capture foto dan video
+- Optimasi ukuran gambar
+- Kompresi gambar
+- Preview gambar
+
+```typescript
+// Contoh Camera Integration
+import { launchCamera } from 'react-native-image-picker';
+
+const captureImage = async () => {
+  try {
+    const result = await launchCamera({
+      mediaType: 'photo',
+      quality: 0.8,
+      maxWidth: 1024,
+      maxHeight: 1024,
+    });
+    
+    if (result.assets && result.assets[0]) {
+      // Proses gambar
+      const image = result.assets[0];
+      // Upload atau simpan gambar
+    }
+  } catch (error) {
+    console.error('Error capturing image:', error);
+  }
+};
+```
+
+### GPS
+- Implementasi tracking lokasi
+- Geofencing
+- Optimasi penggunaan baterai
+- Penanganan permission
+
+```typescript
+// Contoh GPS Integration
+import Geolocation from '@react-native-community/geolocation';
+
+const getCurrentLocation = () => {
+  return new Promise((resolve, reject) => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        resolve({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      (error) => reject(error),
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 10000,
+      }
+    );
+  });
+};
+```
+
+### Signature Capture
+- Implementasi capture tanda tangan
+- Konversi ke format yang sesuai
+- Validasi tanda tangan
+- Preview tanda tangan
+
+```typescript
+// Contoh Signature Capture
+import SignatureScreen from 'react-native-signature-canvas';
+
+const SignatureCapture = ({ onSave }) => {
+  const handleSignature = (signature) => {
+    // Konversi signature ke base64
+    const base64Data = signature.replace('data:image/png;base64,', '');
+    onSave(base64Data);
+  };
+
+  return (
+    <SignatureScreen
+      onOK={handleSignature}
+      descriptionText="Tanda tangan"
+      clearText="Hapus"
+      confirmText="Simpan"
+      webStyle={`
+        .m-signature-pad--body {
+          border: 1px solid #e8e8e8;
+        }
+        .m-signature-pad--footer {
+          display: flex;
+          justify-content: space-between;
+        }
+      `}
+    />
+  );
+};
+```
+
+## Testing
+
+### Unit Testing
+- Gunakan Jest untuk testing
+- Test komponen dan hooks
+- Mock native modules
+- Test business logic
+
+```typescript
+// Contoh Unit Test
+import { render, fireEvent } from '@testing-library/react-native';
+import UserProfile from './UserProfile';
+
+describe('UserProfile', () => {
+  it('renders user information correctly', () => {
+    const user = {
+      name: 'John Doe',
+      email: 'john@example.com',
+    };
+    
+    const { getByText } = render(<UserProfile user={user} />);
+    
+    expect(getByText('John Doe')).toBeTruthy();
+    expect(getByText('john@example.com')).toBeTruthy();
+  });
+});
+```
+
+### E2E Testing
+- Gunakan Detox untuk E2E testing
+- Test critical user flows
+- Test offline functionality
+- Test device integration
+
+```typescript
+// Contoh Detox Test
+describe('Login Flow', () => {
+  beforeAll(async () => {
+    await device.launchApp();
+  });
+
+  it('should login successfully', async () => {
+    await element(by.id('email')).typeText('test@example.com');
+    await element(by.id('password')).typeText('password123');
+    await element(by.id('loginButton')).tap();
+    
+    await expect(element(by.text('Welcome'))).toBeVisible();
+  });
+});
+```

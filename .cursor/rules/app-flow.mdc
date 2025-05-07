@@ -1,0 +1,38 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Alur Aplikasi Samudra ERP
+
+## Autentikasi
+- Implementasi JWT untuk autentikasi
+- Refresh token untuk sesi yang aman
+- Role-based access control (RBAC)
+- Protected routes untuk akses terbatas
+
+## Manajemen State
+- Global state untuk user session
+- Local state untuk komponen spesifik
+- Caching untuk optimasi performa
+- Error handling terpusat
+
+## Routing
+- Nested routes untuk fitur kompleks
+- Lazy loading untuk optimasi
+- Route guards untuk akses
+- Breadcrumb navigation
+
+## Integrasi API
+- Axios untuk HTTP requests
+- Interceptors untuk auth headers
+- Error handling terpusat
+- Request/response transformers
+
+## Fitur Utama
+- Dashboard dengan real-time updates
+- Manajemen inventory
+- Sistem pembayaran
+- Laporan dan analitik
+- Notifikasi real-time
+

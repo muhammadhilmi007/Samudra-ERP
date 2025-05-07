@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import branchService, { Branch } from '../../services/branchService';
 import FormField from '../molecules/FormField';
 import Button from '../atoms/Button';
-import Select from '../atoms/Select';
+import {Select} from '../atoms/Select';
 
 // Define form schema
 const branchSchema = z.object({

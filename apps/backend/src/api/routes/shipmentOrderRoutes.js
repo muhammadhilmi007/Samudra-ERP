@@ -7,8 +7,11 @@ const express = require('express');
 const ShipmentOrderController = require('../controllers/shipmentOrderController');
 const MongoShipmentOrderRepository = require('../../infrastructure/repositories/mongoShipmentOrderRepository');
 const MongoServiceAreaRepository = require('../../infrastructure/repositories/mongoServiceAreaRepository');
+const MongoWaybillDocumentRepository = require('../../infrastructure/repositories/mongoWaybillDocumentRepository');
+const FileUploadService = require('../../domain/services/fileUploadService');
+const DocumentGenerationService = require('../../domain/services/documentGenerationService');
 const { authenticate } = require('../middleware/authMiddleware');
-const { authorize } = require('../middleware/permissionMiddleware');
+const { authorize } = require('../middleware/authorizationMiddleware');
 const {
   validateCreateShipmentOrder,
   validateUpdateShipmentOrder,
@@ -22,11 +25,38 @@ const {
 // Initialize repositories
 const shipmentOrderRepository = new MongoShipmentOrderRepository();
 const serviceAreaRepository = new MongoServiceAreaRepository();
+const waybillDocumentRepository = new MongoWaybillDocumentRepository();
+const fileUploadService = new FileUploadService();
+
+// Initialize document generation service
+const documentGenerationService = new DocumentGenerationService(
+  waybillDocumentRepository,
+  shipmentOrderRepository,
+  fileUploadService,
+  {
+    tempDir: process.env.TEMP_DIR || './temp',
+    uploadDir: process.env.UPLOAD_DIR || './uploads',
+    baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+    email: {
+      transport: {
+        host: process.env.EMAIL_HOST,
+        port: process.env.EMAIL_PORT,
+        secure: process.env.EMAIL_SECURE === 'true',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      },
+      from: process.env.EMAIL_FROM || 'noreply@samudrapaket.com',
+    },
+  }
+);
 
 // Initialize controller
 const shipmentOrderController = new ShipmentOrderController(
   shipmentOrderRepository,
-  serviceAreaRepository
+  serviceAreaRepository,
+  documentGenerationService
 );
 
 // Create router

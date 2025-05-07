@@ -29,8 +29,9 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 
-// Import database connection
-const { connectToDatabase } = require('./infrastructure/database/connection');
+// Import database and cache configurations
+const { configureMongoDB } = require('./config/database');
+const { configureRedis, cacheMiddleware } = require('./config/cache');
 
 // Import API Gateway middleware
 const {
@@ -87,9 +88,23 @@ const startServer = async () => {
     
     // Connect to database
     console.log('Connecting to MongoDB...');
-    await connectToDatabase();
+    await configureMongoDB(app);
     logger.info('MongoDB connected successfully');
     console.log('MongoDB connected successfully');
+    
+    // Connect to Redis for caching
+    console.log('Connecting to Redis...');
+    const redis = await configureRedis(app);
+    if (redis) {
+      logger.info('Redis connected successfully');
+      console.log('Redis connected successfully');
+      
+      // Apply cache middleware globally with 1-hour expiry
+      app.use(cacheMiddleware(redis, 3600));
+    } else {
+      logger.warn('Redis connection failed or not configured. Caching is disabled.');
+      console.warn('Redis connection failed or not configured. Caching is disabled.');
+    }
 
     // Start Express server
     console.log(`Starting Express server on port ${PORT}...`);

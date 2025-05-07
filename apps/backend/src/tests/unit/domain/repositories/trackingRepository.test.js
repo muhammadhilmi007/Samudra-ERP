@@ -44,13 +44,15 @@ describe('Tracking Repository', () => {
       await trackingRepository.createTrackingEvent(trackingEventData);
 
       // Assert
-      expect(TrackingEvent).toHaveBeenCalledWith(expect.objectContaining({
-        trackingCode: 'WB-12345678',
-        entityType: 'shipment_order',
-        entityId: 'mockEntityId',
-        eventType: 'created',
-        performer: 'mockUserId',
-      }));
+      expect(TrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          trackingCode: 'WB-12345678',
+          entityType: 'shipment_order',
+          entityId: 'mockEntityId',
+          eventType: 'created',
+          performer: 'mockUserId',
+        })
+      );
       expect(mockTrackingEvent.save).toHaveBeenCalled();
     });
 
@@ -73,9 +75,11 @@ describe('Tracking Repository', () => {
       await trackingRepository.createTrackingEvent(trackingEventData);
 
       // Assert
-      expect(TrackingEvent).toHaveBeenCalledWith(expect.objectContaining({
-        trackingCode: 'CUSTOM-CODE',
-      }));
+      expect(TrackingEvent).toHaveBeenCalledWith(
+        expect.objectContaining({
+          trackingCode: 'CUSTOM-CODE',
+        })
+      );
       expect(TrackingEvent.generateTrackingCode).not.toHaveBeenCalled();
     });
 
@@ -96,8 +100,9 @@ describe('Tracking Repository', () => {
       };
 
       // Act & Assert
-      await expect(trackingRepository.createTrackingEvent(trackingEventData))
-        .rejects.toThrow(mockError);
+      await expect(trackingRepository.createTrackingEvent(trackingEventData)).rejects.toThrow(
+        mockError
+      );
     });
   });
 
@@ -119,10 +124,12 @@ describe('Tracking Repository', () => {
       // Assert
       expect(TrackingEvent.find).toHaveBeenCalledWith({ trackingCode: 'WB-12345678' });
       expect(result.data).toEqual(mockEvents);
-      expect(result.pagination).toEqual(expect.objectContaining({
-        totalCount: 10,
-        totalPages: 1,
-      }));
+      expect(result.pagination).toEqual(
+        expect.objectContaining({
+          totalCount: 10,
+          totalPages: 1,
+        })
+      );
     });
 
     it('should apply customer visibility filter if specified', async () => {
@@ -167,7 +174,7 @@ describe('Tracking Repository', () => {
           status: 'processing',
         },
       ];
-      
+
       TrackingEvent.find.mockReturnValue({
         sort: jest.fn().mockReturnThis(),
         populate: jest.fn().mockResolvedValue(mockEvents),
@@ -177,7 +184,7 @@ describe('Tracking Repository', () => {
         _id: 'mockEntityId',
         waybillNo: 'WB12345',
       };
-      
+
       ShipmentOrder.findById.mockReturnValue({
         select: jest.fn().mockResolvedValue(mockShipmentOrder),
       });
@@ -186,9 +193,7 @@ describe('Tracking Repository', () => {
       const result = await trackingRepository.generateTrackingTimeline('WB-12345678');
 
       // Assert
-      expect(TrackingEvent.find).toHaveBeenCalledWith(
-        { trackingCode: 'WB-12345678' }
-      );
+      expect(TrackingEvent.find).toHaveBeenCalledWith({ trackingCode: 'WB-12345678' });
       expect(result.trackingCode).toBe('WB-12345678');
       expect(result.entityType).toBe('shipment_order');
       expect(result.entityId).toBe('mockEntityId');
@@ -202,10 +207,13 @@ describe('Tracking Repository', () => {
         sort: jest.fn().mockReturnThis(),
         populate: jest.fn().mockResolvedValue([]),
       });
+      // Mock ShipmentOrder.findById agar tidak resolve entityDetails
+      ShipmentOrder.findById.mockReturnValue({ select: jest.fn().mockResolvedValue(null) });
 
       // Act & Assert
-      await expect(trackingRepository.generateTrackingTimeline('INVALID-CODE'))
-        .rejects.toThrow('No tracking events found for the provided tracking code');
+      await expect(trackingRepository.generateTrackingTimeline('INVALID-CODE')).rejects.toThrow(
+        'No tracking events found for the provided tracking code'
+      );
     });
   });
 
@@ -218,11 +226,9 @@ describe('Tracking Repository', () => {
         status: 'in_transit',
         location: { coordinates: [0, 0] },
       };
-      
       TrackingEvent.findOne.mockReturnValue({
         sort: jest.fn().mockResolvedValue(mockLatestEvent),
       });
-
       const mockCreatedEvent = { _id: 'newEvent' };
       trackingRepository.createTrackingEvent = jest.fn().mockResolvedValue(mockCreatedEvent);
 
@@ -237,9 +243,8 @@ describe('Tracking Repository', () => {
       // Assert
       expect(TrackingEvent.findOne).toHaveBeenCalledWith({
         entityType: 'shipment',
-        entityId: expect.any(Object),
+        entityId: 'mockEntityId',
       });
-      
       expect(trackingRepository.createTrackingEvent).toHaveBeenCalledWith(expect.objectContaining({
         trackingCode: 'WB-12345678',
         entityType: 'shipment',
@@ -247,7 +252,6 @@ describe('Tracking Repository', () => {
         eventType: 'location_updated',
         status: 'in_transit',
       }));
-      
       expect(result).toBe(mockCreatedEvent);
     });
 
@@ -258,12 +262,14 @@ describe('Tracking Repository', () => {
       });
 
       // Act & Assert
-      await expect(trackingRepository.updateLocation(
-        'shipment',
-        'mockEntityId',
-        { coordinates: { coordinates: [1, 1] } },
-        'mockUserId'
-      )).rejects.toThrow('No tracking events found for shipment with ID mockEntityId');
+      await expect(
+        trackingRepository.updateLocation(
+          'shipment',
+          'mockEntityId',
+          { coordinates: { coordinates: [1, 1] } },
+          'mockUserId'
+        )
+      ).rejects.toThrow('No tracking events found for shipment with ID mockEntityId');
     });
   });
 
@@ -274,35 +280,27 @@ describe('Tracking Repository', () => {
       TrackingEvent.findOne.mockReturnValue({
         sort: jest.fn().mockResolvedValue(mockEvent),
       });
-
-      const mockTimeline = { trackingCode: 'WB-12345678', events: [] };
-      trackingRepository.generateTrackingTimeline = jest.fn().mockResolvedValue(mockTimeline);
+      const mockTimeline = { trackingCode: 'WB-12345678' };
+      const spy = jest.spyOn(trackingRepository, 'generateTrackingTimeline').mockResolvedValue(mockTimeline);
 
       // Act
       const result = await trackingRepository.findTrackingByReference('WB-12345678');
 
       // Assert
       expect(TrackingEvent.findOne).toHaveBeenCalledWith({ trackingCode: 'WB-12345678' });
-      expect(trackingRepository.generateTrackingTimeline).toHaveBeenCalledWith('WB-12345678', true);
+      expect(spy).toHaveBeenCalledWith('WB-12345678', true);
       expect(result).toBe(mockTimeline);
     });
 
     it('should find tracking by shipment order waybill number', async () => {
       // Arrange
-      TrackingEvent.findOne.mockReturnValueOnce({
-        sort: jest.fn().mockResolvedValue(null),
-      });
-
+      TrackingEvent.findOne
+        .mockReturnValueOnce({ sort: jest.fn().mockResolvedValue(null) })
+        .mockReturnValueOnce({ sort: jest.fn().mockResolvedValue({ trackingCode: 'WB-12345678' }) });
       const mockShipmentOrder = { _id: 'mockEntityId' };
       ShipmentOrder.findOne.mockResolvedValue(mockShipmentOrder);
-
-      const mockEvent = { trackingCode: 'WB-12345678' };
-      TrackingEvent.findOne.mockReturnValueOnce({
-        sort: jest.fn().mockResolvedValue(mockEvent),
-      });
-
-      const mockTimeline = { trackingCode: 'WB-12345678', events: [] };
-      trackingRepository.generateTrackingTimeline = jest.fn().mockResolvedValue(mockTimeline);
+      const mockTimeline = { trackingCode: 'WB-12345678', entityType: 'shipment_order', entityId: 'mockEntityId' };
+      const spy = jest.spyOn(trackingRepository, 'generateTrackingTimeline').mockResolvedValue(mockTimeline);
 
       // Act
       const result = await trackingRepository.findTrackingByReference('WB12345');
@@ -313,7 +311,12 @@ describe('Tracking Repository', () => {
         entityType: 'shipment_order',
         entityId: 'mockEntityId',
       });
-      expect(result).toBe(mockTimeline);
+      expect(result).toMatchObject({
+        trackingCode: 'WB-12345678',
+        entityType: 'shipment_order',
+        entityId: 'mockEntityId',
+      });
+      expect(spy).toHaveBeenCalledWith('WB-12345678', true);
     });
 
     it('should throw an error if no tracking information is found', async () => {
@@ -321,15 +324,16 @@ describe('Tracking Repository', () => {
       TrackingEvent.findOne.mockReturnValue({
         sort: jest.fn().mockResolvedValue(null),
       });
-      
+
       ShipmentOrder.findOne.mockResolvedValue(null);
       Shipment.findOne.mockResolvedValue(null);
-      
+
       // Mock other entity lookups as needed
 
       // Act & Assert
-      await expect(trackingRepository.findTrackingByReference('INVALID-REF'))
-        .rejects.toThrow('No tracking information found for the provided reference');
+      await expect(trackingRepository.findTrackingByReference('INVALID-REF')).rejects.toThrow(
+        'No tracking information found for the provided reference'
+      );
     });
   });
 });

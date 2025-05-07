@@ -8,6 +8,7 @@ const OperationalMetric = require('../models/operationalMetric');
 const PerformanceMetric = require('../models/performanceMetric');
 const MonitoringAlert = require('../models/monitoringAlert');
 const logger = require('../../api/middleware/gateway/logger');
+const { ValidationError } = require('../utils/errorUtils');
 
 /**
  * Create a new operational metric

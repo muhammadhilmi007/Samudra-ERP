@@ -6,7 +6,7 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const app = require('../../../src/app');
+const app = require('../../../src/index');
 const PickupAssignment = require('../../../src/domain/models/pickupAssignment');
 const PickupRequest = require('../../../src/domain/models/pickupRequest');
 const Branch = require('../../../src/domain/models/branch');

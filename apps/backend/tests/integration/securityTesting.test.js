@@ -7,7 +7,7 @@
  */
 
 const request = require('supertest');
-const app = require('../../src/app');
+const app = require('../../src/index');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const { setupTestDB, teardownTestDB } = require('../utils/testDB');

@@ -1,6 +1,22 @@
 # Samudra Paket ERP
 
-Enterprise Resource Planning system for PT. Sarana Mudah Raya (Samudra Paket).
+Enterprise Resource Planning system for PT. Sarana Mudah Raya (Samudra Paket), a logistics and shipping company operating throughout Indonesia.
+
+## Tentang Proyek (About the Project)
+
+Samudra Paket ERP adalah sistem terintegrasi yang mencakup seluruh proses bisnis perusahaan, dari pengambilan barang, pemrosesan di cabang, pengiriman antar cabang, penerimaan di cabang tujuan, hingga pengiriman ke penerima serta pengelolaan keuangan dan pelaporan.
+
+### Modul Utama (Main Modules)
+
+1. **Manajemen Cabang & Divisi** - Pengelolaan cabang, area layanan, divisi, dan posisi
+2. **Manajemen Pegawai** - Pengelolaan data pegawai, absensi, dan cuti
+3. **Pengambilan Barang (Pickup)** - Permintaan pickup, penugasan, dan eksekusi
+4. **Penjualan & Pembuatan Resi** - Pembuatan order pengiriman dan perhitungan harga
+5. **Muat & Langsir Barang** - Pengelolaan pemuatan dan pengiriman antar cabang
+6. **Tracking & Monitoring** - Pelacakan kiriman dan notifikasi
+7. **Keuangan & Akuntansi** - Pengelolaan kas, bank, dan pembukuan
+8. **Penagihan** - Pengelolaan piutang dan penagihan
+9. **HRD & Pelaporan** - Pengelolaan SDM dan laporan
 
 ## Project Structure
 
@@ -72,35 +88,68 @@ cd my-turborepo
 pnpm dev
 ```
 
-### Remote Caching
+## Deployment
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+This project is configured for deployment on Railway.app. For detailed setup instructions, see the [Railway Setup Guide](./documentation/RAILWAY-SETUP.md).
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+### Quick Deployment Steps
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+1. Create a Railway project
+2. Set up MongoDB and Redis services
+3. Configure environment variables
+4. Connect to GitHub repository
+5. Deploy the application
 
-```
-cd my-turborepo
-npx turbo login
-```
+### Environment Variables
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+The application requires several environment variables to function properly. See the `.env.example` files in each application directory for the required variables.
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+## Tech Stack
 
-```
-npx turbo link
-```
+### Backend
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **Language**: JavaScript
+- **Database**: MongoDB
+- **Cache**: Redis
+- **Authentication**: JWT
+- **API Documentation**: Swagger/OpenAPI
+
+### Frontend
+- **Framework**: Next.js with React
+- **Language**: JavaScript
+- **State Management**: Redux Toolkit
+- **Styling**: Tailwind CSS
+- **Data Fetching**: React Query
+- **Form Handling**: React Hook Form
+- **Visualization**: Recharts
+
+### Mobile
+- **Framework**: React Native (Expo)
+- **Language**: TypeScript
+- **State Management**: Redux
+- **Offline Storage**: WatermelonDB
+- **Maps**: React Native Maps
+- **Device Features**: Expo Camera, Expo Location
+
+### DevOps
+- **Deployment Platform**: Railway.app
+- **CI/CD**: GitHub Actions (Railway integration)
+- **Monitoring**: Railway built-in monitoring
+- **Logging**: Railway logs
+- **Database**: MongoDB on Railway
+- **Caching**: Redis on Railway
+
+## Project Timeline
+
+- **Durasi Total:** 8 bulan
+- **Pendekatan:** Agile dengan implementasi bertahap (modular)
+- **Go-Live Target:** Akhir bulan ke-8
 
 ## Useful Links
 
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turborepo.com/docs/core-concepts/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+- [Business Requirement Document (BRD)](./documentation/BRD.md)
+- [Software Requirement Specification (SRS)](./documentation/SRS.md)
+- [Technical Design Document (TDD)](./documentation/TDD.md)
+- [Task Breakdown List](./documentation/Task-Breakdown-List.md)
+- [Developer Guidelines](./documentation/DEVELOPER-GUIDELINES.md)

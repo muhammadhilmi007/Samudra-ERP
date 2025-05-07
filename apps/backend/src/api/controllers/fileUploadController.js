@@ -4,8 +4,8 @@
  */
 
 const fileUploadService = require('../../domain/services/fileUploadService');
-const { createApiError } = require('../../utils/apiError');
-const logger = require('../../utils/logger');
+const { createApiError } = require('../../infrastructure/errors/ApiError');
+const logger = require('../../api/middleware/gateway/logger');
 
 /**
  * Upload an image

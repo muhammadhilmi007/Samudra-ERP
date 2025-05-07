@@ -1,0 +1,39 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Panduan Pengembangan Samudra ERP
+
+## Standar Kode
+- Gunakan TypeScript untuk semua file kode baru
+- Ikuti ESLint dan Prettier untuk konsistensi kode
+- Tulis komentar yang jelas untuk fungsi kompleks
+- Gunakan async/await untuk operasi asynchronous
+- Hindari penggunaan any type di TypeScript
+
+## Komponen React
+- Gunakan functional components dengan hooks
+- Pisahkan logika bisnis ke custom hooks
+- Gunakan prop-types atau TypeScript interfaces
+- Implementasikan error boundaries
+- Optimalkan performa dengan React.memo dan useMemo
+
+## State Management
+- Gunakan React Context untuk state global
+- Implementasikan custom hooks untuk state logic
+- Gunakan reducers untuk state kompleks
+- Pisahkan business logic dari UI components
+
+## Testing
+- Tulis unit test untuk utilities dan hooks
+- Gunakan React Testing Library untuk komponen
+- Implementasikan integration tests untuk fitur utama
+- Pertahankan coverage test minimal 80%
+
+## Git Workflow
+- Gunakan conventional commits
+- Buat branch feature untuk setiap fitur baru
+- Lakukan code review sebelum merge
+- Update dokumentasi untuk perubahan signifikan
+

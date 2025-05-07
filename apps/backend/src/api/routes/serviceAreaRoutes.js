@@ -8,8 +8,7 @@ const express = require('express');
 const router = express.Router();
 const serviceAreaController = require('../controllers/serviceAreaController');
 const { authenticate } = require('../middleware/authMiddleware');
-// eslint-disable-next-line import/no-unresolved, import/extensions
-const { authorize } = require('../middleware/authMiddleware');
+const { authorize } = require('../middleware/authorizationMiddleware');
 
 // Service Area routes
 router.post(

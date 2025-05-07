@@ -42,7 +42,7 @@ describe('Forwarder Management Service', () => {
       count: jest.fn(),
       findById: jest.fn(),
       findByForwarder: jest.fn(),
-      findForRoute: jest.fn(),
+      findRatesForRoute: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
       delete: jest.fn(),
@@ -202,7 +202,7 @@ describe('Forwarder Management Service', () => {
       ];
 
       const filter = { forwarder: forwarderId };
-      const options = { skip: 0, limit: 10, sort: { province: 1, city: 1 } };
+      const options = { skip: 0, limit: 10, sort: { city: 1, province: 1 } };
       const total = 2;
 
       mockForwarderAreaRepository.findAll.mockResolvedValue(mockAreas);
@@ -256,7 +256,7 @@ describe('Forwarder Management Service', () => {
         }),
       ];
 
-      mockForwarderRateRepository.findForRoute.mockResolvedValue(mockRates);
+      mockForwarderRateRepository.findRatesForRoute.mockResolvedValue(mockRates);
 
       // Act
       const result = await forwarderService.findRatesForRoute(
@@ -268,7 +268,7 @@ describe('Forwarder Management Service', () => {
       );
 
       // Assert
-      expect(mockForwarderRateRepository.findForRoute).toHaveBeenCalledWith(
+      expect(mockForwarderRateRepository.findRatesForRoute).toHaveBeenCalledWith(
         forwarderId,
         originProvince,
         originCity,

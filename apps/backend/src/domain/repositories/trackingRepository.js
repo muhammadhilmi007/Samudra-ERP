@@ -123,7 +123,7 @@ const getTrackingEventsByEntity = async (entityType, entityId, options = {}) => 
     // Build query
     const query = {
       entityType,
-      entityId: mongoose.Types.ObjectId(entityId)
+      entityId: typeof entityId === 'string' ? entityId : mongoose.Types.ObjectId(entityId)
     };
 
     // Filter by visibility if specified
@@ -264,7 +264,7 @@ const updateLocation = async (entityType, entityId, locationData, userId) => {
     // Find the most recent tracking event for this entity to get the tracking code
     const latestEvent = await TrackingEvent.findOne({
       entityType,
-      entityId: mongoose.Types.ObjectId(entityId)
+      entityId: typeof entityId === 'string' ? entityId : mongoose.Types.ObjectId(entityId)
     }).sort({ timestamp: -1 });
 
     if (!latestEvent) {
@@ -272,7 +272,7 @@ const updateLocation = async (entityType, entityId, locationData, userId) => {
     }
 
     // Create a location update event
-    const trackingEvent = await createTrackingEvent({
+    const trackingEvent = await module.exports.createTrackingEvent({
       trackingCode: latestEvent.trackingCode,
       entityType,
       entityId,
@@ -308,7 +308,7 @@ const updateETA = async (entityType, entityId, newEta, userId, reason = '') => {
     // Find the most recent tracking event for this entity to get the tracking code
     const latestEvent = await TrackingEvent.findOne({
       entityType,
-      entityId: mongoose.Types.ObjectId(entityId)
+      entityId: typeof entityId === 'string' ? entityId : mongoose.Types.ObjectId(entityId)
     }).sort({ timestamp: -1 });
 
     if (!latestEvent) {
@@ -326,7 +326,7 @@ const updateETA = async (entityType, entityId, newEta, userId, reason = '') => {
           await entity.save();
           
           // Create an ETA update event
-          const trackingEvent = await createTrackingEvent({
+          const trackingEvent = await module.exports.createTrackingEvent({
             trackingCode: latestEvent.trackingCode,
             entityType,
             entityId,
@@ -354,7 +354,7 @@ const updateETA = async (entityType, entityId, newEta, userId, reason = '') => {
           await entity.save();
           
           // Create an ETA update event
-          const trackingEvent = await createTrackingEvent({
+          const trackingEvent = await module.exports.createTrackingEvent({
             trackingCode: latestEvent.trackingCode,
             entityType,
             entityId,

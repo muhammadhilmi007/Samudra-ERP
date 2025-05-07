@@ -4,7 +4,7 @@
  */
 
 const DeliveryOrderRepository = require('../../infrastructure/repositories/deliveryOrderRepository');
-const { ValidationError, NotFoundError } = require('../../domain/utils/errors');
+const { ValidationError, NotFoundError } = require('../../domain/utils/errorUtils');
 const { successResponse, errorResponse } = require('../../domain/utils/responseFormatter');
 
 class DeliveryOrderController {
